@@ -1,5 +1,3 @@
 <?PHP
-	PHPINFO();
-
-	²âÊÔ
+phpinfo();
 ?>
