@@ -25,42 +25,44 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?PHP echo $_TITLE?></title>
 <link href="<?PHP echo CSS_PATH."main.css"?>" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
 </head>
 
 <body class="mainfont">
-<div id="Body">
-  <div id="TitleIMG">
+
+<div class="BodyDiv">
+  <div class="TitleIMG">
 	<a href="<?PHP echo IMG_PATH."logo_max_color.gif"?>"><IMG SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" WIDTH="26" HEIGHT="22" BORDER="0" ALT=""></a>
   </div>
-  <div id="Title">
+  <div class="Title">
 	        <?PHP echo "<STRONG>". $_TITLE ."</STRONG>";?> 
   </div>
-	<div id="Login">
+	<div class="Login">
 	<fieldset>
         <legend>&nbsp;<font size="4">登录</font>&nbsp;</legend>
         <FORM action="form_process.php" method="post" >
-        <TABLE id="AllFont" border="0">
+        <TABLE class="AllFont" border="0">
         <TR>
             <TD><?PHP echo $_USERNAME ?></TD>
-            <TD> <input id= "LoginInput" type="text" name="username"></TD>
+            <TD> <input class="LoginInput" type="text" name="username"></TD>
         </TR>
         <TR>
             <TD><?PHP echo $_PASSWORD ?></TD>
-            <TD><input id= "LoginInput" type="password" name="password"></TD>
+            <TD><input class="LoginInput" type="password" name="password"></TD>
         </TR>
 		<TR>
 			<TD>&nbsp;
 			</TD>
 			<TD align="right">
             <INPUT type="hidden" name="login" value="LOGIN">
-            <INPUT id="LoginButton" type="submit" value="<?PHP echo $_LOGIN?>">
+            <INPUT class="LoginButton" type="submit" value="<?PHP echo $_LOGIN?>">
 			</TD>
         </TR>
         </TABLE>
         </FORM>
         </fieldset>
 	</div>
-    <div id="Foot" align="center">
+    <div class="Foot" align="center">
     Copyright © 2010-2012 ChenBK All Rights Reserved<br> 
         一个简单在线个人收支管理系统<br>
         E-mail : <a href="mailto:chenbingkun55@163.com">ChenBingKun55@163.com</a> 

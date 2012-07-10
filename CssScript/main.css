@@ -4,12 +4,12 @@ body.mainfont {
 }
 
 
-#AllFont {
+.AllFont {
 	font-family: "微软雅黑";
 	font-size: 12px;
 }
 
-#Body {
+.BodyDiv {
 	background-color: #66CC00;
 	position:absolute;
 	height: 480px;
@@ -18,7 +18,7 @@ body.mainfont {
 	top: 0px;
 }
 
-#TopInfo {
+.TopInfo {
 	position: absolute;
 	height: 15px;
 	width: 300;
@@ -27,7 +27,7 @@ body.mainfont {
 }
 
 
-#Title {
+.Title {
 	font-family: "微软雅黑";
 	font-size: 16px;
 	position: absolute;
@@ -37,7 +37,7 @@ body.mainfont {
 	top: 35px;
 }
 
-#ErrorInfo {
+.ErrorInfo {
 	position: absolute;
 	height: 20px;
 	width: 300;
@@ -45,7 +45,7 @@ body.mainfont {
 	top: 35px;
 }
 
-#TitleIMG {
+.TitleIMG {
 	position: absolute;
 	height: 50px;
 	width: 50px;
@@ -53,7 +53,7 @@ body.mainfont {
 	top: 35px;
 }
 
-#FunTitle1 {
+.FunTitle1 {
 	position: absolute;
 	height: 20px;
 	width: 56;
@@ -61,21 +61,21 @@ body.mainfont {
 	top: 65px;
 }
 
-#FunTitle2 {
+.FunTitle2 {
 	position: absolute;
 	height: 20px;
 	width: 56;
 	left: 76px;
 	top: 65px;
 }
-#FunTitle3 {
+.FunTitle3 {
 	position: absolute;
 	height: 20px;
 	width: 56;
 	left: 132px;
 	top: 65px;
 }
-#FunTitle4 {
+.FunTitle4 {
 	position: absolute;
 	height: 20px;
 	width: 56;
@@ -83,7 +83,7 @@ body.mainfont {
 	top: 65px;
 }
 
-#FunTitle5 {
+.FunTitle5 {
 	position: absolute;
 	height: 20px;
 	width: 56;
@@ -91,7 +91,7 @@ body.mainfont {
 	top: 65px;
 }
 
-#Content {
+.Content {
 	background-color: #C7EDCC;
 	padding-top: 10;
 	padding-left: 10;
@@ -104,7 +104,7 @@ body.mainfont {
 	top: 85px;
 }
 
-#Foot {
+.Foot {
 	font-family: "微软雅黑";
 	font-size: 11px;
 	line-height: 14px;
@@ -115,7 +115,7 @@ body.mainfont {
 	left: 0px;
 }
 
-#Login {
+.Login {
 	background-color: #66CC00;
 	position:absolute;
 	height: 240px;
@@ -130,7 +130,7 @@ body.mainfont {
 
 
 
-#LoginInput{
+.LoginInput{
 	margin-left:   20px;
 	color:   #0033FF;
 	width:   160px;
@@ -141,7 +141,7 @@ body.mainfont {
 	height:   18px;
 } 
 
-#LoginButton {
+.LoginButton {
 	BORDER-RIGHT: #002D96 1px solid; 
 	PADDING-RIGHT: 2px; 
 	BORDER-TOP: #002D96 1px solid; 
