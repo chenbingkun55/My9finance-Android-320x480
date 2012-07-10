@@ -56,6 +56,7 @@ body.mainfont {
 
 .FunTitle1 {
 	position: absolute;
+	text-align : center;
 	height: 20px;
 	width: 56;
 	left: 20px;
@@ -64,6 +65,7 @@ body.mainfont {
 
 .FunTitle2 {
 	position: absolute;
+	text-align : center;
 	height: 20px;
 	width: 56;
 	left: 76px;
@@ -71,6 +73,7 @@ body.mainfont {
 }
 .FunTitle3 {
 	position: absolute;
+	text-align : center;	
 	height: 20px;
 	width: 56;
 	left: 132px;
@@ -78,6 +81,7 @@ body.mainfont {
 }
 .FunTitle4 {
 	position: absolute;
+	text-align : center;
 	height: 20px;
 	width: 56;
 	left: 188px;
@@ -86,6 +90,7 @@ body.mainfont {
 
 .FunTitle5 {
 	position: absolute;
+	text-align : center;
 	height: 20px;
 	width: 56;
 	left: 244px;
@@ -154,3 +159,4 @@ body.mainfont {
 	PADDING-TOP: 2px; 
 	BORDER-BOTTOM: #002D96 1px solid
 }
+
