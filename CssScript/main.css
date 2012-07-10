@@ -1,0 +1,155 @@
+body.mainfont {
+	font-family: "微软雅黑";
+	font-size: 12px;
+}
+
+
+#AllFont {
+	font-family: "微软雅黑";
+	font-size: 12px;
+}
+
+#Body {
+	background-color: #66CC00;
+	position:absolute;
+	height: 480px;
+	width: 320px;
+	left: 0px;
+	top: 0px;
+}
+
+#TopInfo {
+	position: absolute;
+	height: 15px;
+	width: 300;
+	left: 20px;
+	top: 10px;
+}
+
+
+#Title {
+	font-family: "微软雅黑";
+	font-size: 16px;
+	position: absolute;
+	height: 20px;
+	width: 300;
+	left: 60px;
+	top: 35px;
+}
+
+#ErrorInfo {
+	position: absolute;
+	height: 20px;
+	width: 300;
+	left: 60px;
+	top: 35px;
+}
+
+#TitleIMG {
+	position: absolute;
+	height: 50px;
+	width: 50px;
+	left: 20px;
+	top: 35px;
+}
+
+#FunTitle1 {
+	position: absolute;
+	height: 20px;
+	width: 56;
+	left: 20px;
+	top: 65px;
+}
+
+#FunTitle2 {
+	position: absolute;
+	height: 20px;
+	width: 56;
+	left: 76px;
+	top: 65px;
+}
+#FunTitle3 {
+	position: absolute;
+	height: 20px;
+	width: 56;
+	left: 132px;
+	top: 65px;
+}
+#FunTitle4 {
+	position: absolute;
+	height: 20px;
+	width: 56;
+	left: 188px;
+	top: 65px;
+}
+
+#FunTitle5 {
+	position: absolute;
+	height: 20px;
+	width: 56;
+	left: 244px;
+	top: 65px;
+}
+
+#Content {
+	background-color: #C7EDCC;
+	padding-top: 10;
+	padding-left: 10;
+	padding-right: 10;
+	padding-bottom: 10;
+	position: absolute;
+	height: 320px;
+	width: 280;
+	left: 20px;
+	top: 85px;
+}
+
+#Foot {
+	font-family: "微软雅黑";
+	font-size: 11px;
+	line-height: 14px;
+	position: absolute;
+	height: 60px;
+	width: 320px;
+	bottom: 0px;
+	left: 0px;
+}
+
+#Login {
+	background-color: #66CC00;
+	position:absolute;
+	height: 240px;
+	width: 280px;
+	left: 20px;
+	top: 120px;
+	padding-top: 10;
+	padding-left: 0;
+	padding-right: 0;
+	padding-bottom: 10;
+}
+
+
+
+#LoginInput{
+	margin-left:   20px;
+	color:   #0033FF;
+	width:   160px;
+	font-size:   12px;
+	font-family:   Arial;
+	margin-top:   0px;
+	border:   0px   none;
+	height:   18px;
+} 
+
+#LoginButton {
+	BORDER-RIGHT: #002D96 1px solid; 
+	PADDING-RIGHT: 2px; 
+	BORDER-TOP: #002D96 1px solid; 
+	PADDING-LEFT: 2px; 
+	FONT-SIZE: 12px; 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#66CC00, EndColorStr=#9DBCEA); 
+	BORDER-LEFT: #002D96 1px solid; 
+	CURSOR: hand; COLOR: black; 
+	PADDING-TOP: 2px; 
+	BORDER-BOTTOM: #002D96 1px solid
+}

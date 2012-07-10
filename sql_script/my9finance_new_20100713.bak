@@ -1,0 +1,508 @@
+-- MySQL dump 10.11
+--
+-- Host: localhost    Database: my9finance
+-- ------------------------------------------------------
+-- Server version	5.0.77
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `address`
+--
+
+DROP TABLE IF EXISTS `address`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `address` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `store` smallint(4) default NULL,
+  `is_display` bit(1) default NULL,
+  `name` char(20) NOT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `address`
+--
+
+LOCK TABLES `address` WRITE;
+/*!40000 ALTER TABLE `address` DISABLE KEYS */;
+/*!40000 ALTER TABLE `address` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groups`
+--
+
+DROP TABLE IF EXISTS `groups`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `groups` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `groupname` char(16) NOT NULL,
+  `group_alias` char(20) default NULL,
+  `groupadmin_id` smallint(4) NOT NULL,
+  `password` char(20) default NULL,
+  `notes` varchar(50) default NULL,
+  `create_date` datetime NOT NULL,
+  `last_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `groupname` (`groupname`),
+  KEY `groupadmin_id` (`groupadmin_id`),
+  CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`groupadmin_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `groups`
+--
+
+LOCK TABLES `groups` WRITE;
+/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `in_corde`
+--
+
+DROP TABLE IF EXISTS `in_corde`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `in_corde` (
+  `id` int(6) NOT NULL auto_increment,
+  `money` int(6) NOT NULL,
+  `user_id` smallint(4) NOT NULL,
+  `group_id` smallint(4) NOT NULL,
+  `in_mantype_id` smallint(4) NOT NULL,
+  `in_subtype_id` smallint(4) NOT NULL,
+  `addr_id` smallint(4) NOT NULL,
+  `notes` varchar(50) default NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `group_id` (`group_id`),
+  KEY `in_mantype_id` (`in_mantype_id`),
+  KEY `in_subtype_id` (`in_subtype_id`),
+  KEY `addr_id` (`addr_id`),
+  CONSTRAINT `in_corde_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `in_corde_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `in_corde_ibfk_3` FOREIGN KEY (`in_mantype_id`) REFERENCES `in_mantype` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `in_corde_ibfk_4` FOREIGN KEY (`in_subtype_id`) REFERENCES `in_subtype` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `in_corde_ibfk_5` FOREIGN KEY (`addr_id`) REFERENCES `address` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `in_corde`
+--
+
+LOCK TABLES `in_corde` WRITE;
+/*!40000 ALTER TABLE `in_corde` DISABLE KEYS */;
+/*!40000 ALTER TABLE `in_corde` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `in_mantype`
+--
+
+DROP TABLE IF EXISTS `in_mantype`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `in_mantype` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `store` smallint(4) default NULL,
+  `is_display` smallint(4) default NULL,
+  `name` char(16) NOT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `in_mantype_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `in_mantype`
+--
+
+LOCK TABLES `in_mantype` WRITE;
+/*!40000 ALTER TABLE `in_mantype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `in_mantype` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `in_out_gather`
+--
+
+DROP TABLE IF EXISTS `in_out_gather`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `in_out_gather` (
+  `id` int(6) NOT NULL auto_increment,
+  `in_all` double(8,2) default NULL,
+  `out_all` double(8,2) default NULL,
+  `inout_all` double(8,2) default NULL,
+  `month_in` double(8,2) default NULL,
+  `month_out` double(8,2) default NULL,
+  `month_all` double(8,2) default NULL,
+  `year_in` double(8,2) default NULL,
+  `year_out` double(8,2) default NULL,
+  `year_all` double(8,2) default NULL,
+  `year` smallint(4) NOT NULL default '0',
+  `month` smallint(4) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `in_out_gather`
+--
+
+LOCK TABLES `in_out_gather` WRITE;
+/*!40000 ALTER TABLE `in_out_gather` DISABLE KEYS */;
+/*!40000 ALTER TABLE `in_out_gather` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `in_subtype`
+--
+
+DROP TABLE IF EXISTS `in_subtype`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `in_subtype` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `man_id` smallint(4) NOT NULL,
+  `store` smallint(4) default NULL,
+  `is_display` bit(1) default NULL,
+  `name` char(16) NOT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `man_id` (`man_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `in_subtype_ibfk_1` FOREIGN KEY (`man_id`) REFERENCES `in_mantype` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `in_subtype_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `in_subtype`
+--
+
+LOCK TABLES `in_subtype` WRITE;
+/*!40000 ALTER TABLE `in_subtype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `in_subtype` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `log` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `group_id` smallint(4) NOT NULL,
+  `log_id` smallint(4) NOT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `log`
+--
+
+LOCK TABLES `log` WRITE;
+/*!40000 ALTER TABLE `log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `log_resolve`
+--
+
+DROP TABLE IF EXISTS `log_resolve`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `log_resolve` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `log_id` smallint(4) NOT NULL,
+  `content` char(100) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `log_resolve`
+--
+
+LOCK TABLES `log_resolve` WRITE;
+/*!40000 ALTER TABLE `log_resolve` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log_resolve` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `out_corde`
+--
+
+DROP TABLE IF EXISTS `out_corde`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `out_corde` (
+  `id` int(6) NOT NULL auto_increment,
+  `money` int(6) NOT NULL,
+  `user_id` smallint(4) NOT NULL,
+  `group_id` smallint(4) NOT NULL,
+  `out_mantype_id` smallint(4) NOT NULL,
+  `out_subtype_id` smallint(4) NOT NULL,
+  `addr_id` smallint(4) NOT NULL,
+  `notes` varchar(50) default NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `group_id` (`group_id`),
+  KEY `out_mantype_id` (`out_mantype_id`),
+  KEY `out_subtype_id` (`out_subtype_id`),
+  KEY `addr_id` (`addr_id`),
+  CONSTRAINT `out_corde_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `out_corde_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `out_corde_ibfk_3` FOREIGN KEY (`out_mantype_id`) REFERENCES `out_mantype` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `out_corde_ibfk_4` FOREIGN KEY (`out_subtype_id`) REFERENCES `out_subtype` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `out_corde_ibfk_5` FOREIGN KEY (`addr_id`) REFERENCES `address` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `out_corde`
+--
+
+LOCK TABLES `out_corde` WRITE;
+/*!40000 ALTER TABLE `out_corde` DISABLE KEYS */;
+/*!40000 ALTER TABLE `out_corde` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `out_mantype`
+--
+
+DROP TABLE IF EXISTS `out_mantype`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `out_mantype` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `store` smallint(4) default NULL,
+  `is_display` smallint(4) default NULL,
+  `name` char(16) NOT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `out_mantype_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `out_mantype`
+--
+
+LOCK TABLES `out_mantype` WRITE;
+/*!40000 ALTER TABLE `out_mantype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `out_mantype` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `out_subtype`
+--
+
+DROP TABLE IF EXISTS `out_subtype`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `out_subtype` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `man_id` smallint(4) NOT NULL,
+  `store` smallint(4) default NULL,
+  `is_display` bit(1) default NULL,
+  `name` char(16) NOT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `man_id` (`man_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `out_subtype_ibfk_1` FOREIGN KEY (`man_id`) REFERENCES `out_mantype` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `out_subtype_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `out_subtype`
+--
+
+LOCK TABLES `out_subtype` WRITE;
+/*!40000 ALTER TABLE `out_subtype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `out_subtype` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_group`
+--
+
+DROP TABLE IF EXISTS `user_group`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `user_group` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `group_id` smallint(4) NOT NULL,
+  `granddad` smallint(4) NOT NULL default '0',
+  `paternity` smallint(4) NOT NULL default '0',
+  `brother` smallint(4) NOT NULL default '0',
+  `consort` smallint(4) NOT NULL default '0',
+  `friend` smallint(4) NOT NULL default '0',
+  `colleague` smallint(4) NOT NULL default '0',
+  `notes` varchar(50) default NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`group_id`),
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `user_group_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `user_group_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `user_group`
+--
+
+LOCK TABLES `user_group` WRITE;
+/*!40000 ALTER TABLE `user_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_limit`
+--
+
+DROP TABLE IF EXISTS `user_limit`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `user_limit` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `user_disable` smallint(4) NOT NULL default '0',
+  `group_disable` smallint(4) NOT NULL default '0',
+  `create_group_num` smallint(4) NOT NULL default '1',
+  `create_mantype_num` smallint(4) NOT NULL default '10',
+  `create_subtype_num` smallint(4) NOT NULL default '10',
+  `create_addr_num` smallint(4) NOT NULL default '10',
+  `attr_group_num` smallint(4) NOT NULL default '1',
+  `pass_size` smallint(4) NOT NULL default '0',
+  `pass_difficulty` smallint(4) NOT NULL default '0',
+  `pass_overdue` datetime default NULL,
+  `overdue_time` datetime default NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_limit_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `user_limit`
+--
+
+LOCK TABLES `user_limit` WRITE;
+/*!40000 ALTER TABLE `user_limit` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_limit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_power`
+--
+
+DROP TABLE IF EXISTS `user_power`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `user_power` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `user_id` smallint(4) NOT NULL,
+  `add_mantype` smallint(4) NOT NULL default '0',
+  `alter_mantype` smallint(4) NOT NULL default '0',
+  `add_subtype` smallint(4) NOT NULL default '0',
+  `add_address` smallint(4) NOT NULL default '0',
+  `alter_address` smallint(4) NOT NULL default '0',
+  `add_in_corde` smallint(4) NOT NULL default '0',
+  `alter_in_corde` smallint(4) NOT NULL default '0',
+  `add_out_corde` smallint(4) NOT NULL default '0',
+  `alter_out_corde` smallint(4) NOT NULL default '0',
+  `report_all` smallint(4) NOT NULL default '0',
+  `create_group` smallint(4) NOT NULL default '0',
+  `search_disable` smallint(4) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_power_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `user_power`
+--
+
+LOCK TABLES `user_power` WRITE;
+/*!40000 ALTER TABLE `user_power` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_power` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `users` (
+  `id` smallint(4) NOT NULL auto_increment,
+  `username` char(16) NOT NULL,
+  `user_alias` char(20) default NULL,
+  `password` char(20) NOT NULL,
+  `notes` varchar(50) default NULL,
+  `create_date` datetime NOT NULL,
+  `last_date` datetime NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2010-07-12 17:50:06
