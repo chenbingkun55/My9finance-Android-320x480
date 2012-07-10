@@ -30,6 +30,7 @@ body.mainfont {
 .Title {
 	font-family: "微软雅黑";
 	font-size: 16px;
+	color: #3300CC;
 	position: absolute;
 	height: 20px;
 	width: 300;
