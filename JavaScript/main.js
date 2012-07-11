@@ -7,20 +7,30 @@
 
 function OverFunTitleColor(obj) { 
 	var FunTitleColor = document.getElementById(obj);
+	/* 字体动态 */
+	FunTitleColor.style.Color="#6699FF";
+	FunTitleColor.style.fontSize="12pt";
 	
+	/* 背景动态
 	if (FunTitleColor.style.backgroundColor != "#c7edcc")
 	{
 		FunTitleColor.style.backgroundColor = "#c7edcd";
-	}
+	}*/
 }
 
 function OutFunTitleColor(obj) { 
 	var FunTitleColor = document.getElementById(obj);
-	
+
+	/* 字体动态 */
+	FunTitleColor.style.fontSize="";
+	FunTitleColor.style.Color="";
+
+
+	/* 背景动态
 	if (FunTitleColor.style.backgroundColor == "#c7edcd")
 	{
 		FunTitleColor.style.backgroundColor = "";
-	}
+	}*/
 }
 
 function ChangFunTitle(obj){

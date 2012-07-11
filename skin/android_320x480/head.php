@@ -3,7 +3,7 @@
 </div>
 
 <div class="TitleIMG">
-	<a href="<?PHP echo IMG_PATH."logo_max_color.gif"?>"><IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()"></a>
+	<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
 </div>
 
 <div class="ErrorInfo">
