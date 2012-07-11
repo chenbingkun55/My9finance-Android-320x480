@@ -20,10 +20,74 @@ body.mainfont {
 
 .TopInfo {
 	position: absolute;
-	height: 15px;
-	width: 300;
+	height: 10px;
+	width: 200px;
 	left: 20px;
 	top: 10px;
+}
+
+.theme-1, .theme-2, .theme-3, .theme-4, .theme-5, {
+    cursor: pointer;
+	border-style: ridge;
+	border-width : 1px;
+    float: left;
+    overflow: hidden;
+
+}
+
+.ChangeSkinColor {
+	font-size: 7px;
+	position: absolute;
+	height: 10px;
+	width: 50px;
+	left: 240px;
+	top: 7px;
+}
+
+.theme-1 {
+	position: absolute;
+	background-color: #66CC00;
+	text-align : center;
+	height: 10px;
+	width: 10px;
+	left: 0px;
+	top: 7px;
+}
+.theme-2 {
+	position: absolute;
+	background-color: #9900FF;
+	text-align : center;
+	height: 10px;
+	width: 10px;
+	left: 12px;
+	top: 7px;
+}
+.theme-3 {
+	position: absolute;
+	background-color: #FF6600;
+	text-align : center;
+	height: 10px;
+	width: 10px;
+	left: 24px;
+	top: 7px;
+}
+.theme-4 {
+	position: absolute;
+	background-color: #FFFF33;
+	text-align : center;
+	height: 10px;
+	width: 10px;
+	left: 36px;
+	top: 7px;
+}
+.theme-5 {
+	position: absolute;
+	background-color: #333300;
+	text-align : center;
+	height: 10px;
+	width: 10px;
+	left: 48px;
+	top: 7px;
 }
 
 
@@ -58,6 +122,7 @@ body.mainfont {
 .FunTitle1 {
 	position: absolute;
 	text-align : center;
+    cursor: pointer;
 	height: 20px;
 	width: 56;
 	left: 20px;
@@ -67,6 +132,7 @@ body.mainfont {
 .FunTitle2 {
 	position: absolute;
 	text-align : center;
+    cursor: pointer;
 	height: 20px;
 	width: 56;
 	left: 76px;
@@ -74,7 +140,8 @@ body.mainfont {
 }
 .FunTitle3 {
 	position: absolute;
-	text-align : center;	
+	text-align : center;
+	cursor: pointer;
 	height: 20px;
 	width: 56;
 	left: 132px;
@@ -83,6 +150,7 @@ body.mainfont {
 .FunTitle4 {
 	position: absolute;
 	text-align : center;
+    cursor: pointer;
 	height: 20px;
 	width: 56;
 	left: 188px;
@@ -92,6 +160,7 @@ body.mainfont {
 .FunTitle5 {
 	position: absolute;
 	text-align : center;
+    cursor: pointer;
 	height: 20px;
 	width: 56;
 	left: 244px;

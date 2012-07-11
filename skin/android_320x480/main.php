@@ -13,7 +13,7 @@
 </head>
 
 <body class="mainfont">
-	<div class="BodyDiv">
+	<div class="BodyDiv" id="BodyDiv">
 		<?PHP 
 			 require_once("head.php"); 
 			 require_once("body.php");

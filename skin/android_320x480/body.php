@@ -1,5 +1,7 @@
 <div class="Content" id="Content">
 
-* 支出记录 | 收入记录
+<script>
+	document.write(bodyHTML['FunTitle1']);
+</script>
 
 </div>
