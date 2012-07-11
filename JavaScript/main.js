@@ -39,25 +39,26 @@ function OutFunTitleColor(obj) {
 	定义各功能内容数组.
 */
 var bodyHTML = new Array(5);
-bodyHTML['FunTitle1'] = "<br><a href=\"\"><span>支出记录</span></a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<a href=\"\"><span>收入记录</span></a><br><br>\
-	<a href=\"\"><span>功能管理</span></a><br><br>\
-	<a href=\"\"><span>报表</span></a><br><br>\
-	<a href=\"\"><span>搜索</span></a>";
-bodyHTML['FunTitle2'] = "<br><a href=\"\"><span>收入主类别</span></a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<a href=\"\"><span>支出主类别</span></a><br><br>\
-	<a href=\"\"><span>列出地址</span></a><br><br>\
-	<a href=\"\"><span>修改用户</span></a><br><br>\
-	<a href=\"\"><span>列出家庭成员</span></a>";
-bodyHTML['FunTitle3'] = "<br><a href=\"\"><span>每月支出报表</span></a><br>\
-	<a href=\"\"><span>每年支出报表</span></a><br><br>\
-	<a href=\"\"><span>每月收入报表</span></a><br>\
-	<a href=\"\"><span> 每年收入报表</span></a><br><br>\
-	<a href=\"\"><span>收支平衡报表</span></a><br>\
-	<a href=\"\"><span>支出分类报表</span></a><br>\
-	<a href=\"\"><span>支出地点报表</span></a><br><br>\
-	<a href=\"\"><span>每年支出分类报表</span></a><br>\
-	<a href=\"\"><span>每年支出地址报表</span></a><br><br>";
+bodyHTML['FunTitle1'] = "<br><span class=\"BodyLink1\" onclick=\"record('out')\">支出记录</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">收入记录</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle2')\">功能管理</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle3')\">报表</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle4')\">搜索</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle5')\">关于</span>";
+bodyHTML['FunTitle2'] = "<br><span class=\"BodyLink1\" onclick=\"record('in')\">收入主类别</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">支出主类别</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">列出地址</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">修改用户</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">列出家庭成员</span>";
+bodyHTML['FunTitle3'] = "<br><span class=\"BodyLink1\" onclick=\"record('in')\">每月支出报表</span><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出报表</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">每月收入报表</span><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\"> 每年收入报表</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">收支平衡报表</span><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">支出分类报表</span><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">支出地点报表</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出分类报表</span><br>\
+	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出地址报表</span><br><br>";
 bodyHTML['FunTitle4'] = "搜索整个家庭：";
 bodyHTML['FunTitle5'] = "<br>一个简单在线个人收支管理系统,工作之余所出作品,&nbsp;\
 	但愿能给大家生活上带来便利.<br><br>\

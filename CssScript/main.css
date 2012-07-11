@@ -230,3 +230,7 @@ body.mainfont {
 	BORDER-BOTTOM: #002D96 1px solid
 }
 
+
+.BodyLink1 {
+    cursor: pointer;
+}
