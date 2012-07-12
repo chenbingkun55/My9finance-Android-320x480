@@ -12,14 +12,26 @@
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
 <script type="text/javascript" src="<?PHP echo JS_PATH."TwoSelect.js"?>"></script>
 </head>
-
 <body class="mainfont">
 	<div class="BodyDiv" id="BodyDiv">
-		<?PHP 
-			 require_once("head.php"); 
-			 require_once("body.php");
-			 require_once("foot.php"); 
-		?>
+<?PHP 
+	/*
+		清除所有PHP Session。
+	*/
+	$_SESSION['__global_logid']=6000;
+	echo $Finance->convertLogIdToContent($_SESSION['__global_logid']);
+	session_destroy();
+	/*
+		跳转到登录页面。
+	*/	
+	if(DEBUG_YES){ 
+		echo "<br>DEBUG START*********************************************<br>";
+		echo "提示内容为: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
+		echo "<br>DEBUG END*********************************************<br>";	
+	}else {
+		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=index.php\">";
+	}
+?>
 	</div>
 </body>
 </html>

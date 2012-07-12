@@ -1,0 +1,4 @@
+JavaScript 说明:
+   PostErrorInfo(GlobalError,type)	抛出全局错误信息.
+	GlobalError		错误内容.
+	type			错误代码,这[1 错误提示信息,0 提示信息]

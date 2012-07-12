@@ -1,4 +1,11 @@
 var CurrentFunTitleColor = "#c7edcc";
+var GlobalUserName = "aaaa";
+var GlobalGroupName = "";
+
+function setGloblData(username,groupname){
+	GlobalUserName = username;
+	GlobalGroupName = groupname;
+}
 
 /*
   JavaScript 更改鼠标经过标题栏时,动态变化.
@@ -39,17 +46,17 @@ function OutFunTitleColor(obj) {
 	定义各功能内容数组.
 */
 var bodyHTML = new Array(5);
-bodyHTML['FunTitle1'] = "<br><span class=\"BodyLink1\" onclick=\"post('in_out_record.php')\">支出记录</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">收入记录</span><br><br>\
+bodyHTML['FunTitle1'] = "<br><span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=out_record')\">支出记录</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=in_record')\">收入记录</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle2')\">功能管理</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle3')\">报表</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle4')\">搜索</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle5')\">关于</span>";
-bodyHTML['FunTitle2'] = "<br><span class=\"BodyLink1\" onclick=\"record('in')\">收入主类别</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">支出主类别</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">列出地址</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">修改用户</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">列出家庭成员</span>";
+bodyHTML['FunTitle2'] = "<br><span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=in_record_type')\">收入类别管理</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=out_record_type')\">支出类别管理</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=address')\">地址管理</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=user')\">用户管理</span><br><br>\
+	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=family')\">家庭管理</span>";
 bodyHTML['FunTitle3'] = "<br><span class=\"BodyLink1\" onclick=\"record('in')\">每月支出报表</span><br>\
 	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出报表</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"record('in')\">每月收入报表</span><br>\
@@ -152,13 +159,6 @@ function post(xmlBodyURL){
 	xmlBody.Open( "post",xmlBodyURL,false );
 	xmlBody.onreadystatechange = HandleStateChange;
 	xmlBody.Send(xmlBodyURL);
-
-}
-
-function writeObj(obj){
-	for(i=0;i< 20 ; i++){    
-		alert(boj[i]+"<br>");
-	}  
 }
 
 function HandleStateChange(){
@@ -170,3 +170,22 @@ function HandleStateChange(){
 	}
 }
 
+function PostErrorInfo(GlobalError,type){
+	var ErrorInfo = document.getElementById('ErrorInfo');
+	if (GlobalError)
+	{
+		if (type == '1')
+		{
+			ErrorInfo.innerHTML = "<b>"+GlobalError+"</b>";
+			ErrorInfo.style.Color = "#FF0000";
+		}
+		ErrorInfo.innerHTML = GlobalError;
+	} else {
+		ErrorInfo.innerHTML = "彩贝壳之家 -- 欢迎您!!!";
+	}
+}
+
+
+function logout(){
+	top.location='logout.php';
+}

@@ -2,6 +2,17 @@
     require_once(INCLUDE_PATH.'db.inc.php');
     require_once(INCLUDE_PATH.'language_CN.php');
 
+/*
+	返回值说明：0 成功 ， 非0值 失败
+		1		用户不存在。
+	    2		登录用户有存在，密码验证失败。
+
+
+
+	函数说明：
+		login()		判断登录是否成功。
+*/
+
     class Finance extends DBSQL
     {
         /* 定义表名称变量*/
@@ -29,6 +40,58 @@
             parent::_construct();
         }
         
+
+         /* 用户登录验证函数 */
+        public function login($username,$password)
+        {
+             $sql = "SELECT * FROM ".$this->_users." WHERE username = '".$username."'";
+			 $sql2 = "SELECT * FROM ".$this->_users." WHERE username = '".$username."' AND password = password( '".$password."')";
+
+             if( $result =  $this->select($sql))
+            {
+				if ($this->select($sql2)){
+					return $result;
+				}else{
+					return 2;
+				}
+
+             } else {                
+				return 1;
+			}
+		}
+
+
+
+        /* 转换LOG_ID为日志内容函数 */
+        public function convertLogIdToContent($log_id)
+        {
+            $sql = "SELECT content FROM  ".$this->_log_resolve." WHERE log_id = '".$log_id."'";        
+            $result = $this->select($sql);
+            foreach($result as $key => $value )
+            {
+                $value_done = $value[0];
+            }
+            return $value_done;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*  以上内容为优化内容  ####################################################################################################*/
         /*  获取用户列表函数 */
         public function getUserList()
         {
@@ -236,27 +299,7 @@
 
 
 
-         /* 用户登录验证函数 */
-        public function login($username,$password)
-        {
-                $sql = "SELECT id,user_alias FROM ".$this->_users." WHERE username = '".$username."' AND password = '".$password."'";
-             if( $this->select($sql))
-            {
-                        $result =  $this->select($sql);
-                        foreach( $result as $key => $value)
-                        {
-                            return $value;
-                        }
-             } else {                
-                $sql = "SELECT count(*) FROM ".$this->_users." WHERE username = '".$username."'";
-                         if( $this->select($sql)) 
-                         {
-                            return "useralive";
-                         } else {
-                            return "userrnalive";
-                         }
-            }
-    }
+
     
         /* 获取组列表 */
         public function getGroupList()
@@ -861,17 +904,6 @@
         }
 
 
-          /* 转换LOG_ID为日志内容函数 */
-        public function convertLogIdToContent($log_id)
-        {
-            $sql = "SELECT content FROM  ".$this->_log_resolve." WHERE log_id = '".$log_id."'";        
-            $result = $this->select($sql);
-            foreach($result as $key => $value )
-            {
-                $value_done = $value[0];
-            }
-            return $value_done;
-        }
 
         /*更新日志函数 */
         public function updateLog($id,$log_id,$content)

@@ -13,8 +13,8 @@
 	<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
 </div>
 
-<div class="ErrorInfo">
-	<BLINK>这里放置提示信息!!!</BLINK> 
+<div class="ErrorInfo" id="ErrorInfo">
+	<BLINK>彩贝壳之家 -- 欢迎您!!!</BLINK> 
 </div>
   
 <div class="FunTitle1" style="background-color: #C7EDCC;" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 

@@ -22,10 +22,17 @@
   <div class="Title">
 		<?PHP echo "<STRONG>". $_TITLE ."</STRONG>";?> 
   </div>
+  <?PHP 
+		if ( !is_null($_SESSION['__global_logid'])) {
+			echo "<div class=\"Title_Info\" align=\"center\">";
+			echo "ERROR: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
+			echo "</div>";
+	  }
+  ?>
   <div class="Login">
 	<fieldset>
         <legend>&nbsp;<font size="4">登录</font>&nbsp;</legend>
-        <FORM action="form_process.php" id="login-form" method="post" >
+        <FORM action="login.php" id="login-form" method="post" >
         <TABLE class="AllFont" border="0">
         <TR>
             <TD><?PHP echo $_USERNAME ?></TD>

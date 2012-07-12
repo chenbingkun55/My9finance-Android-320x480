@@ -10,7 +10,7 @@ body.mainfont {
 }
 
 .BodyDiv {
-	background-color: #66CC00;
+	background-color: #6600FF;
 	position:absolute;
 	height: 480px;
 	width: 320px;
@@ -46,7 +46,7 @@ body.mainfont {
 
 .theme-1 {
 	position: absolute;
-	background-color: #66CC00;
+	background-color: #6600FF;
 	text-align : center;
 	height: 10px;
 	width: 10px;
@@ -102,24 +102,9 @@ body.mainfont {
 	top: 35px;
 }
 
-
-.Title_Info {
-	font-family: "微软雅黑";
-	font-size: 14px;
-	z-index:1;
-	background-color: #333300;
-	color: #FF6666;
-	position: absolute;
-	height: 20px;
-	width: 280;
-	left: 20px;
-	top: 280px;
-}
-
 .ErrorInfo {
 	position: absolute;
 	font-size: 16px;
-	z-index:1;
 	height: 20px;
 	width: 250;
 	left: 60px;
@@ -184,7 +169,7 @@ body.mainfont {
 }
 
 .Content {
-	background-color: #C7EDCC;
+	background-color: #6699FF;
 	padding-top: 10;
 	padding-left: 10;
 	padding-right: 10;
@@ -212,9 +197,9 @@ body.mainfont {
 }
 
 .Login {
-	background-color: #66CC00;
+	background-color: #6600FF;
 	position:absolute;
-	height: 160px;
+	height: 240px;
 	width: 280px;
 	left: 20px;
 	top: 120px;
@@ -243,7 +228,7 @@ body.mainfont {
 	BORDER-TOP: #002D96 1px solid; 
 	PADDING-LEFT: 2px; 
 	FONT-SIZE: 12px; 
-	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#66CC00, EndColorStr=#9DBCEA); 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#6600FF, EndColorStr=#9DBCEA); 
 	BORDER-LEFT: #002D96 1px solid; 
 	CURSOR: hand; COLOR: black; 
 	PADDING-TOP: 2px; 
@@ -256,7 +241,7 @@ body.mainfont {
 	BORDER-TOP: #002D96 1px solid; 
 	PADDING-LEFT: 2px; 
 	FONT-SIZE: 12px; 
-	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#66CC00, EndColorStr=#9DBCEA); 
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#6600FF, EndColorStr=#9DBCEA); 
 	BORDER-LEFT: #002D96 1px solid; 
 	CURSOR: hand; COLOR: black; 
 	PADDING-TOP: 2px; 
