@@ -12,7 +12,7 @@
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
 </head>
 
-<body class="mainfont">
+<body class="mainfont" onload="document.getElementById('login-form').username.focus()">
 
 <div class="BodyDiv">
   <div class="TitleIMG">
@@ -25,7 +25,7 @@
   <div class="Login">
 	<fieldset>
         <legend>&nbsp;<font size="4">登录</font>&nbsp;</legend>
-        <FORM action="form_process.php" method="post" >
+        <FORM action="form_process.php" id="login-form" method="post" >
         <TABLE class="AllFont" border="0">
         <TR>
             <TD><?PHP echo $_USERNAME ?></TD>

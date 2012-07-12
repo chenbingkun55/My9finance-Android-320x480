@@ -17,7 +17,7 @@
 	<div class="BodyDiv" id="BodyDiv">
 		<?PHP 
 			 require_once("head.php"); 
-			 require_once("in_out_record.php");
+			 require_once("body.php");
 			 require_once("tail.php"); 
 		?>
 	</div>

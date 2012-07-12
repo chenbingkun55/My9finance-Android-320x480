@@ -39,7 +39,7 @@ function OutFunTitleColor(obj) {
 	定义各功能内容数组.
 */
 var bodyHTML = new Array(5);
-bodyHTML['FunTitle1'] = "<br><span class=\"BodyLink1\" onclick=\"record('out')\">支出记录</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+bodyHTML['FunTitle1'] = "<br><span class=\"BodyLink1\" onclick=\"post('in_out_record.php')\">支出记录</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
 	<span class=\"BodyLink1\" onclick=\"record('in')\">收入记录</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle2')\">功能管理</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle3')\">报表</span><br><br>\
@@ -60,7 +60,7 @@ bodyHTML['FunTitle3'] = "<br><span class=\"BodyLink1\" onclick=\"record('in')\">
 	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出分类报表</span><br>\
 	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出地址报表</span><br><br>";
 bodyHTML['FunTitle4'] = "搜索整个家庭：";
-bodyHTML['FunTitle5'] = "<br>一个简单在线个人收支管理系统,工作之余所出作品,&nbsp;\
+bodyHTML['FunTitle5'] = "一个简单在线个人收支管理系统,<br>工作之余所出作品,<br>&nbsp;\
 	但愿能给大家生活上带来便利.<br><br>\
 	出品: @-ChenBK<br>制作时间: 2012-07-11<br>E-mail :\
 	<a href=\"mailto:chenbingkun55@163.com\">ChenBingKun55@163.com</a>";
@@ -130,6 +130,43 @@ function ChangeSkinColor(obj){
 		document.getElementById("Content").style.backgroundColor = "#339900";
 		CurrentFunTitleColor = "#339900";
 		break;
+	}
+}
+
+/*
+	创建 XMLHTTPRequest 
+*/
+function createHttPRequext(){
+	if(window.ActiveXObject){
+		xmlBody = new ActiveXObject('Microsoft.XMLHTTP');	
+	}
+	else if (window.XMLHTTPRequest)
+	{
+		xmlBody = new XMLHTTPRequest();
+	}
+
+}
+
+function post(xmlBodyURL){
+	createHttPRequext();
+	xmlBody.Open( "post",xmlBodyURL,false );
+	xmlBody.onreadystatechange = HandleStateChange;
+	xmlBody.Send(xmlBodyURL);
+
+}
+
+function writeObj(obj){
+	for(i=0;i< 20 ; i++){    
+		alert(boj[i]+"<br>");
+	}  
+}
+
+function HandleStateChange(){
+	var Content = document.getElementById('Content');
+	if (xmlBody.readyState == 4 )
+	{
+		var GetbodyHTML = xmlBody.responseText;
+		Content.innerHTML = GetbodyHTML;
 	}
 }
 
