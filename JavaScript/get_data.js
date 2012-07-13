@@ -17,13 +17,26 @@ function scity(pname,cname){
 	document.write('<select id="citys" name="'+cname+'">');
 	document.write('<option value="">--选择分类--</option>');
 	document.write("</select>");
-
-	//selectc(document.getElementById("pro"));
 	
 }
 
 
 function selectc(pobj){
-	var index=pobj.selectedIndex;
-	alert(index);
+	var index=pobj.selectedIndex-1;
+	var cobj=document.getElementById("citys");
+	cobj.innerHTML="";
+	if ( index >=0 ){
+		var option=document.createElement("option");
+		var text="--选择分类--";
+		option.value=text;
+		option.innerHTML=text;
+		cobj.appendChild(option);
+		for (var i=0; i< citys[index].length ; i++ ){
+			var option=document.createElement("option");
+			var text=citys[index][i];
+			option.value=text;
+			option.innerHTML=text;
+			cobj.appendChild(option);
+		}
+	}
 }

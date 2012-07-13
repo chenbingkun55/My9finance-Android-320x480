@@ -22,6 +22,7 @@
 
 	/* 判断登录用户 */
 	$_SESSION['__userdata'] = $Finance->login($username,  $password);
+
 	if(DEBUG_YES){ 
 		echo "<br>DEBUG START*********************************************<br>";
 		print_r($_SESSION['__userdata']); 
@@ -33,17 +34,21 @@
 	} else if ( $_SESSION['__userdata'] == '2' ) {
 		$_SESSION['__global_logid']=2 ;
 	} else if( $_SESSION['__userdata']['0']["username"] == $username ){
+		$_SESSION['__groupdata'] = $Finance->getUserGroupData($_SESSION['__userdata']['0']["id"]);
+
 		if(DEBUG_YES){ 
 			echo "<br>DEBUG START*********************************************<br>";
 			printf("登录成功。");
-			echo "用户名：".$_SESSION['__userdata']['0']["username"];
+			echo "用户数据包：";
+			print_r($_SESSION['__userdata']);
+			echo "<br>用户组数据包：";
+			print_r($_SESSION['__groupdata']);
 			echo "<br>DEBUG END*********************************************<br>";	
-		} else {
+		} else {		
 			echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=main.php\">";
 		}
 	} else {
 		$_SESSION['__global_logid']=1 ;
-
 	}
 	if(DEBUG_YES){ 
 		echo "<br>DEBUG START*********************************************<br>";

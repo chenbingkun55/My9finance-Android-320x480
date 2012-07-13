@@ -1,11 +1,4 @@
 var CurrentFunTitleColor = "#c7edcc";
-var GlobalUserName = "aaaa";
-var GlobalGroupName = "";
-
-function setGloblData(username,groupname){
-	GlobalUserName = username;
-	GlobalGroupName = groupname;
-}
 
 /*
   JavaScript 更改鼠标经过标题栏时,动态变化.

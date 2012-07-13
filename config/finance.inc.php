@@ -66,20 +66,41 @@
         public function convertLogIdToContent($log_id)
         {
             $sql = "SELECT content FROM  ".$this->_log_resolve." WHERE log_id = '".$log_id."'";        
-            $result = $this->select($sql);
-            foreach($result as $key => $value )
-            {
-                $value_done = $value[0];
-            }
-            return $value_done;
+            if ($result = $this->select($sql)) {
+				return $result;
+			} else {
+				return	false;
+			}
         }
 
 
 
 
+       /* 获取收入\支出数据函数 */
+        public function getCordeData($userID,$table,$date)
+        {
+            
+			if ( $table == $this->_in_corde ){
+				$sql = "SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND user_id = '".$userID."' ORDER BY  create_date desc";
+			} else if ( $table == $this->_out_corde ) {
+				$sql = "SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND user_id = '".$userID."' ORDER BY  create_date desc";
+			}
+
+			$result = $this->select($sql);
+
+            return $result;
+        }
 
 
+        /* 获取用户组数据 */
+        public function getUserGroupData($user_id)
+        {
+            $sql = "SELECT group_id FROM ".$this->_user_group." WHERE user_id = '".$user_id."'";
+            $temp =  $this->select($sql);
 
+			$sql = "SELECT * FROM ".$this->_groups." WHERE id = '".$temp[0][group_id]."'";
+			return $this->select($sql);
+        }
 
 
 
@@ -871,19 +892,7 @@
 
 
 
-       /* 列出支出表函数 */
-        public function listInOutCorde($in_out_corde)
-        {
-            if ( $_SESSION['__useralive'][0] == 1 )
-            {
-                $sql = "SELECT * FROM  ".$this->$in_out_corde." WHERE create_date like '".date("Y-m-d")."%'  ORDER BY  create_date desc";
-            } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT * FROM  ".$this->$in_out_corde." WHERE create_date like '".date("Y-m-d")."%'  AND user_id = '".$_SESSION['__useralive'][0]."' ORDER BY  create_date desc";
-            } else {
-                $sql = "SELECT * FROM  ".$this->$in_out_corde." WHERE create_date like '".date("Y-m-d")."%' AND group_id = '".$_SESSION['__group_id']."'  ORDER BY  create_date desc";
-            }
-            return $this->select($sql);
-        }
+
 
 
 

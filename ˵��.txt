@@ -1,4 +1,58 @@
-JavaScript 说明:
-   PostErrorInfo(GlobalError,type)	抛出全局错误信息.
+调试模式打印内容:
+if(DEBUG_YES){ 
+	echo "<br>DEBUG START*********************************************<br>";
+	print_r($_SESSION['__userdata']); 
+	echo "<br>DEBUG END*********************************************<br>";	
+}
+=======================================================================
+PHP Session 变量定义列表:
+  Session变量:
+    $_SESSION['__global_logid']		全局错误ID.
+    $_SESSION['__userdata']		全局用户数据包.
+    $_SESSION['__groupdata']		全局用户组数据包.
+
+  变量:
+    $error_info	 接收这个日志ID转换函数过来的数据$Finance->convertLogIdToContent($_SESSION['__global_logid'])
+    $today_out_corde	今天支出的记录.
+    $login_username	用户名
+    $login_user_alias	用户别名
+    $login_user_id	用户ID
+    $login_user_session	用户Session
+    $login_last_date	用户最后登录
+    $login_groupname	用户组名
+    $login_group_alias	用户组别名
+    $login_groupadmin_id 用户组管理员ID
+    $login_id		用户组ID
+
+========================================================================
+JavaScript 变量定义列表:
+
+
+
+========================================================================
+PHP 变量定义列表:
+
+
+
+========================================================================
+PHP 函数说明:
+    finance.inc.php:
+	login($username,$password)	登录账号检查.返回1(账号不存在),2(账号有存在密码不正确),登录成功,其它(登录有错误)
+	convertLogIdToContent($log_id)	传入一个LogID
+	getCordeData($userID,$table,$date)	获取用户记录的数据.
+
+========================================================================
+JavaScript 函数说明:
+    PostErrorInfo(GlobalError,type)	抛出全局错误信息.
 	GlobalError		错误内容.
 	type			错误代码,这[1 错误提示信息,0 提示信息]
+
+
+
+========================================================================
+log level 定义：
+    1. ERROR	log_id 1-1999
+    2. WAIN	 log_id 2000-4999
+    3. INFO	 log_id	 5000-9999
+
+

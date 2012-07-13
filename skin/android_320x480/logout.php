@@ -19,7 +19,7 @@
 		清除所有PHP Session。
 	*/
 	$_SESSION['__global_logid']=6000;
-	echo $Finance->convertLogIdToContent($_SESSION['__global_logid']);
+	echo "<br><br>&nbsp;".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
 	session_destroy();
 	/*
 		跳转到登录页面。
@@ -29,9 +29,11 @@
 		echo "提示内容为: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
 		echo "<br>DEBUG END*********************************************<br>";	
 	}else {
+		echo "<script>window.opener='';window.close();</script>";
 		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=index.php\">";
 	}
 ?>
 	</div>
 </body>
 </html>
+$_SESSION['__userdata']

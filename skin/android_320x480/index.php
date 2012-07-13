@@ -24,8 +24,15 @@
   </div>
   <?PHP 
 		if ( !is_null($_SESSION['__global_logid'])) {
+			$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
 			echo "<div class=\"Title_Info\" align=\"center\">";
-			echo "ERROR: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
+			if(DEBUG_YES){ 
+				echo "<br>DEBUG START*********************************************<br>";
+				print_r($error_info); 
+				echo "<br>DEBUG END*********************************************<br>";	
+			} else {
+				echo "ERROR: ".$error_info['0']['content'];
+			}
 			echo "</div>";
 	  }
   ?>

@@ -1,5 +1,6 @@
 <?PHP
     $_TITLE = "彩贝壳-个人收支管理系统";
+	$_HELLO = "你好!";
     $_USERNAME = "用户名";
     $_PASSWORD = "密码";
     $_IN = "收入";
