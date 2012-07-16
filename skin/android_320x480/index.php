@@ -39,7 +39,7 @@
   <div class="Login">
 	<fieldset>
         <legend>&nbsp;<font size="4">登录</font>&nbsp;</legend>
-        <FORM action="login.php" id="login-form" method="post" >
+        <FORM action="login.php" onsubmit="return check()" id="login-form" method="post" name="login-form" >
         <TABLE class="AllFont" border="0">
         <TR>
             <TD><?PHP echo $_USERNAME ?></TD>

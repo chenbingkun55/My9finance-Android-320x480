@@ -19,7 +19,8 @@
 		清除所有PHP Session。
 	*/
 	$_SESSION['__global_logid']=6000;
-	echo "<br><br>&nbsp;".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
+	$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
+	echo "<br><br>&nbsp;".$error_info['0']['content'];
 	session_destroy();
 	/*
 		跳转到登录页面。
