@@ -103,13 +103,117 @@
         }
 
 
+         /* 获取主类函数  */
+        public function getManType($user_id,$cordtype)
+        {
+			if ($cordtype == "out" ) {
+				$sql = "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store";
+			}else if ($cordtype == "in" ){
+				$sql = "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store";
+			}
+            return $this->select($sql);
+        }
+
+		 /* 获取子类函数  */
+        public function getSubType($user_id,$cordtype)
+        {
+			if ($cordtype == "out" ) {
+				$sql = "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' order by store";
+			}else if ($cordtype == "in" ){
+				$sql = "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store";
+			}
+            return $this->select($sql);
+        }
 
 
+       /* 列出地址函数 */
+        public function getAddress($user_id)
+        {
+            $sql = "SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  order by store";        
+            return $this->select($sql);
+        }
 
 
+		/*  收入、支出、地址下拉菜单函数  */
+		public function select_type($in_out){
+				$ManType = $this->getManType($login_user_id,$in_out);
+				$SubType = $this->getSubType($login_user_id,$in_out);
+				$Address = $this->getAddress($login_user_id);
+
+				if(DEBUG_YES){ 
+					echo "<br>DEBUG START*********************************************<br>";
+					echo "主类数量".count($ManType);
+					echo "子类数量".count($SubType);
+					echo "地址数量".count($Address);
+					echo "<br>DEBUG END*********************************************<br>";	
+				}
+
+				echo "<script>";
+				for ($i=0;$i<count($SubType);$i++){
+					echo "SubType['".$i."'] = new Array('".$SubType[$i]['id']."','".$SubType[$i]['man_id']."','".$SubType[$i]['name']."');";
+				}
+
+				echo "</script>";
+				echo "<select name=\"mantype_id\" onChange=\"sSubType(document.add_form.mantype_id.options[document.add_form.mantype_id.selectedIndex].value );\">";
+				echo "<option value=\"\">--选择主类--</option>";
+				for ($i=0;$i<count($ManType);$i++){
+					echo "<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
+				}
+				echo "</select>";
+
+				echo "<br>";
+				echo "<select name=\"subtype_id\">";
+				echo "<option value=\"\">--选择子类--</option>";
+				echo "</select>";
 
 
+				echo "地址:&nbsp;";
 
+				echo "<select name=\"address\">";
+				echo "<option value=\"\">--选择地址--</option>";
+				for ($i=0;$i<count($Address);$i++){
+					echo "<option value=\"".$Address[$i]['id']."\">".$Address[$i]['name']."</option>";
+				}
+				echo "</select>";
+
+				echo "<br>";
+				echo "金额:&nbsp;";
+				echo "<input  type=\"text\" name=\"menoy\" size=\"8\" value=\"0\"><br>";
+				echo "说明:&nbsp;";
+				echo "<input  type=\"text\" name=\"notes\" size=\"8\" value=\"\"><br>";
+				echo "<INPUT type=\"submit\" value=\"提交\">";
+			}
+
+         /* 转换ID->名称函数*/
+        public function convertID($user_id,$id,$table)
+        {
+            
+			switch ($table){
+				case "users":
+					$sql = "SELECT user_alias FROM ".$this->_users." WHERE id = '".$user_id."'";
+					break;
+				case "out_mantype":
+					$sql = "SELECT name FROM ".$this->_out_mantype." WHERE id = '".$id."'";
+					break;
+				case "out_subtype":
+					$sql = "SELECT name FROM ".$this->_out_subtype." WHERE id = '".$id."'";
+					break;
+				case "in_mantype":
+					$sql = "SELECT name FROM ".$this->_in_mantype." WHERE id = '".$id."'";
+					break;
+				case "in_subtype":
+					$sql = "SELECT name FROM ".$this->_in_subtype." WHERE id = '".$id."'";
+					break;
+				case "address":
+					$sql = "SELECT name FROM ".$this->_address." WHERE id = '".$id."'";
+					break;
+			}
+            $result = $this->select($sql);
+            foreach( $result as $key => $value)
+            {
+                return $value[0];
+            }
+        }
 
 
 /*  以上内容为优化内容  ####################################################################################################*/
@@ -139,17 +243,6 @@
         }
 
 
-
-          /* 转换用户ID为用户名函数*/
-        public function convertUserID($user_id)
-        {
-            $sql = "SELECT username FROM ".$this->_users." WHERE id = '".$user_id."'";
-            $result =  $this->select($sql);
-            foreach( $result as $key => $value)
-            {
-                return $value[0];
-            }
-        }
 
         /* 转换用户ID为用户别名函数*/
         public function convertUserAliasID($user_id)
@@ -666,12 +759,7 @@
 
 
 
-          /* 列出支出主类函数  */
-        public function getOutType()
-        {
-            $sql = "SELECT * FROM  ".$this->_out_mantype;
-            return $this->select($sql);
-        }
+
 
         public  function  getManTypeList($typelist)
         {
@@ -896,12 +984,6 @@
 
 
 
-         /* 列出子类函数  */
-        public function getSubType($subtype,$mantype_id)
-        {
-            $sql = "SELECT * FROM  ".$this->$subtype." WHERE man_id = '".$mantype_id."' AND user_id = '".$_SESSION['__useralive'][0]."' order by store";
-            return $this->select($sql);
-        }
 
 
 
@@ -968,12 +1050,7 @@
         }
 
 
-       /* 列出地址函数 */
-        public function getAddress()
-        {
-            $sql = "SELECT * FROM ".$this->_address." WHERE user_id = '".$_SESSION['__useralive'][0]."'  order by store";        
-            return $this->select($sql);
-        }
+
 
         /*  列出要显示的地址函数*/
         public function getAddressDisplay()

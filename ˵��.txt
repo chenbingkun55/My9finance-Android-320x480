@@ -23,10 +23,13 @@ PHP Session 变量定义列表:
     $login_group_alias	用户组别名
     $login_groupadmin_id 用户组管理员ID
     $login_id		用户组ID
+    $ManType		用户主类ID
+    $SubType		用户子类ID
+    $Address		用户地址
 
 ========================================================================
 JavaScript 变量定义列表:
-
+    SubType		JavaScript二级下拉菜单数组。	
 
 
 ========================================================================

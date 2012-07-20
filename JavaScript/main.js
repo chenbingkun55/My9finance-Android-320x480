@@ -1,4 +1,5 @@
 var CurrentFunTitleColor = "#c7edcc";
+var SubType=new Array();
 
 /*
   JavaScript 更改鼠标经过标题栏时,动态变化.
@@ -39,8 +40,8 @@ function OutFunTitleColor(obj) {
 	定义各功能内容数组.
 */
 var bodyHTML = new Array(5);
-bodyHTML['FunTitle1'] = "<br><span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=out_record')\">支出记录</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=in_record')\">收入记录</span><br><br>\
+bodyHTML['FunTitle1'] = "<br><a href=\"main.php?page=add_record.php&add_type=out_record\"><span class=\"BodyLink1\">支出记录</span></a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+	<a href=\"main.php?page=add_record.php&add_type=in_record\"><span class=\"BodyLink1\">收入记录</span></a><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle2')\">功能管理</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle3')\">报表</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle4')\">搜索</span><br><br>\
@@ -205,4 +206,26 @@ function check(){
 		alert(info);
 	}
 	return stats;
+}
+
+
+function sSubType(id){
+	var sobj=document.getElementById("subtype_id");
+	sobj.innerHTML="";
+	if ( id >=0 ){
+		var option=document.createElement("option");
+		var text="--选择子类--";
+		option.value=text;
+		option.innerHTML=text;
+		sobj.appendChild(option);
+		for (var i=0; i<SubType.length ; i++ ){
+			if (SubType[i][1] == id )
+			{
+				var option=document.createElement("option");
+				option.value=SubType[i][0];
+				option.innerHTML=SubType[i][2];
+				sobj.appendChild(option);
+			}
+		}
+	}
 }
