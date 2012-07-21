@@ -1,19 +1,43 @@
 <div class="Content" id="Content">
-<form class="add_form" name="add_form" action="add_record.php" method="post">
+<form class="add_form" name="add_form" action="main.php<?PHP echo "?page=add_record.php&add_type=".$_GET['add_type'];?>" method="post">
 
 <?PHP 	
-
-
-
 	$recordtype = $_GET['add_type'];
+	$add_submit = $_POST['add_submit'];
+
 	/*
 		添加表单:
 	*/
 	if  ( $recordtype == 'out_record' )
 	{
+		if ( $add_submit == 1 ){
+			$mantype_id = $_POST['mantype_id'];
+			$subtype_id = $_POST['subtype_id'];
+			$address = $_POST['address'];
+			$menoy = $_POST['menoy'];
+			$notes = $_POST['notes'];
+
+			if(DEBUG_YES){ 
+				echo "<br>DEBUG START*********************************************<br>";
+				echo "add_submit值为：".$_POST['add_submit']."<br>";
+				echo "mantype_id值为：".$_POST['mantype_id']."<br>";
+				echo "subtype_id值为：".$_POST['subtype_id']."<br>";
+				echo "address值为：".$_POST['address']."<br>";
+				echo "menoy值为：".$_POST['menoy']."<br>";
+				echo "notes值为：".$_POST['notes']."<br>";
+				echo "<br>DEBUG END*********************************************<br>";	
+			}
+			if ($Finance->addCordeData("out",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$menoy,$notes)){
+				echo "成功<br>";
+			}else{
+				echo "失败<br>";
+			}
+		}
+
+
 		echo "支出:&nbsp;";
-		$Finance->select_type("out");
-		$today_corde = $Finance->getCordeData($login_user_id,"out_corde",date("Y-m-d"));
+		$Finance->select_type($login_user_id,"out");
+		$today_corde = $Finance->getCordeData($login_group_id,"out",date("Y-m-d"));
 		$table_title = array("序号","用户","家庭","主类","子类","金额","地址","备注","时间");
 		
 		echo "<table>";		
@@ -32,7 +56,7 @@
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['out_subtype_id'],"out_subtype")."</td>";
 			echo "<td>".$today_corde[$i]['money']."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['addr_id'],"address")."</td>";
-			echo "<td>".$today__corde[$i]['notes']."</td>";
+			echo "<td>".$today_corde[$i]['notes']."</td>";
 			echo "<td>".$today_corde[$i]['create_date']."</td>";
 			echo "</tr>";
 		}
@@ -46,12 +70,42 @@
 		}
 
 	} else if ( $recordtype == 'in_record' ){
+		if ( $add_submit == 1 ){
+			$mantype_id = $_POST['mantype_id'];
+			$subtype_id = $_POST['subtype_id'];
+			$address = $_POST['address'];
+			$menoy = $_POST['menoy'];
+			$notes = $_POST['notes'];
+
+			if(DEBUG_YES){ 
+				echo "<br>DEBUG START*********************************************<br>";
+				echo "add_submit值为：".$_POST['add_submit']."<br>";
+				echo "mantype_id值为：".$_POST['mantype_id']."<br>";
+				echo "subtype_id值为：".$_POST['subtype_id']."<br>";
+				echo "address值为：".$_POST['address']."<br>";
+				echo "menoy值为：".$_POST['menoy']."<br>";
+				echo "notes值为：".$_POST['notes']."<br>";
+				echo "<br>DEBUG END*********************************************<br>";	
+			}
+			if ($Finance->addCordeData("in",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$menoy,$notes)){
+				echo "成功<br>";
+			}else{
+				echo "失败<br>";
+			}
+		}
+
 		echo "收入:&nbsp;";
 		
-		$Finance->select_type("in");
-		$today_corde = $Finance->getCordeData($login_user_id,"in_corde",date("Y-m-d"));
+		$Finance->select_type($login_user_id,"in");
+		$today_corde = $Finance->getCordeData($login_group_id,"in",date("Y-m-d"));
 		$table_title = array("序号","用户","家庭","主类","子类","金额","地址","备注","时间");
-		
+		if(DEBUG_YES){ 
+			echo "<br>DEBUG START*********************************************<br>";
+			print_r($today_corde);
+			echo "<Br>".date("Y-m-d");
+			echo "<br>DEBUG END*********************************************<br>";	
+		}
+
 		echo "<table>";		
 		echo "<tr>";
 		for ($i=0;$i<count($table_title);$i++){
@@ -74,12 +128,6 @@
 		}
 
 		echo "</table>";
-		if(DEBUG_YES){ 
-			echo "<br>DEBUG START*********************************************<br>";
-			print_r($today_corde);
-			echo "<Br>".date("Y-m-d");
-			echo "<br>DEBUG END*********************************************<br>";	
-		}
 	} else if ( $recordtype == 'out_record_type' ){
 
 		echo "添加支出主类:&nbsp;";

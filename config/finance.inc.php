@@ -77,18 +77,31 @@
 
 
        /* 获取收入\支出数据函数 */
-        public function getCordeData($userID,$table,$date)
+        public function getCordeData($group_id,$in_out,$date,$is_user=0)
         {
             
-			if ( $table == $this->_in_corde ){
-				$sql = "SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND user_id = '".$userID."' ORDER BY  create_date desc";
-			} else if ( $table == $this->_out_corde ) {
-				$sql = "SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND user_id = '".$userID."' ORDER BY  create_date desc";
+			if ( $in_out == "out" ){
+				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc":"SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
+			} else if ( $in_out == "in" ) {
+				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc":"SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
 			}
 
 			$result = $this->select($sql);
 
             return $result;
+        }
+
+       /* 添加收入\支出数据函数 "out",$user_id,$group_id,$mantype_id,$subtype_id,$address,$menoy,$notes */
+        public function addCordeData($in_out,$user_id,$group_id,$mantype_id,$subtype_id,$address,$menoy,$notes)
+        {
+            
+			if ( $in_out == "out" ){
+				$sql = "INSERT INTO ".$this->_out_corde ."  VALUES ('','".$menoy."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
+			} else if (  $in_out == "in"  ) {
+				$sql = "INSERT INTO ".$this->_in_corde ."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
+			}
+
+            return $this->insert($sql);
         }
 
 
@@ -104,41 +117,41 @@
 
 
          /* 获取主类函数  */
-        public function getManType($user_id,$cordtype)
+        public function getManType($user_id,$cordtype,$isdisplay=0)
         {
 			if ($cordtype == "out" ) {
-				$sql = "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store";
+				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
 			}else if ($cordtype == "in" ){
-				$sql = "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store";
+				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
 			}
             return $this->select($sql);
         }
 
 		 /* 获取子类函数  */
-        public function getSubType($user_id,$cordtype)
+        public function getSubType($user_id,$cordtype,$isdisplay=0)
         {
 			if ($cordtype == "out" ) {
-				$sql = "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' order by store";
+				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND is_display = '1'  order by store";
 			}else if ($cordtype == "in" ){
-				$sql = "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store";
+				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND is_display = '1' order by store";
 			}
             return $this->select($sql);
         }
 
 
        /* 列出地址函数 */
-        public function getAddress($user_id)
+        public function getAddress($user_id,$isdisplay=0)
         {
-            $sql = "SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  order by store";        
+            $sql = $isdisplay ? "SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  order by store":"SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  AND is_display = '1' order by store";        
             return $this->select($sql);
         }
 
 
 		/*  收入、支出、地址下拉菜单函数  */
-		public function select_type($in_out){
-				$ManType = $this->getManType($login_user_id,$in_out);
-				$SubType = $this->getSubType($login_user_id,$in_out);
-				$Address = $this->getAddress($login_user_id);
+		public function select_type($user_id,$in_out){
+				$ManType = $this->getManType($user_id,$in_out);
+				$SubType = $this->getSubType($user_id,$in_out);
+				$Address = $this->getAddress($user_id);
 
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
@@ -180,7 +193,8 @@
 				echo "金额:&nbsp;";
 				echo "<input  type=\"text\" name=\"menoy\" size=\"8\" value=\"0\"><br>";
 				echo "说明:&nbsp;";
-				echo "<input  type=\"text\" name=\"notes\" size=\"8\" value=\"\"><br>";
+				echo "<input  type=\"text\" name=\"notes\" size=\"20\" value=\"\"><br>";
+				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
 				echo "<INPUT type=\"submit\" value=\"提交\">";
 			}
 
