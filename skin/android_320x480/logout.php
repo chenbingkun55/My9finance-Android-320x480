@@ -12,8 +12,8 @@
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
 <script type="text/javascript" src="<?PHP echo JS_PATH."TwoSelect.js"?>"></script>
 </head>
-<body class="mainfont">
-	<div class="BodyDiv" id="BodyDiv">
+<body>
+	<div class="10_BackPlane" id="BodyDiv">
 <?PHP 
 	/*
 		清除所有PHP Session。

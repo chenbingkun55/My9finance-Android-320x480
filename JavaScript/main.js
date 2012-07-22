@@ -40,7 +40,7 @@ function OutFunTitleColor(obj) {
 	定义各功能内容数组.
 */
 var bodyHTML = new Array(5);
-bodyHTML['FunTitle1'] = "<br><a href=\"main.php?page=add_record.php&add_type=out_record\"><span class=\"BodyLink1\">支出记录</span></a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+bodyHTML['FunTitle1'] = "<a href=\"main.php?page=add_record.php&add_type=out_record\"><span class=\"BodyLink1\">支出记录</span></a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
 	<a href=\"main.php?page=add_record.php&add_type=in_record\"><span class=\"BodyLink1\">收入记录</span></a><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle2')\">功能管理</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle3')\">报表</span><br><br>\
@@ -102,31 +102,31 @@ function OutTitleIMG(){
 function ChangeSkinColor(obj){
 	switch (obj)
 	{
-	case "theme-1":
+	case "Skin-1":
 		document.getElementById("BodyDiv").style.backgroundColor = "#66CC00";
 		document.getElementById("Content").style.backgroundColor = "#C7EDCC";
 		CurrentFunTitleColor = "#C7EDCC";
 		break;
 
-	case "theme-2":
+	case "Skin-2":
 		document.getElementById("BodyDiv").style.backgroundColor = "#9900FF";
 		document.getElementById("Content").style.backgroundColor = "#CC66FF";
 		CurrentFunTitleColor = "#CC66FF";
 		break;
 
-	case "theme-3":
+	case "Skin-3":
 		document.getElementById("BodyDiv").style.backgroundColor = "#FF6600";
 		document.getElementById("Content").style.backgroundColor = "#FF6666";
 		CurrentFunTitleColor = "#FF6666";
 		break;
 
-	case "theme-4":
+	case "Skin-4":
 		document.getElementById("BodyDiv").style.backgroundColor = "#CCFF33";
 		document.getElementById("Content").style.backgroundColor = "#CCFF99";
 		CurrentFunTitleColor = "#CCFF99";
 		break;
 
-	case "theme-5":
+	case "Skin-5":
 		document.getElementById("BodyDiv").style.backgroundColor = "#336633";
 		document.getElementById("Content").style.backgroundColor = "#339900";
 		CurrentFunTitleColor = "#339900";
@@ -229,3 +229,53 @@ function sSubType(id){
 		}
 	}
 }
+
+function PrintDate(){
+	var date=new Date();
+	var DateTimePlane=document.getElementById("DateTimePlane");
+	var week = date.getDay();
+	var text="";
+	switch (week)
+	{
+		case 0:
+			week="星期天";
+			break;
+		case 1:
+			week="星期一";
+			break;
+		case 2:
+			week="星期二";
+			break;
+		case 3:
+			week="星期三";
+			break;
+		case 4:
+			week="星期四";
+			break;
+		case 5:
+			week="星期五";
+			break;
+		case 6:
+			week="星期六";
+			break;
+	}
+
+	if (date.getHours()<10){
+		var Hours = "0"+date.getHours();
+	} else {
+		Hours = date.getHours()
+	}
+	if (date.getMinutes()<10){
+		var Minutes = "0"+date.getMinutes();
+	}else{
+		Minutes = date.getMinutes()
+	}
+
+	text = date.getFullYear()+'.'+(date.getMonth() + 1)+'.'+date.getDate();
+	text += '<br>'+week;
+	text += '<br>'+Hours+':'+Minutes;
+
+	DateTimePlane.innerHTML=text;
+}
+
+

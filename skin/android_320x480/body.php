@@ -1,4 +1,4 @@
-<div class="Content" id="Content">
+<div class="20_ContentPlane Content" id="Content">
 
 <script>
 	document.write(bodyHTML['FunTitle1']);

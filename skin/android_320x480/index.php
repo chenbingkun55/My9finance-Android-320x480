@@ -12,20 +12,20 @@
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
 </head>
 
-<body class="mainfont" onload="document.getElementById('login-form').username.focus()">
+<body onload="document.getElementById('login-form').username.focus()">
 
-<div class="BodyDiv">
-  <div class="TitleIMG">
+<div class="10_Backplane">
+  <div class="100_IndexICO">
 	<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
   </div>
 
-  <div class="Title">
+  <div class="20_IndexTitle IndexTitle">
 		<?PHP echo "<STRONG>". $_TITLE ."</STRONG>";?> 
   </div>
   <?PHP 
 		if ( !is_null($_SESSION['__global_logid'])) {
 			$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
-			echo "<div class=\"Title_Info\" align=\"center\">";
+			echo "<div class=\"20_IndexLoginInfo IndexLoginInfo\" align=\"center\">";
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";
 				print_r($error_info); 
@@ -36,11 +36,11 @@
 			echo "</div>";
 	  }
   ?>
-  <div class="Login">
+  <div class="20_IndexLogin">
 	<fieldset>
-        <legend>&nbsp;<font size="4">登录</font>&nbsp;</legend>
+        <legend class="IndexLogin">&nbsp;登录&nbsp;</legend>
         <FORM action="login.php" onsubmit="return check()" id="login-form" method="post" name="login-form" >
-        <TABLE class="AllFont" border="0">
+        <TABLE border="0">
         <TR>
             <TD><?PHP echo $_USERNAME ?></TD>
             <TD> <input class="LoginInput" type="text" name="username"></TD>
@@ -54,18 +54,14 @@
 			</TD>
 			<TD align="right">
             <INPUT type="hidden" name="login" value="LOGIN">
+			<a href="regedit_user.php?registr=1"><?PHP echo $_REGISTR?></a>&nbsp;
             <INPUT class="LoginButton" type="submit" value="<?PHP echo $_LOGIN?>">
+			
 			</TD>
         </TR>
-        </TABLE>
+        </TABLE> 
         </FORM>
         </fieldset>
-  </div>
-
-  <div class="Foot" align="center">
-    Copyright © 2010-2012 ChenBK All Rights Reserved<br> 
-    一个简单在线个人收支管理系统<br>
-    E-mail : <a href="mailto:chenbingkun55@163.com">ChenBingKun55@163.com</a> 
   </div>
 </div>
 </body>

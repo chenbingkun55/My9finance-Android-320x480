@@ -1,16 +1,7 @@
-body.mainfont {
-	font-family: "微软雅黑";
-	font-size: 12px;
-}
-
-
-.AllFont {
-	font-family: "微软雅黑";
-	font-size: 12px;
-}
-
-.BodyDiv {
+/* DIV 绝对定位 1-100 1为最底层 */
+.10_BackPlane {
 	background-color: #66CC00;
+	z-index:10;
 	position:absolute;
 	height: 480px;
 	width: 320px;
@@ -18,34 +9,104 @@ body.mainfont {
 	top: 0px;
 }
 
-.TopInfo {
+.100_IndexICO {
 	position: absolute;
+	z-index:100;
+	height: 50px;
+	width: 50px;
+	left: 20px;
+	top: 100px;
+}
+
+.100_MainICO {
+	position: absolute;
+	z-index:100;
+	height: 50px;
+	width: 50px;
+	left: 20px;
+	top: 35px;
+}
+
+
+.20_IndexLogin{
+	background-color: #66CC00;
+	position:absolute;
+	z-index:20;
+	height: 160px;
+	width: 280px;
+	left: 20px;
+	top: 140px;
+	padding-top: 10;
+	padding-left: 0;
+	padding-right: 0;
+	padding-bottom: 10;
+}
+
+.20_IndexTitle{
+	position: absolute;
+	z-index:20;
+	height: 20px;
+	width: 300;
+	left: 60px;
+	top: 100px;
+}
+
+.20_Foot {
+	position: absolute;
+	z-index:20;
+	height: 80px;
+	width: 300px;
+	bottom: 0px;
+	left: 0px;
+}
+
+.20_UserInfo {
+	position: absolute;
+	z-index:20;
 	height: 10px;
-	width: 200px;
+	width: 240px;
 	left: 20px;
 	top: 10px;
 }
 
-.theme-1, .theme-2, .theme-3, .theme-4, .theme-5, {
+.30_MainMessage {
+	position: absolute;
+	z-index:30;
+	height: 20px;
+	width: 300;
+	left: 60px;
+	top: 35px;
+}
+
+.20_DateTimePlane{
+	position: absolute;
+	z-index:20;
+	height: 8px;
+	width: 50px;
+	left: 250px;
+	top: 26px;
+}
+
+.20_ChangeSkinPlane{
+	position: absolute;
+	z-index:20;
+	height: 8px;
+	width: 50px;
+	left: 250px;
+	top: 8px;
+}
+
+.20_Skin-1, .20_Skin-2, .20_Skin-3, .20_Skin-4, .20_Skin-5, {
     cursor: pointer;
-	border-style: ridge;
-	border-width : 1px;
-    float: left;
+	text-align : center;
+	FONT-SIZE: 8px;
     overflow: hidden;
 
 }
 
-.ChangeSkinColor {
-	font-size: 7px;
+.20_Skin-1 {
 	position: absolute;
-	height: 10px;
-	width: 50px;
-	left: 240px;
-	top: 7px;
-}
-
-.theme-1 {
-	position: absolute;
+	z-index:20;
 	background-color: #66CC00;
 	text-align : center;
 	height: 10px;
@@ -53,8 +114,10 @@ body.mainfont {
 	left: 0px;
 	top: 7px;
 }
-.theme-2 {
+
+.20_Skin-2 {
 	position: absolute;
+	z-index:20;
 	background-color: #9900FF;
 	text-align : center;
 	height: 10px;
@@ -62,8 +125,9 @@ body.mainfont {
 	left: 12px;
 	top: 7px;
 }
-.theme-3 {
+.20_Skin-3 {
 	position: absolute;
+	z-index:20;
 	background-color: #FF6600;
 	text-align : center;
 	height: 10px;
@@ -71,8 +135,9 @@ body.mainfont {
 	left: 24px;
 	top: 7px;
 }
-.theme-4 {
+.20_Skin-4 {
 	position: absolute;
+	z-index:20;
 	background-color: #FFFF33;
 	text-align : center;
 	height: 10px;
@@ -80,8 +145,9 @@ body.mainfont {
 	left: 36px;
 	top: 7px;
 }
-.theme-5 {
+.20_Skin-5 {
 	position: absolute;
+	z-index:20;
 	background-color: #333300;
 	text-align : center;
 	height: 10px;
@@ -90,100 +156,50 @@ body.mainfont {
 	top: 7px;
 }
 
-
-.Title {
-	font-family: "微软雅黑";
-	font-size: 16px;
-	color: #3300CC;
+.20_FunTitle1 {
 	position: absolute;
-	height: 20px;
-	width: 300;
-	left: 60px;
-	top: 35px;
-}
-
-
-.Title_Info {
-	font-family: "微软雅黑";
-	font-size: 14px;
-	z-index:1;
-	background-color: #333300;
-	color: #FF6666;
-	position: absolute;
-	height: 20px;
-	width: 280;
-	left: 20px;
-	top: 280px;
-}
-
-.ErrorInfo {
-	position: absolute;
-	font-size: 16px;
-	height: 20px;
-	width: 250;
-	left: 60px;
-	top: 35px;
-}
-
-.TitleIMG {
-	position: absolute;
-	z-index:1;
-	height: 50px;
-	width: 50px;
-	left: 20px;
-	top: 35px;
-}
-
-.FunTitle1 {
-	position: absolute;
-	text-align : center;
-    cursor: pointer;
+	z-index:20;
 	height: 20px;
 	width: 56;
 	left: 20px;
 	top: 65px;
 }
 
-.FunTitle2 {
+.20_FunTitle2 {
 	position: absolute;
-	text-align : center;
-    cursor: pointer;
+	z-index:20;
 	height: 20px;
 	width: 56;
 	left: 76px;
 	top: 65px;
 }
-.FunTitle3 {
+.20_FunTitle3 {
 	position: absolute;
-	text-align : center;
-	cursor: pointer;
+	z-index:20;
 	height: 20px;
 	width: 56;
 	left: 132px;
 	top: 65px;
 }
-.FunTitle4 {
+.20_FunTitle4 {
 	position: absolute;
-	text-align : center;
-    cursor: pointer;
+	z-index:20;
 	height: 20px;
 	width: 56;
 	left: 188px;
 	top: 65px;
 }
 
-.FunTitle5 {
+.20_FunTitle5 {
 	position: absolute;
-	text-align : center;
-    cursor: pointer;
+	z-index:20;
 	height: 20px;
 	width: 56;
 	left: 244px;
 	top: 65px;
 }
 
-.Content {
-	background-color: #C7EDCC;
+.20_ContentPlane {
 	padding-top: 10;
 	padding-left: 10;
 	padding-right: 10;
@@ -193,37 +209,91 @@ body.mainfont {
 	width: 280;
 	left: 20px;
 	top: 85px;
+}
+
+
+.20_IndexLoginInfo {
+	z-index:20;
+	position: absolute;
+	height: 20px;
+	width: 280;
+	left: 20px;
+	top: 300px;
+} 
+
+/*  重新定义 标签样式 */
+Body{
+	font-family: "微软雅黑";
+	font-size: 14px;
+}
+
+
+table{
+	font-family: "微软雅黑";
+	font-size: 14px;
+}
+
+
+/*  自定义标签样式 */
+.IndexLogin{
+	font-family: "微软雅黑";
+	font-size: 16px;
+	color: #3300CC;
+}
+
+
+.IndexTitle{
+	font-family: "微软雅黑";
+	font-size: 18px;
+	color: #3300CC;
+
+}
+
+.MainMessage{
+	font-family: "微软雅黑";
+	font-size: 16px;
+}
+
+.ChangeSkinPlane{
+    cursor: pointer;
+	border-style: ridge;
+	border-width : 1px;
+    float: left;
+    overflow: hidden;
+
+}
+.FootFont {
+	font-family: "微软雅黑";
+	font-size: 11px;
+}
+
+.DateTimePlaneFont{
+	font-family: "微软雅黑";
+	font-size: 9px;
+}
+
+.FunTitleFont{
+	font-family: "微软雅黑";
+	font-size: 14px;
+	text-align : center;
+	    cursor: pointer;
+}
+
+.Content {
+	background-color: #C7EDCC;
 	overflow-x: auto;
 	overflow-y: auto;
 	white-space:nowrap;
 
 }
-
-.Foot {
+.IndexLoginInfo{
+	background-color: #333300;
+	color: #FF6666;
 	font-family: "微软雅黑";
-	font-size: 11px;
-	line-height: 14px;
-	position: absolute;
-	height: 80px;
-	width: 300px;
-	bottom: 0px;
-	left: 0px;
+	font-size: 14px;
 }
 
-.Login {
-	background-color: #66CC00;
-	position:absolute;
-	height: 160px;
-	width: 280px;
-	left: 20px;
-	top: 120px;
-	padding-top: 10;
-	padding-left: 0;
-	padding-right: 0;
-	padding-bottom: 10;
-}
-
-
+/*  按钮和其它定义 */
 
 .LoginInput{
 	margin-left:   20px;
@@ -262,7 +332,3 @@ body.mainfont {
 	BORDER-BOTTOM: #002D96 1px solid
 }
 
-
-.BodyLink1 {
-    cursor: pointer;
-}

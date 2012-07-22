@@ -23,8 +23,8 @@
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
 </head>
 
-<body class="mainfont">
-	<div class="BodyDiv" id="BodyDiv">
+<body>
+	<div class="10_Backplane" id="BodyDiv">
 		<?PHP 
 			$page = $_GET['page'];
 			 require_once("head.php"); 

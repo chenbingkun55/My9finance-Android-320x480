@@ -1,4 +1,4 @@
-<div class="Content" id="Content">
+<div class="20_ContentPlane Content" id="Content">
 <form class="add_form" name="add_form" action="main.php<?PHP echo "?page=add_record.php&add_type=".$_GET['add_type'];?>" method="post">
 
 <?PHP 	
@@ -14,7 +14,7 @@
 			$mantype_id = $_POST['mantype_id'];
 			$subtype_id = $_POST['subtype_id'];
 			$address = $_POST['address'];
-			$menoy = $_POST['menoy'];
+			$money = $_POST['money'];
 			$notes = $_POST['notes'];
 
 			if(DEBUG_YES){ 
@@ -23,11 +23,11 @@
 				echo "mantype_id值为：".$_POST['mantype_id']."<br>";
 				echo "subtype_id值为：".$_POST['subtype_id']."<br>";
 				echo "address值为：".$_POST['address']."<br>";
-				echo "menoy值为：".$_POST['menoy']."<br>";
+				echo "money值为：".$_POST['money']."<br>";
 				echo "notes值为：".$_POST['notes']."<br>";
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
-			if ($Finance->addCordeData("out",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$menoy,$notes)){
+			if ($Finance->addCordeData("out",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes)){
 				echo "成功<br>";
 			}else{
 				echo "失败<br>";
@@ -74,7 +74,7 @@
 			$mantype_id = $_POST['mantype_id'];
 			$subtype_id = $_POST['subtype_id'];
 			$address = $_POST['address'];
-			$menoy = $_POST['menoy'];
+			$money = $_POST['money'];
 			$notes = $_POST['notes'];
 
 			if(DEBUG_YES){ 
@@ -83,11 +83,11 @@
 				echo "mantype_id值为：".$_POST['mantype_id']."<br>";
 				echo "subtype_id值为：".$_POST['subtype_id']."<br>";
 				echo "address值为：".$_POST['address']."<br>";
-				echo "menoy值为：".$_POST['menoy']."<br>";
+				echo "money值为：".$_POST['money']."<br>";
 				echo "notes值为：".$_POST['notes']."<br>";
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
-			if ($Finance->addCordeData("in",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$menoy,$notes)){
+			if ($Finance->addCordeData("in",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes)){
 				echo "成功<br>";
 			}else{
 				echo "失败<br>";
@@ -120,7 +120,7 @@
 			echo "<td>".$login_group_alias."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['in_mantype_id'],"in_mantype")."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['in_subtype_id'],"in_subtype")."</td>";
-			echo "<td>".$today_out_corde[$i]['money']."</td>";
+			echo "<td>".$today_corde[$i]['money']."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['addr_id'],"address")."</td>";
 			echo "<td>".$today_corde[$i]['notes']."</td>";
 			echo "<td>".$today_corde[$i]['create_date']."</td>";

@@ -92,11 +92,11 @@
         }
 
        /* 添加收入\支出数据函数 "out",$user_id,$group_id,$mantype_id,$subtype_id,$address,$menoy,$notes */
-        public function addCordeData($in_out,$user_id,$group_id,$mantype_id,$subtype_id,$address,$menoy,$notes)
+        public function addCordeData($in_out,$user_id,$group_id,$mantype_id,$subtype_id,$address,$money,$notes)
         {
             
 			if ( $in_out == "out" ){
-				$sql = "INSERT INTO ".$this->_out_corde ."  VALUES ('','".$menoy."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
+				$sql = "INSERT INTO ".$this->_out_corde ."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
 			} else if (  $in_out == "in"  ) {
 				$sql = "INSERT INTO ".$this->_in_corde ."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
 			}
@@ -191,7 +191,7 @@
 
 				echo "<br>";
 				echo "金额:&nbsp;";
-				echo "<input  type=\"text\" name=\"menoy\" size=\"8\" value=\"0\"><br>";
+				echo "<input  type=\"text\" name=\"money\" size=\"8\" value=\"0\"><br>";
 				echo "说明:&nbsp;";
 				echo "<input  type=\"text\" name=\"notes\" size=\"20\" value=\"\"><br>";
 				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
