@@ -40,17 +40,16 @@ function OutFunTitleColor(obj) {
 	定义各功能内容数组.
 */
 var bodyHTML = new Array(5);
-bodyHTML['FunTitle1'] = "<a href=\"main.php?page=add_record.php&add_type=out_record\"><span class=\"BodyLink1\">支出记录</span></a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<a href=\"main.php?page=add_record.php&add_type=in_record\"><span class=\"BodyLink1\">收入记录</span></a><br><br>\
-	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle2')\">功能管理</span><br><br>\
+bodyHTML['FunTitle1'] = "<a href=\"main.php?page=add_record.php&add_type=out_record\">支出记录</a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
+	<a href=\"main.php?page=add_record.php&add_type=in_record\">收入记录</a><br><br>\
+	<a href=\"main.php?page=fun_manager.php\"><span>功能管理</span></a><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle3')\">报表</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle4')\">搜索</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle5')\">关于</span>";
-bodyHTML['FunTitle2'] = "<br><span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=in_record_type')\">收入类别管理</span>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=out_record_type')\">支出类别管理</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=address')\">地址管理</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=user')\">用户管理</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"post('add_record.php?add_type=family')\">家庭管理</span>";
+bodyHTML['FunTitle2'] = "<br><a href=\"main.php?page=fun_manager.php&add_type=in_mantype\"><span>收入类别管理</span></a><br><br>\
+	<a href=\"main.php?page=fun_manager.php&add_type=out_mantype\"><span>支出类别管理</span></a><br><br>\
+	<a href=\"main.php?page=fun_manager.php&add_type=address\"><span>地址管理</span></a><br><br>\
+	<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>家庭管理</span></a>";
 bodyHTML['FunTitle3'] = "<br><span class=\"BodyLink1\" onclick=\"record('in')\">每月支出报表</span><br>\
 	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出报表</span><br><br>\
 	<span class=\"BodyLink1\" onclick=\"record('in')\">每月收入报表</span><br>\
@@ -279,3 +278,7 @@ function PrintDate(){
 }
 
 
+function PrintCreateDateShort(str){
+	ss = str.split(" ");
+	document.write(ss[1]);
+}

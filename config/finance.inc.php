@@ -104,6 +104,57 @@
             return $this->insert($sql);
         }
 
+		/* 添加收入\支出类别 */
+		public function addTypeData($in_out,$user_id,$typename,$is_display=1,$is_sub=0){
+		if ( $in_out == "out" ){
+				$man_store = $this->select("select max(store) from out_mantype");
+				$sub_store = $this->select("select max(store) from out_subtype");
+
+				$sql =($is_sub) ? "INSERT INTO ".$this->_out_subtype ."  VALUES ('','".$user_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_out_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;
+			} else if (  $in_out == "in"  ) {
+				$man_store = $this->select("select max(store) from in_mantype");
+				$sub_store = $this->select("select max(store) from in_subtype");
+
+				$sql =($is_sub) ? "INSERT INTO ".$this->_in_subtype ."  VALUES ('','".$user_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_in_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;	
+			}
+			return $this->insert($sql);
+		}
+
+
+        /*  添加用户函数 */
+        public function AddUser($user_name,$user_alias,$user_password,$notes,$group_id)
+        {
+            $sql = "INSERT INTO ".$this->_users." (id,username,user_alias,password,notes,create_date)   VALUES  ('','".$user_name."','".$user_alias."',password('".$user_password."'),'".$notes."','".date("Y-m-d H:i:s")."')";
+			if ($this->insert($sql) != false){
+				$user_id = $this->select("SELECT * from users where username = '".$user_name."'");
+				$sql = "INSERT INTO ".$this->_user_group." (id,user_id,group_id,create_date,disable)   VALUES  ('','".$user_id['0']['id']."','".$group_id."','".date("Y-m-d H:i:s")."','0')";
+				if ($this->insert($sql) != false){
+					return true;
+				}else{
+					$this->select("DELETE from users where id = '".$user_id['0']['id']."'");
+					return false;
+				}
+			} else {
+				
+				return false;
+			}
+            
+        }
+
+        /*  获取家庭用户函数 */
+        public function getUserData($group_id=0)
+        {
+			$users = $this->select("SELECT user_id FROM user_group where group_id ='".$group_id."'");
+            for ($i=0;$i<count($users);$i++){
+				if ($i<count($users)-1){
+					$user_list .= "'".$users[$i]['user_id']."',";
+				}else{
+					$user_list .= "'".$users[$i]['user_id']."'";
+				}
+			}
+			$sql = "SELECT * FROM users where id in (".$user_list.")";
+			return $this->select($sql);
+        }
 
         /* 获取用户组数据 */
         public function getUserGroupData($user_id)
@@ -139,7 +190,7 @@
         }
 
 
-       /* 列出地址函数 */
+       /* 获取地址函数 */
         public function getAddress($user_id,$isdisplay=0)
         {
             $sql = $isdisplay ? "SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  order by store":"SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  AND is_display = '1' order by store";        
@@ -167,35 +218,34 @@
 				}
 
 				echo "</script>";
-				echo "<select name=\"mantype_id\" onChange=\"sSubType(document.add_form.mantype_id.options[document.add_form.mantype_id.selectedIndex].value );\">";
+				echo "<span><select name=\"mantype_id\" onChange=\"sSubType(document.add_form.mantype_id.options[document.add_form.mantype_id.selectedIndex].value );\">";
 				echo "<option value=\"\">--选择主类--</option>";
 				for ($i=0;$i<count($ManType);$i++){
 					echo "<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
 				}
 				echo "</select>";
 
-				echo "<br>";
 				echo "<select name=\"subtype_id\">";
 				echo "<option value=\"\">--选择子类--</option>";
-				echo "</select>";
+				echo "</select></span>";
 
-
-				echo "地址:&nbsp;";
+				echo "<br>";
+				echo "<span>地址:&nbsp;";
 
 				echo "<select name=\"address\">";
 				echo "<option value=\"\">--选择地址--</option>";
 				for ($i=0;$i<count($Address);$i++){
 					echo "<option value=\"".$Address[$i]['id']."\">".$Address[$i]['name']."</option>";
 				}
-				echo "</select>";
+				echo "</select></span>";
 
 				echo "<br>";
-				echo "金额:&nbsp;";
-				echo "<input  type=\"text\" name=\"money\" size=\"8\" value=\"0\"><br>";
-				echo "说明:&nbsp;";
-				echo "<input  type=\"text\" name=\"notes\" size=\"20\" value=\"\"><br>";
+				echo "<span>金额:&nbsp;";
+				echo "<input  type=\"text\" name=\"money\" size=\"8\" value=\"0\"></span><br>";
+				echo "<span>说明:&nbsp;";
+				echo "<input  type=\"text\" name=\"notes\" size=\"20\" value=\"\"></span><br>";
 				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
-				echo "<INPUT type=\"submit\" value=\"提交\">";
+				echo "<span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"提交\"></span>";
 			}
 
          /* 转换ID->名称函数*/
@@ -231,12 +281,7 @@
 
 
 /*  以上内容为优化内容  ####################################################################################################*/
-        /*  获取用户列表函数 */
-        public function getUserList()
-        {
-            $sql = "SELECT * FROM ".$this->_users;
-            return $this->select($sql);
-        }
+
 
         /*  以用户名来获取用户ID函数 */
         public function getUserID($username)
@@ -278,12 +323,6 @@
         }
 
 
-        /*  添加用户函数 */
-        public function insertUser($user_name,$user_alias,$user_password,$notes)
-        {
-            $sql = "INSERT INTO ".$this->_users." (id,username,user_alias,password,notes,create_date)   VALUES  ('','".$user_name."','".$user_alias."','".$user_password."','".$notes."','".date("Y-m-d H:i:s")."')";
-            return $this->insert($sql);
-        }
 
         /*  添加用户默认收支主类 */
         public function insertManTypeDefault($user_id)

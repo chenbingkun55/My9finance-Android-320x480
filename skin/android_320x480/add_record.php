@@ -38,18 +38,20 @@
 		echo "支出:&nbsp;";
 		$Finance->select_type($login_user_id,"out");
 		$today_corde = $Finance->getCordeData($login_group_id,"out",date("Y-m-d"));
-		$table_title = array("序号","用户","家庭","主类","子类","金额","地址","备注","时间");
+		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注");
 		
 		echo "<table>";		
-		echo "<tr>";
+		echo "<tr bgcolor=\"#66CC00\">";
 		for ($i=0;$i<count($table_title);$i++){
 			echo "<th>".$table_title[$i]."</th>";
 		}
 
-
+		$c="#33FFFF";
 		for ($i=0;$i<count($today_corde);$i++){
-			echo "<tr>";
+			echo "<tr bgcolor=\"".$c."\">";
 			echo "<td>".($i+1)."</td>";
+			echo "<td><script>PrintCreateDateShort('".$today_corde[$i]['create_date']."')</script></td>";
+
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],"","users")."</td>";
 			echo "<td>".$login_group_alias."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['out_mantype_id'],"out_mantype")."</td>";
@@ -57,8 +59,8 @@
 			echo "<td>".$today_corde[$i]['money']."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['addr_id'],"address")."</td>";
 			echo "<td>".$today_corde[$i]['notes']."</td>";
-			echo "<td>".$today_corde[$i]['create_date']."</td>";
 			echo "</tr>";
+			$c=($c=="#33FFFF") ? "#00CC00":"#33FFFF";
 		}
 
 		echo "</table>";
@@ -98,7 +100,7 @@
 		
 		$Finance->select_type($login_user_id,"in");
 		$today_corde = $Finance->getCordeData($login_group_id,"in",date("Y-m-d"));
-		$table_title = array("序号","用户","家庭","主类","子类","金额","地址","备注","时间");
+		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注");
 		if(DEBUG_YES){ 
 			echo "<br>DEBUG START*********************************************<br>";
 			print_r($today_corde);
@@ -107,15 +109,16 @@
 		}
 
 		echo "<table>";		
-		echo "<tr>";
+		echo "<tr bgcolor=\"#66CC00\">";
 		for ($i=0;$i<count($table_title);$i++){
 			echo "<th>".$table_title[$i]."</th>";
 		}
 
-
+		$c="#33FFFF";
 		for ($i=0;$i<count($today_corde);$i++){
-			echo "<tr>";
+			echo "<tr bgcolor=\"".$c."\">";
 			echo "<td>".($i+1)."</td>";
+			echo "<td><script>PrintCreateDateShort('".$today_corde[$i]['create_date']."')</script></td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],"","users")."</td>";
 			echo "<td>".$login_group_alias."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['in_mantype_id'],"in_mantype")."</td>";
@@ -123,8 +126,8 @@
 			echo "<td>".$today_corde[$i]['money']."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['addr_id'],"address")."</td>";
 			echo "<td>".$today_corde[$i]['notes']."</td>";
-			echo "<td>".$today_corde[$i]['create_date']."</td>";
 			echo "</tr>";
+			$c=($c=="#33FFFF") ? "#00CC00":"#33FFFF";
 		}
 
 		echo "</table>";
