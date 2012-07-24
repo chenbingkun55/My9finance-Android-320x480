@@ -39,45 +39,31 @@ function OutFunTitleColor(obj) {
 /*
 	定义各功能内容数组.
 */
-var bodyHTML = new Array(5);
-bodyHTML['FunTitle1'] = "<a href=\"main.php?page=add_record.php&add_type=out_record\">支出记录</a>&nbsp;&nbsp;&nbsp;\|&nbsp;&nbsp;\
-	<a href=\"main.php?page=add_record.php&add_type=in_record\">收入记录</a><br><br>\
-	<a href=\"main.php?page=fun_manager.php\"><span>功能管理</span></a><br><br>\
-	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle3')\">报表</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle4')\">搜索</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"ChangFunTitle('FunTitle5')\">关于</span>";
-bodyHTML['FunTitle2'] = "<br><a href=\"main.php?page=fun_manager.php&add_type=in_mantype\"><span>收入类别管理</span></a><br><br>\
-	<a href=\"main.php?page=fun_manager.php&add_type=out_mantype\"><span>支出类别管理</span></a><br><br>\
-	<a href=\"main.php?page=fun_manager.php&add_type=address\"><span>地址管理</span></a><br><br>\
-	<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>家庭管理</span></a>";
-bodyHTML['FunTitle3'] = "<br><span class=\"BodyLink1\" onclick=\"record('in')\">每月支出报表</span><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出报表</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">每月收入报表</span><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\"> 每年收入报表</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">收支平衡报表</span><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">支出分类报表</span><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">支出地点报表</span><br><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出分类报表</span><br>\
-	<span class=\"BodyLink1\" onclick=\"record('in')\">每年支出地址报表</span><br><br>";
-bodyHTML['FunTitle4'] = "搜索整个家庭：";
-bodyHTML['FunTitle5'] = "一个简单在线个人收支管理系统,<br>工作之余所出作品,<br>&nbsp;\
-	但愿能给大家生活上带来便利.<br><br>\
-	出品: @-ChenBK<br>制作时间: 2012-07-11<br>E-mail :\
-	<a href=\"mailto:chenbingkun55@163.com\">ChenBingKun55@163.com</a>";
+
+function GetCurrentStyle (obj, prop) {      
+    if (obj.currentStyle) {         
+        return obj.currentStyle[prop];      
+    }       
+    else if (window.getComputedStyle) {         
+        propprop = prop.replace (/([A-Z])/g, "-$1");            
+        propprop = prop.toLowerCase ();         
+        return document.defaultView.getComputedStyle (obj,null)[prop];      
+    }       
+    return null;    
+}    
+
 
 function ChangFunTitle(obj){
-	var FunTitleColor = document.getElementById(obj);
+	var FunTitle = document.getElementById(obj);
 	var Content = document.getElementById('Content');
-	
+
 	document.getElementById('FunTitle1').style.backgroundColor = "";
 	document.getElementById('FunTitle2').style.backgroundColor = "";
 	document.getElementById('FunTitle3').style.backgroundColor = "";
 	document.getElementById('FunTitle4').style.backgroundColor = "";
 	document.getElementById('FunTitle5').style.backgroundColor = "";
 
-	FunTitleColor.style.backgroundColor = CurrentFunTitleColor;
-	
-	Content.innerHTML = bodyHTML[obj];
+	FunTitle.style.backgroundColor=GetCurrentStyle(Content,"backgroundColor");
 }
 
 /*

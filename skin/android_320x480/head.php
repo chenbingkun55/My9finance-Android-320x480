@@ -61,22 +61,22 @@
 	<BLINK>彩贝壳之家 -- 欢迎您!!!</BLINK> 
 </div>
   
-<div class="20_FunTitle1 FunTitleFont" style="background-color: #C7EDCC;" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
-		主页   
+<div class="20_FunTitle1 FunTitleFont" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
+		<a href="main.php?page=add_record.php"><span>主页</span></a>   
 </div>
 
 <div class="20_FunTitle2 FunTitleFont" id="FunTitle2" onMouseOver="OverFunTitleColor('FunTitle2')" onMouseOut="OutFunTitleColor('FunTitle2')" onclick="ChangFunTitle('FunTitle2')"> 
-	功能管理   
+	<a href="main.php?page=fun_manager.php"><span>功能管理</span></a>   
 </div>
 
 <div class="20_FunTitle3 FunTitleFont" id="FunTitle3" onMouseOver="OverFunTitleColor('FunTitle3')" onMouseOut="OutFunTitleColor('FunTitle3')" onclick="ChangFunTitle('FunTitle3')"> 
-	报表   
+	<a href="main.php?page=report.php"><span>报表</span></a>   
 </div>
 
 <div class="20_FunTitle4 FunTitleFont" id="FunTitle4" onMouseOver="OverFunTitleColor('FunTitle4')" onMouseOut="OutFunTitleColor('FunTitle4')" onclick="ChangFunTitle('FunTitle4')"> 
-	搜索   
+	<a href="main.php?page=search.php"><span>搜索</span></a>   
 </div>
 		
 <div class="20_FunTitle5 FunTitleFont" id="FunTitle5" onMouseOver="OverFunTitleColor('FunTitle5')" onMouseOut="OutFunTitleColor('FunTitle5')" onclick="ChangFunTitle('FunTitle5')"> 
-	关于   
+	<a href="main.php?page=about.php"><span>关于</span></a>   
 </div>
