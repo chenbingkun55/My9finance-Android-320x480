@@ -62,7 +62,7 @@
 </div>
   
 <div class="FunTitle1 FunTitleFont" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
-		<a href="main.php?page=add_record.php"><span>主页</span></a>   
+		<a href="main.php?page=record.php"><span>主页</span></a>   
 </div>
 
 <div class="FunTitle2 FunTitleFont" id="FunTitle2" onMouseOver="OverFunTitleColor('FunTitle2')" onMouseOut="OutFunTitleColor('FunTitle2')" onclick="ChangFunTitle('FunTitle2')"> 

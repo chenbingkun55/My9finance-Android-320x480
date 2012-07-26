@@ -29,7 +29,7 @@
 			$page = $_GET['page'];
 			 require_once("head.php"); 
 			 if (!$page){
-				require_once("add_record.php");
+				require_once("record.php");
 			 }else{
 				require_once("$page");
 			 }

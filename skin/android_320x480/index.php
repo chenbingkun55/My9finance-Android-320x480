@@ -37,7 +37,7 @@
   ?>
   <div class="IndexLogin">
 	<fieldset>
-        <legend>&nbsp;登录&nbsp;</legend>
+        <legend>&nbsp;<?PHP echo $_LOGIN?>&nbsp;</legend>
         <FORM action="login.php" onsubmit="return check()" id="login-form" method="post">
         <TABLE border="0">
         <TR>

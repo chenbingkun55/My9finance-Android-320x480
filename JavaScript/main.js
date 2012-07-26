@@ -11,7 +11,7 @@ var SubType=new Array();
 function OverFunTitleColor(obj) { 
 	var FunTitleColor = document.getElementById(obj);
 	/* 字体动态 */
-	FunTitleColor.style.Color="#6699FF";
+	FunTitleColor.style.Color="#FFFF99";
 	FunTitleColor.style.fontSize="12pt";
 	
 	/* 背景动态
