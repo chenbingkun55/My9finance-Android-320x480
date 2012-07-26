@@ -60,7 +60,12 @@
 			}
 		}
 
-
+         /*更新用户会话ID与最后登录时间函数 */
+        public function refurbishUserSession($user_id)
+        {
+            $sql = "UPDATE users SET last_date = '".date("Y-m-d H:i:s")."' , session = '".session_id()."' WHERE id = '".$user_id."'";
+            return $this->update($sql);
+        }
 
         /* 转换LOG_ID为日志内容函数 */
         public function convertLogIdToContent($log_id)
@@ -456,13 +461,6 @@
         }
 
 
-
-         /*更新用户会话ID与最后登录时间函数 */
-        public function refurbishUserSession($user_id)
-        {
-            $sql = "UPDATE users SET last_date = '".date("Y-m-d H:i:s")."' , session = '".session_id()."' WHERE id = '".$user_id."'";
-            return $this->update($sql);
-        }
 
 
 

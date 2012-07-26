@@ -14,18 +14,17 @@
 
 <body onload="document.getElementById('login-form').username.focus()">
 
-<div class="10_Backplane">
-  <div class="100_IndexICO">
-	<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
-  </div>
-
-  <div class="20_IndexTitle IndexTitle">
+<div class="Backplane">
+	<div class="IndexICO">
+		<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
+	</div>
+  <div class="IndexTitle IndexTitle">
 		<?PHP echo "<STRONG>". $_TITLE ."</STRONG>";?> 
   </div>
   <?PHP 
 		if ( !is_null($_SESSION['__global_logid'])) {
 			$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
-			echo "<div class=\"20_IndexLoginInfo IndexLoginInfo\" align=\"center\">";
+			echo "<div class=\"IndexLoginInfo IndexLoginInfo\" align=\"center\">";
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";
 				print_r($error_info); 
@@ -36,10 +35,10 @@
 			echo "</div>";
 	  }
   ?>
-  <div class="20_IndexLogin">
+  <div class="IndexLogin">
 	<fieldset>
-        <legend class="IndexLogin">&nbsp;登录&nbsp;</legend>
-        <FORM action="login.php" onsubmit="return check()" id="login-form" method="post" name="login-form" >
+        <legend>&nbsp;登录&nbsp;</legend>
+        <FORM action="login.php" onsubmit="return check()" id="login-form" method="post">
         <TABLE border="0">
         <TR>
             <TD><?PHP echo $_USERNAME ?></TD>

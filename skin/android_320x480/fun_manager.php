@@ -1,4 +1,4 @@
-<div class="20_ContentPlane Content" id="Content">
+<div class="ContentPlane Content" id="Content">
 <script>ChangFunTitle('FunTitle2')</script>
 <form class="add_form" name="add_form" action="main.php<?PHP echo "?page=fun_manager.php&add_type=".$_GET['add_type'];?>" method="post">
 

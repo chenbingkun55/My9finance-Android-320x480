@@ -24,7 +24,7 @@
 </head>
 
 <body>
-	<div class="10_Backplane" id="BodyDiv">
+	<div class="Backplane" id="BodyDiv">
 		<?PHP 
 			$page = $_GET['page'];
 			 require_once("head.php"); 

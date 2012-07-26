@@ -1,4 +1,4 @@
-<div class="20_ContentPlane Content" id="Content">
+<div class="ContentPlane Content" id="Content">
 <script>ChangFunTitle('FunTitle1')</script>
 <form class="add_form" name="add_form" action="main.php<?PHP echo "?page=add_record.php&add_type=".$_GET['add_type'];?>" method="post">
 

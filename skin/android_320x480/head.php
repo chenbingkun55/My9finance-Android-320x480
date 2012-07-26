@@ -26,7 +26,7 @@
 	}
 ?>
 
-<div class="20_UserInfo">
+<div class="UserInfo">
 	<?PHP
 		if ( $login_user_alias ) {
 			echo "<div>".$login_user_alias."&nbsp;&nbsp;".$_HELLO;
@@ -41,42 +41,42 @@
 		}
 	?>
 </div>
-<div class="20_ChangeSkinPlane">
-	<span class="20_Skin-1" id="Skin-1" title="蓝色主题" onClick="ChangeSkinColor('Skin-1')">1</span>
-	<span class="20_Skin-2" id="Skin-2" title="灰色主题" onClick="ChangeSkinColor('Skin-2')">2</span>
-	<span class="20_Skin-3" id="Skin-3" title="绿色主题" onClick="ChangeSkinColor('Skin-3')">3</span>
-	<span class="20_Skin-4" id="Skin-4" title="粉色主题" onClick="ChangeSkinColor('Skin-4')">4</span>
-	<span class="20_Skin-5" id="Skin-5" title="黄色主题" onClick="ChangeSkinColor('Skin-5')">5</span>
+<div class="ChangeSkinPlane">
+	<span class="Skin1" id="Skin1" title="蓝色主题" onClick="ChangeSkinColor('Skin1')">1</span>
+	<span class="Skin2" id="Skin2" title="灰色主题" onClick="ChangeSkinColor('Skin2')">2</span>
+	<span class="Skin3" id="Skin3" title="绿色主题" onClick="ChangeSkinColor('Skin3')">3</span>
+	<span class="Skin4" id="Skin4" title="粉色主题" onClick="ChangeSkinColor('Skin4')">4</span>
+	<span class="Skin5" id="Skin5" title="黄色主题" onClick="ChangeSkinColor('Skin5')">5</span>
 </div>
 
-<div class="20_DateTimePlane DateTimePlaneFont" align="right" id="DateTimePlane">
+<div class="DateTimePlane DateTimePlaneFont" align="right" id="DateTimePlane">
 	<script>PrintDate();setInterval("PrintDate()",60000)</script>
 </div>
 
-<div class="100_MainICO">
+<div class="MainICO">
 	<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
 </div>
 
-<div class="30_MainMessage MainMessage" id="MainMessage">
+<div class="MainMessage MainMessage" id="MainMessage">
 	<BLINK>彩贝壳之家 -- 欢迎您!!!</BLINK> 
 </div>
   
-<div class="20_FunTitle1 FunTitleFont" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
+<div class="FunTitle1 FunTitleFont" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
 		<a href="main.php?page=add_record.php"><span>主页</span></a>   
 </div>
 
-<div class="20_FunTitle2 FunTitleFont" id="FunTitle2" onMouseOver="OverFunTitleColor('FunTitle2')" onMouseOut="OutFunTitleColor('FunTitle2')" onclick="ChangFunTitle('FunTitle2')"> 
+<div class="FunTitle2 FunTitleFont" id="FunTitle2" onMouseOver="OverFunTitleColor('FunTitle2')" onMouseOut="OutFunTitleColor('FunTitle2')" onclick="ChangFunTitle('FunTitle2')"> 
 	<a href="main.php?page=fun_manager.php"><span>功能管理</span></a>   
 </div>
 
-<div class="20_FunTitle3 FunTitleFont" id="FunTitle3" onMouseOver="OverFunTitleColor('FunTitle3')" onMouseOut="OutFunTitleColor('FunTitle3')" onclick="ChangFunTitle('FunTitle3')"> 
+<div class="FunTitle3 FunTitleFont" id="FunTitle3" onMouseOver="OverFunTitleColor('FunTitle3')" onMouseOut="OutFunTitleColor('FunTitle3')" onclick="ChangFunTitle('FunTitle3')"> 
 	<a href="main.php?page=report.php"><span>报表</span></a>   
 </div>
 
-<div class="20_FunTitle4 FunTitleFont" id="FunTitle4" onMouseOver="OverFunTitleColor('FunTitle4')" onMouseOut="OutFunTitleColor('FunTitle4')" onclick="ChangFunTitle('FunTitle4')"> 
+<div class="FunTitle4 FunTitleFont" id="FunTitle4" onMouseOver="OverFunTitleColor('FunTitle4')" onMouseOut="OutFunTitleColor('FunTitle4')" onclick="ChangFunTitle('FunTitle4')"> 
 	<a href="main.php?page=search.php"><span>搜索</span></a>   
 </div>
 		
-<div class="20_FunTitle5 FunTitleFont" id="FunTitle5" onMouseOver="OverFunTitleColor('FunTitle5')" onMouseOut="OutFunTitleColor('FunTitle5')" onclick="ChangFunTitle('FunTitle5')"> 
+<div class="FunTitle5 FunTitleFont" id="FunTitle5" onMouseOver="OverFunTitleColor('FunTitle5')" onMouseOut="OutFunTitleColor('FunTitle5')" onclick="ChangFunTitle('FunTitle5')"> 
 	<a href="main.php?page=about.php"><span>关于</span></a>   
 </div>

@@ -1,4 +1,4 @@
-<div class="20_Foot FootFont" align="right">
+<div class="Foot FootFont" align="right">
 	<INPUT class="LogoutButton" type="submit" onclick="logout();" value="<?PHP echo $_LOGOUT?>"><BR>
     <CENTER>
 		Copyright © 2010-2012 ChenBK All Rights Reserved<br> 

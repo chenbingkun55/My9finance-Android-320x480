@@ -1,4 +1,4 @@
-<div class="20_ContentPlane Content" id="Content">
+<div class="ContentPlane Content" id="Content">
 <script>ChangFunTitle('FunTitle5')</script>
 
 一个简单在线个人收支管理系统,<br>工作之余所出作品,<br>&nbsp;

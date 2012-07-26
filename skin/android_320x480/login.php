@@ -25,6 +25,8 @@
 
 	if(DEBUG_YES){ 
 		echo "<br>DEBUG START*********************************************<br>";
+		echo "用户名: ".$_POST['username']."<BR>";
+		echo "密码: ".$_POST['password']."<BR>";
 		print_r($_SESSION['__userdata']); 
 		echo "<br>DEBUG END*********************************************<br>";	
 	}
@@ -35,6 +37,7 @@
 		$_SESSION['__global_logid']=2 ;
 	} else if( $_SESSION['__userdata']['0']["username"] == $username ){
 		$_SESSION['__groupdata'] = $Finance->getUserGroupData($_SESSION['__userdata']['0']["id"]);
+		$Finance->refurbishUserSession($_SESSION['__userdata']['0']["id"]);
 
 		if(DEBUG_YES){ 
 			echo "<br>DEBUG START*********************************************<br>";
@@ -45,7 +48,7 @@
 			print_r($_SESSION['__groupdata']);
 			echo "<br>DEBUG END*********************************************<br>";	
 		} else {		
-			echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=main.php\">";
+			echo "<script>window.location.href='main.php';</script>";
 		}
 	} else {
 		$_SESSION['__global_logid']=1 ;
@@ -55,7 +58,7 @@
 		echo "错误内容为: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
 		echo "<br>DEBUG END*********************************************<br>";	
 	}else {
-		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=index.php\">";
+		echo "<script>window.location.href='index.php';</script>";
 	}
 ?>
 	</div>

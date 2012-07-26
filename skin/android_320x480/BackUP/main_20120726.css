@@ -1,66 +1,57 @@
 /* DIV 绝对定位 1-100 1为最底层 */
-.BackPlane{
-	z-index: 10; 
-	position: absolute;
-	width:320px;
-	height:480px;
-	overflow:left;
-	left:0;
-	top:0;
-	background-color:#66CC00
+.10_BackPlane {
+	background-color: #66CC00;
+	z-index:10;
+	position:absolute;
+	height: 480px;
+	width: 320px;
+	left: 0px;
+	top: 0px;
 }
 
-.IndexICO{
-	z-index: 100; 
+.100_IndexICO {
 	position: absolute;
-	width:auto;
-	height:auto;
-	overflow:left;
+	z-index:100;
+	height: 50px;
+	width: 50px;
 	left: 20px;
 	top: 100px;
-	background-color:transient
 }
 
-.MainICO{
-	z-index: 100; 
+.100_MainICO {
 	position: absolute;
-	width:auto;
-	height:auto;
-	overflow:left;
+	z-index:100;
+	height: 50px;
+	width: 50px;
 	left: 20px;
 	top: 35px;
-	background-color:transient
 }
 
-.IndexTitle{
-	z-index: 20; 
-	position: absolute;
-	width:auto;
-	height:auto;
-	overflow:left;
-	left: 60px;
-	top: 100px;
-	background-color:transient
-}
 
-.IndexLogin{
-	z-index: 20; 
-	position: absolute;
-	width:auto;
-	height:auto;
-	overflow:left;
+.20_IndexLogin{
+	background-color: #66CC00;
+	position:absolute;
+	z-index:20;
+	height: 160px;
+	width: 280px;
 	left: 20px;
 	top: 140px;
 	padding-top: 10;
 	padding-left: 0;
 	padding-right: 0;
 	padding-bottom: 10;
-	background-color:transient
 }
 
+.20_IndexTitle{
+	position: absolute;
+	z-index:20;
+	height: 20px;
+	width: 300;
+	left: 60px;
+	top: 100px;
+}
 
-/* ====================================================== */
-.Foot {
+.20_Foot {
 	position: absolute;
 	z-index:20;
 	height: 80px;
@@ -69,7 +60,7 @@
 	left: 0px;
 }
 
-.UserInfo {
+.20_UserInfo {
 	position: absolute;
 	z-index:20;
 	height: 10px;
@@ -78,7 +69,7 @@
 	top: 10px;
 }
 
-.MainMessage {
+.30_MainMessage {
 	position: absolute;
 	z-index:30;
 	height: 20px;
@@ -87,7 +78,7 @@
 	top: 35px;
 }
 
-.DateTimePlane{
+.20_DateTimePlane{
 	position: absolute;
 	z-index:20;
 	height: 8px;
@@ -96,77 +87,76 @@
 	top: 26px;
 }
 
-.ChangeSkinPlane{
-	z-index:20;
+.20_ChangeSkinPlane{
 	position: absolute;
-	width:60px;
-	height:10px;
-	overflow:left;
+	z-index:20;
+	height: 8px;
+	width: 50px;
 	left: 250px;
 	top: 8px;
-	background-color:transient
 }
 
-.Skin1, .Skin2, .Skin3, .Skin4, .Skin5, {
+.20_Skin-1, .20_Skin-2, .20_Skin-3, .20_Skin-4, .20_Skin-5, {
     cursor: pointer;
 	text-align : center;
-	overflow: hidden;
-	FONT-SIZE: 6px;
+	FONT-SIZE: 8px;
+    overflow: hidden;
+
 }
 
-.Skin1 {
-	z-index:20;
+.20_Skin-1 {
 	position: absolute;
-	width:10px;
-	height:10px;
-	overflow:left;
+	z-index:20;
+	background-color: #66CC00;
+	text-align : center;
+	height: 10px;
+	width: 10px;
 	left: 0px;
-	top: 0px;
-	background-color:#66CC00
+	top: 7px;
 }
 
-.Skin2 {
-	z-index:20;
+.20_Skin-2 {
 	position: absolute;
-	width:10px;
-	height:10px;
-	overflow:left;
+	z-index:20;
+	background-color: #9900FF;
+	text-align : center;
+	height: 10px;
+	width: 10px;
 	left: 12px;
-	top: 0px;
-	background-color:#9900FF
+	top: 7px;
 }
-.Skin3 {
-	z-index:20;
+.20_Skin-3 {
 	position: absolute;
-	width:10px;
-	height:10px;
-	overflow:left;
+	z-index:20;
+	background-color: #FF6600;
+	text-align : center;
+	height: 10px;
+	width: 10px;
 	left: 24px;
-	top: 0px;
-	background-color:#FF6600
+	top: 7px;
 }
-.Skin4 {
-	z-index:20;
+.20_Skin-4 {
 	position: absolute;
-	width:10px;
-	height:10px;
-	overflow:left;
+	z-index:20;
+	background-color: #FFFF33;
+	text-align : center;
+	height: 10px;
+	width: 10px;
 	left: 36px;
-	top: 0px;
-	background-color:#FFFF33
+	top: 7px;
 }
-.Skin5 {
-	z-index:20;
+.20_Skin-5 {
 	position: absolute;
-	width:10px;
-	height:10px;
-	overflow:left;
+	z-index:20;
+	background-color: #333300;
+	text-align : center;
+	height: 10px;
+	width: 10px;
 	left: 48px;
-	top: 0px;
-	background-color:#333300
+	top: 7px;
 }
 
-.FunTitle1 {
+.20_FunTitle1 {
 	position: absolute;
 	z-index:20;
 	height: 20px;
@@ -175,7 +165,7 @@
 	top: 65px;
 }
 
-.FunTitle2 {
+.20_FunTitle2 {
 	position: absolute;
 	z-index:20;
 	height: 20px;
@@ -183,7 +173,7 @@
 	left: 76px;
 	top: 65px;
 }
-.FunTitle3 {
+.20_FunTitle3 {
 	position: absolute;
 	z-index:20;
 	height: 20px;
@@ -191,7 +181,7 @@
 	left: 132px;
 	top: 65px;
 }
-.FunTitle4 {
+.20_FunTitle4 {
 	position: absolute;
 	z-index:20;
 	height: 20px;
@@ -200,7 +190,7 @@
 	top: 65px;
 }
 
-.FunTitle5 {
+.20_FunTitle5 {
 	position: absolute;
 	z-index:20;
 	height: 20px;
@@ -209,24 +199,20 @@
 	top: 65px;
 }
 
-.ContentPlane {
-	z-index: 10; 
-	position: absolute;
-	width:260px!important; /*兼容 FF*/
-	width:280px;
-	height:280px!important; /*兼容 FF*/
-	height:300px;
-	overflow:left;
+.20_ContentPlane {
 	padding-top: 10;
 	padding-left: 10;
 	padding-right: 10;
 	padding-bottom: 10;
-	left:20;
-	top:85;
+	position: absolute;
+	height: 300px;
+	width: 280;
+	left: 20px;
+	top: 85px;
 }
 
 
-.IndexLoginInfo {
+.20_IndexLoginInfo {
 	z-index:20;
 	position: absolute;
 	height: 20px;

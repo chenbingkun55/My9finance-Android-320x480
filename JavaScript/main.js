@@ -87,31 +87,31 @@ function OutTitleIMG(){
 function ChangeSkinColor(obj){
 	switch (obj)
 	{
-	case "Skin-1":
+	case "Skin1":
 		document.getElementById("BodyDiv").style.backgroundColor = "#66CC00";
 		document.getElementById("Content").style.backgroundColor = "#C7EDCC";
 		CurrentFunTitleColor = "#C7EDCC";
 		break;
 
-	case "Skin-2":
+	case "Skin2":
 		document.getElementById("BodyDiv").style.backgroundColor = "#9900FF";
 		document.getElementById("Content").style.backgroundColor = "#CC66FF";
 		CurrentFunTitleColor = "#CC66FF";
 		break;
 
-	case "Skin-3":
+	case "Skin3":
 		document.getElementById("BodyDiv").style.backgroundColor = "#FF6600";
 		document.getElementById("Content").style.backgroundColor = "#FF6666";
 		CurrentFunTitleColor = "#FF6666";
 		break;
 
-	case "Skin-4":
+	case "Skin4":
 		document.getElementById("BodyDiv").style.backgroundColor = "#CCFF33";
 		document.getElementById("Content").style.backgroundColor = "#CCFF99";
 		CurrentFunTitleColor = "#CCFF99";
 		break;
 
-	case "Skin-5":
+	case "Skin5":
 		document.getElementById("BodyDiv").style.backgroundColor = "#336633";
 		document.getElementById("Content").style.backgroundColor = "#339900";
 		CurrentFunTitleColor = "#339900";

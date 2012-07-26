@@ -13,7 +13,7 @@
 <script type="text/javascript" src="<?PHP echo JS_PATH."TwoSelect.js"?>"></script>
 </head>
 <body>
-	<div class="10_BackPlane" id="BodyDiv">
+	<div class="BackPlane" id="BodyDiv">
 <?PHP 
 	/*
 		清除所有PHP Session。
@@ -30,11 +30,9 @@
 		echo "提示内容为: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
 		echo "<br>DEBUG END*********************************************<br>";	
 	}else {
-		echo "<script>window.opener='';window.close();</script>";
-		echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=index.php\">";
+		echo "<script>window.location.href='index.php';</script>";
 	}
 ?>
 	</div>
 </body>
 </html>
-$_SESSION['__userdata']
