@@ -48,7 +48,7 @@
 			print_r($_SESSION['__groupdata']);
 			echo "<br>DEBUG END*********************************************<br>";	
 		} else {		
-			echo "<script>window.location.href='main.php';</script>";
+			echo "<script>window.location.replace('main.php');</script>";
 		}
 	} else {
 		$_SESSION['__global_logid']=1 ;
@@ -58,7 +58,7 @@
 		echo "错误内容为: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
 		echo "<br>DEBUG END*********************************************<br>";	
 	}else {
-		echo "<script>window.location.href='index.php';</script>";
+		echo "<script>window.location.replace('index.php');</script>";
 	}
 ?>
 	</div>

@@ -13,7 +13,7 @@
 	{
 		if ( $add_submit == 1 ){
 			$mantype = $_POST['mantype'];
-			$is_display = $_POST['is_display'];
+			$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";
@@ -70,7 +70,7 @@
 	} else if ( $recordtype == 'in_mantype' ){
 		if ( $add_submit == 1 ){
 			$mantype = $_POST['mantype'];
-			$is_display = $_POST['is_display'];
+			$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";

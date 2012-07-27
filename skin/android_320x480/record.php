@@ -35,11 +35,23 @@
 			}
 		}
 
+		if (!(is_null($_GET['Did'])) && !(is_null($login_user_id))){
+			if ($Finance->delInOutCorde("out",$login_user_id,$_GET['Did'])){
+				echo "成功<br>";
+			}else{
+				echo "失败<br>";
+			}
+		}
 
 		echo "支出:&nbsp;";
-		$Finance->select_type($login_user_id,"out");
+		if (!(is_null($_GET['Aid'])) && !(is_null($login_user_id))){
+			$Finance->select_type($login_user_id,"out",$_GET['Aid']);
+		}else{
+			$Finance->select_type($login_user_id,"out");
+		}
+		
 		$today_corde = $Finance->getCordeData($login_group_id,"out",date("Y-m-d"));
-		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注");
+		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注","操作");
 		
 		echo "<table>";		
 		echo "<tr bgcolor=\"#66CC00\">";
@@ -60,6 +72,7 @@
 			echo "<td>".$today_corde[$i]['money']."</td>";
 			echo "<td>".$Finance->convertID($today_corde[$i]['user_id'],$today_corde[$i]['addr_id'],"address")."</td>";
 			echo "<td>".$today_corde[$i]['notes']."</td>";
+			echo "<td><span class=\"click\" onClick=\"Alter('".$today_corde[$i]['id']."')\">修改</span>|<span class=\"click\" onClick=\"Del('".$today_corde[$i]['id']."')\">删除</span></td>";
 			echo "</tr>";
 			$c=($c=="#33FFFF") ? "#00CC00":"#33FFFF";
 		}

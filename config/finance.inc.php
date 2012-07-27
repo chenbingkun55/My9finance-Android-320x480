@@ -82,11 +82,11 @@
 
 
        /* 获取收入\支出数据函数 */
-        public function getCordeData($group_id,$in_out,$date,$is_user=0)
+        public function getCordeData($group_id,$in_out,$date,$is_user=0,$Aid=0)
         {
             
 			if ( $in_out == "out" ){
-				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc":"SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
+				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc": $Aid ? "SELECT * FROM  ".$this->_out_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
 			} else if ( $in_out == "in" ) {
 				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc":"SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
 			}
@@ -204,7 +204,7 @@
 
 
 		/*  收入、支出、地址下拉菜单函数  */
-		public function select_type($user_id,$in_out){
+		public function select_type($user_id,$in_out,$Aid=0){
 				$ManType = $this->getManType($user_id,$in_out);
 				$SubType = $this->getSubType($user_id,$in_out);
 				$Address = $this->getAddress($user_id);
@@ -217,38 +217,50 @@
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
 
+				$alert_corde = $this->getCordeData(0,0,0,0,$Aid);
+				if(DEBUG_YES){ 
+					echo "<br>DEBUG START*********************************************<br>";
+					echo "修改的Aid为：";
+					print_r($alert_corde);
+					echo "<br>DEBUG END*********************************************<br>";	
+				}
+				
+				
 				echo "<script>";
+
 				for ($i=0;$i<count($SubType);$i++){
 					echo "SubType['".$i."'] = new Array('".$SubType[$i]['id']."','".$SubType[$i]['man_id']."','".$SubType[$i]['name']."');";
 				}
 
 				echo "</script>";
-				echo "<span><select name=\"mantype_id\" onChange=\"sSubType(document.add_form.mantype_id.options[document.add_form.mantype_id.selectedIndex].value );\">";
+				echo "<span><select id=\"mantype_id\" name=\"mantype_id\" onChange=\"sSubType();\">";
 				echo "<option value=\"\">--选择主类--</option>";
 				for ($i=0;$i<count($ManType);$i++){
-					echo "<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
+					$str = $ManType[$i]['id'] == $alert_corde['0']['out_mantype_id'] ? "<option selected=\"selected\" value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>":"<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
+					echo $str;
 				}
 				echo "</select>";
-
-				echo "<select name=\"subtype_id\">";
-				echo "<option value=\"\">--选择子类--</option>";
-				echo "</select></span>";
-
+				echo "<select id=\"subtype_id\" name=\"subtype_id\"><option value=\"\">--选择子类--</option></select></span>";
+				if ($Aid != 0){
+					echo "<script>sSubType('".$alert_corde['0']['out_subtype_id']."')</script>";
+				}
 				echo "<br>";
 				echo "<span>地址:&nbsp;";
-
 				echo "<select name=\"address\">";
 				echo "<option value=\"\">--选择地址--</option>";
 				for ($i=0;$i<count($Address);$i++){
-					echo "<option value=\"".$Address[$i]['id']."\">".$Address[$i]['name']."</option>";
+					$str = $Address[$i]['id'] == $alert_corde['0']['addr_id'] ? "<option selected=\"selected\" value=\"".$Address[$i]['id']."\">".$Address[$i]['name']."</option>":"<option value=\"".$Address[$i]['id']."\">".$Address[$i]['name']."</option>";
+					echo $str;
 				}
 				echo "</select></span>";
 
 				echo "<br>";
 				echo "<span>金额:&nbsp;";
-				echo "<input  type=\"text\" name=\"money\" size=\"8\" value=\"0\"></span><br>";
+				$str =  $Aid ? "<input  type=\"text\" name=\"money\" size=\"8\" value=\"".$alert_corde['0']['money']."\"></span><br>":"<input  type=\"text\" name=\"money\" size=\"8\" value=\"0\"></span><br>";
+				echo $str;
 				echo "<span>说明:&nbsp;";
-				echo "<input  type=\"text\" name=\"notes\" size=\"20\" value=\"\"></span><br>";
+				$str =  $Aid ? "<input  type=\"text\" name=\"notes\" size=\"20\" value=\"".$alert_corde['0']['notes']."\"></span><br>":"<input  type=\"text\" name=\"notes\" size=\"20\" value=\"\"></span><br>";
+				echo $str;
 				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
 				echo "<span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"提交\"></span>";
 			}
@@ -284,6 +296,42 @@
             }
         }
 
+
+        /*删除收入支出记录函数 */
+        public function delInOutCorde($in_out,$user_id,$corde_id)
+        {
+			if ($in_out == "out"){
+				$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+			}
+			if ($in_out == "in"){
+				$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+			}
+
+            
+			/* 记录修改前的资料 START */
+			if ($in_out == "out"){
+				$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+				$old_corde1 = $this->select($old_corde_sql);
+				$old_corde = "表名:".$this->_out_corde." 原记录: ";
+			}
+			if ($in_out == "in"){
+				$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+				$old_corde1 = $this->select($old_corde_sql);
+				$old_corde = "表名:".$this->_in_corde." 原记录: ";
+			}
+			
+			for($j=0;$j<count($old_corde1);$j++) {
+				for($i=0;$i<count($old_corde1[$j]);$i++) {
+					$old_corde .= "'".$old_corde1[$j][$i]."',";
+				}
+				$old_corde .= " | ";
+			}
+
+			$this->corde_sql_log($old_corde);
+			/*  记录修改前的资料 END */
+
+            return $this->delete($sql);
+        }
 
 /*  以上内容为优化内容  ####################################################################################################*/
 
@@ -880,28 +928,6 @@
             return $this->update($sql);
         }
 
-
-
-        /*删除收入支出记录函数 */
-        public function deleteInOutCorde($in_out_corde,$corde_id)
-        {
-            $sql = "DELETE FROM ".$this->$in_out_corde." where id = '".$corde_id."' AND user_id = '".$_SESSION['__useralive'][0]."'";
-			/* 记录修改前的资料 START */
-			$old_corde_sql = "SELECT * FROM ".$this->$in_out_corde."  where id = '".$corde_id."' AND user_id = '".$_SESSION['__useralive'][0]."'";
-			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->$in_out_corde." 原记录: ";
-			for($j=0;$j<count($old_corde1);$j++) {
-				for($i=0;$i<count($old_corde1[$j]);$i++) {
-					$old_corde .= "'".$old_corde1[$j][$i]."',";
-				}
-				$old_corde .= " | ";
-			}
-
-			$this->corde_sql_log($old_corde);
-			/*  记录修改前的资料 END */
-
-            return $this->delete($sql);
-        }
 
 
         /*删除用户收入支出记录函数 */

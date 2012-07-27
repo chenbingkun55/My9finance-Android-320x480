@@ -194,26 +194,26 @@ function check(){
 }
 
 
-function sSubType(id){
+function sSubType(sid){
+	with(document.add_form.mantype_id) { var sub = options[selectedIndex].value; }
 	var sobj=document.getElementById("subtype_id");
 	sobj.innerHTML="";
-	if ( id >=0 ){
+
+	if ( sub >=0 ){
 		var option=document.createElement("option");
 		var text="--选择子类--";
 		option.value=text;
 		option.innerHTML=text;
 		sobj.appendChild(option);
 		for (var i=0; i<SubType.length ; i++ ){
-			if (SubType[i][1] == id )
+			if (SubType[i][1] == sub )
 			{
-				var option=document.createElement("option");
-				option.value=SubType[i][0];
-				option.innerHTML=SubType[i][2];
-				sobj.appendChild(option);
+				document.getElementById("subtype_id").options.add(new Option(SubType[i][2],SubType[i][0]));
 			}
 		}
-	}
+	} 
 }
+
 
 function PrintDate(){
 	var date=new Date();
@@ -267,4 +267,21 @@ function PrintDate(){
 function PrintCreateDateShort(str){
 	ss = str.split(" ");
 	document.write(ss[1]);
+}
+
+/* 获取路径变量,来自网络第三方: http://www.cnblogs.com/sohighthesky/archive/2010/01/21/script-querystring.html */
+var queryStrings=function() {//get url querystring
+    var params=document.location.search,reg=/(?:^\?|&)(.*?)=(.*?)(?=&|$)/g,temp,args={};
+    while((temp=reg.exec(params))!=null) args[temp[1]]=decodeURIComponent(temp[2]);
+    return args;
+}
+
+function Alter(ID){
+	var args=queryStrings();
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Aid='+ID);
+}
+
+function Del(ID){
+	var args=queryStrings();
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID);
 }

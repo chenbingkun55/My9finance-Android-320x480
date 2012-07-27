@@ -263,6 +263,9 @@ select{
 	display:inline-block;
 }
 
+span.click{
+	cursor: pointer;
+}
 /*  自定义标签样式 */
 .IndexLogin{
 	font-family: "微软雅黑";
