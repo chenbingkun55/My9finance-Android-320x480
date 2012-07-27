@@ -44,7 +44,7 @@
 		}
 
 		if (!(is_null($Did)) && !(is_null($login_user_id))){
-			if ($Finance->delInOutCorde($recordtype,$login_user_id,$Did)){
+			if ($Finance->delCorde($recordtype,$login_user_id,$Did)){
 				echo "成功<br>";
 			}else{
 				echo "失败<br>";
@@ -126,7 +126,7 @@
 		}
 
 		if (!(is_null($Did)) && !(is_null($login_user_id))){
-			if ($Finance->delInOutCorde($recordtype,$login_user_id,$Did)){
+			if ($Finance->delCorde($recordtype,$login_user_id,$Did)){
 				echo "成功<br>";
 			}else{
 				echo "失败<br>";

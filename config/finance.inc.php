@@ -201,9 +201,9 @@
          /* 获取主类函数  */
         public function getManType($user_id,$cordtype,$isdisplay=0)
         {
-			if ($cordtype == "out_record" ) {
+			if ($cordtype == "out_mantype" ) {
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
-			}else if ($cordtype == "in_record" ){
+			}else if ($cordtype == "in_mantype" ){
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
 			}
             return $this->select($sql);
@@ -323,8 +323,8 @@
         }
 
 
-        /*删除收入支出记录函数 */
-        public function delInOutCorde($in_out,$user_id,$corde_id)
+        /*删除收入支出与各主类了类记录函数 */
+        public function delCorde($in_out,$user_id,$corde_id)
         {
 			switch($in_out){
 				case "out_record":
@@ -337,13 +337,13 @@
 					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
 
 				case "out_mantype":
-					$sql = "DELETE FROM ".$this->_out_mantype." where id = '".$corde_id."' AND user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_out_mantype."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$sql = "DELETE out_mantype,out_subtype from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.user_id = '".$user_id."'";
 					break;
 
 				case "in_mantype":
-					$sql = "DELETE FROM ".$this->_in_mantype." where id = '".$corde_id."' AND user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_in_mantype."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$sql = "DELETE in_mantype,in_subtype from in_mantype left join in_subtype on in_mantype.id=in_subtype.man_id where in_mantype.id='".$corde_id."' AND in_mantype.user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * from in_mantype left join in_subtype on in_mantype.id=in_subtype.man_id where in_mantype.id='".$corde_id."' AND in_mantype.user_id = '".$user_id."'";
 					break;
 			}
 
@@ -366,24 +366,47 @@
             return $this->delete($sql);
         }
 
-        /*删除各种类函数 */
-        public function deleteManType($in_out_type,$type_id)
+        /*  往前地址排序函数 */
+        public function down_up($in_out,$user_id,$id,$isup=0)
         {
-            $sql = "DELETE FROM ".$this->$in_out_type." where id = '".$mantype_id."' AND user_id = '".$_SESSION['__useralive'][0]."'";
-			/* 记录修改前的资料 START */
-			$old_corde_sql = "SELECT * FROM ".$this->$in_out_type."  WHERE id = '".$mantype_id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
-			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->$in_out_type." 原记录: ";
-			for($j=0;$j<count($old_corde1);$j++) {
-				for($i=0;$i<count($old_corde1[$j]);$i++) {
-					$old_corde .= "'".$old_corde1[$j][$i]."',";
-				}
-				$old_corde .= " | ";
-			}
-			$this->corde_sql_log($old_corde);
-			/*  记录修改前的资料 END */
 
-            return $this->delete($sql);
+			$store_num = $this->select("SELECT store from out_mantype where id = '".$id."'");
+			$num = 0;
+			switch($in_out){
+				case "out_mantype":
+					if ($store_num['0']['0'] != 1 )
+					{
+						if ($isup){
+							$num=$store_num['0']['0']-1;
+						}else{
+							$num=$store_num['0']['0']+1;
+						}
+						$sql = "UPDATE out_mantype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+						$this->update($sql);
+
+						$sql = "UPDATE out_mantype SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+						$this->update($sql);
+
+						$sql = "UPDATE out_mantype SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+						$this->update($sql);
+					}
+					break;
+
+				case "in_mantype":
+					if ($id != 1 )
+					{
+						$num=$isup==0? ($id-1):($id+1);
+						$sql = "UPDATE in_mantype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+						$this->update($sql);
+
+						$sql = "UPDATE in_mantype SET store = '".$num."' where store = '".$id."' AND user_id ='".$user_id."'";
+						$this->update($sql);
+
+						$sql = "UPDATE in_mantype SET store = '".$id."' where store = '0' AND user_id ='".$user_id."'";
+						$this->update($sql);
+					}
+					break;
+			}
         }
 
 
@@ -1619,49 +1642,7 @@
             }
         }
 
-        /*  往前地址排序函数 */
-        public function TaxisAddrFront($table,$id)
-        {
-            $num = 0;
-            
-            if ($id != 1 )
-            {
-                $num = $id-1;
-                $sql = "UPDATE ".$this->$table." SET store = '0' where store = '".$num."'";
-                $this->update($sql);
 
-                $sql = "UPDATE ".$this->$table." SET store = '".$num."' where store = '".$id."'";
-                $this->update($sql);
-
-                $sql = "UPDATE ".$this->$table." SET store = '".$id."' where store = '0'";
-                $this->update($sql);
-            } else {
-                return false;
-            }
-        }
-
-        /*  往后地址排序函数 */
-        public function TaxisAddrAfter($table,$id)
-        {
-            $num = 0;
-            $sql = "select max(store) from ".$this->$table;
-            $max = $this->select($sql);
-
-            if ($id <= $max['0']['0'] )
-            {
-                $num = $id+1;
-                $sql = "UPDATE ".$this->$table." SET store = '0' where store = '".$num."'";
-                $this->update($sql);
-
-                $sql = "UPDATE ".$this->$table." SET store = '".$num."' where store = '".$id."'";
-                $this->update($sql);
-
-                $sql = "UPDATE ".$this->$table." SET store = '".$id."' where store = '0'";
-                $this->update($sql);
-            } else {
-                return false;
-            }
-        }
 
         /*  获取主类最大排序号函数 */
         public function getMaxManStore($table)
