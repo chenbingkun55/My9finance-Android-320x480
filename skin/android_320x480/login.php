@@ -57,6 +57,7 @@
 		echo "<br>DEBUG START*********************************************<br>";
 		echo "错误内容为: ".$Finance->convertLogIdToContent($_SESSION['__global_logid']);
 		echo "<br>DEBUG END*********************************************<br>";	
+		echo "<a href=\"main.php\"><span>跳转到Main页</span></a>";
 	}else {
 		echo "<script>window.location.replace('index.php');</script>";
 	}

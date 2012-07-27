@@ -208,7 +208,12 @@ function sSubType(sid){
 		for (var i=0; i<SubType.length ; i++ ){
 			if (SubType[i][1] == sub )
 			{
-				document.getElementById("subtype_id").options.add(new Option(SubType[i][2],SubType[i][0]));
+				
+				if (SubType[i][0] == sid){
+					document.getElementById("subtype_id").options.add(new Option(SubType[i][2],SubType[i][0],true));
+				}else{
+					document.getElementById("subtype_id").options.add(new Option(SubType[i][2],SubType[i][0]));
+				}
 			}
 		}
 	} 

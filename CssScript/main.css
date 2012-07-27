@@ -317,8 +317,20 @@ span.click{
 	overflow-x: auto;
 	overflow-y: auto;
 	white-space:nowrap;
-
 }
+
+.ContentTdColor {
+	background-color: #66CC00;
+}
+
+.ContentTdColor1 {
+	background-color: #33FFFF;
+}
+
+.ContentTdColor2 {
+	background-color: #00CC00;
+}
+
 .IndexLoginInfo{
 	background-color: #333300;
 	color: #FF6666;

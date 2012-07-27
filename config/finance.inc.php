@@ -88,7 +88,7 @@
 			if ( $in_out == "out" ){
 				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc": $Aid ? "SELECT * FROM  ".$this->_out_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
 			} else if ( $in_out == "in" ) {
-				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc":"SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
+				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc": $Aid ? "SELECT * FROM  ".$this->_in_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
 			}
 
 			$result = $this->select($sql);
@@ -107,6 +107,32 @@
 			}
 
             return $this->insert($sql);
+        }
+
+		/*更新收入/支出记录函数 */
+        public function updateCordeData($in_out,$Aid,$user_id,$group_id,$mantype_id,$subtype_id,$address,$money,$notes)
+        {
+			if ( $in_out == "out" ){
+				$sql = "UPDATE ".$this->_out_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+				$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+			}else if ($in_out == "in"){
+				$sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+				$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+			}
+
+			/* 记录修改前的资料 START */
+			$old_corde1 = $this->select($old_corde_sql);
+			$old_corde = "表名:".$this->_out_corde." 原记录: ";
+			for($j=0;$j<count($old_corde1);$j++) {
+				for($i=0;$i<count($old_corde1[$j]);$i++) {
+					$old_corde .= "'".$old_corde1[$j][$i]."',";
+				}
+				$old_corde .= " | ";
+			}
+
+			$this->corde_sql_log($old_corde);
+			/*  记录修改前的资料 END */
+            return $this->update($sql);
         }
 
 		/* 添加收入\支出类别 */
@@ -217,7 +243,7 @@
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
 
-				$alert_corde = $this->getCordeData(0,0,0,0,$Aid);
+				$alert_corde = $this->getCordeData(0,$in_out,0,0,$Aid);
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
 					echo "修改的Aid为：";
@@ -236,13 +262,13 @@
 				echo "<span><select id=\"mantype_id\" name=\"mantype_id\" onChange=\"sSubType();\">";
 				echo "<option value=\"\">--选择主类--</option>";
 				for ($i=0;$i<count($ManType);$i++){
-					$str = $ManType[$i]['id'] == $alert_corde['0']['out_mantype_id'] ? "<option selected=\"selected\" value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>":"<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
+					$str = $ManType[$i]['id'] == $alert_corde['0']['mantype_id'] ? "<option selected=\"selected\" value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>":"<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
 					echo $str;
 				}
 				echo "</select>";
 				echo "<select id=\"subtype_id\" name=\"subtype_id\"><option value=\"\">--选择子类--</option></select></span>";
 				if ($Aid != 0){
-					echo "<script>sSubType('".$alert_corde['0']['out_subtype_id']."')</script>";
+					echo "<script>sSubType('".$alert_corde['0']['subtype_id']."')</script>";
 				}
 				echo "<br>";
 				echo "<span>地址:&nbsp;";
@@ -261,8 +287,8 @@
 				echo "<span>说明:&nbsp;";
 				$str =  $Aid ? "<input  type=\"text\" name=\"notes\" size=\"20\" value=\"".$alert_corde['0']['notes']."\"></span><br>":"<input  type=\"text\" name=\"notes\" size=\"20\" value=\"\"></span><br>";
 				echo $str;
-				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
-				echo "<span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"提交\"></span>";
+				$str =  $Aid ? "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\"><INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"修改\"></span>":"<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"添加\"></span>";
+				echo $str;
 			}
 
          /* 转换ID->名称函数*/
@@ -888,30 +914,12 @@
         }
 
 
-        /*更新支出记录函数 */
-        public function     updateOutCorde($id,$money,$mantype_id,$subtype_id,$address_id,$notes)
-        {
-            $sql = "UPDATE ".$this->_out_corde." SET money = '".$money."',out_mantype_id = '".$mantype_id."',out_subtype_id = '".$subtype_id."',addr_id = '".$address_id."', notes = '".$notes."'  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
-			/* 记录修改前的资料 START */
-			$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
-			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->_out_corde." 原记录: ";
-			for($j=0;$j<count($old_corde1);$j++) {
-				for($i=0;$i<count($old_corde1[$j]);$i++) {
-					$old_corde .= "'".$old_corde1[$j][$i]."',";
-				}
-				$old_corde .= " | ";
-			}
 
-			$this->corde_sql_log($old_corde);
-			/*  记录修改前的资料 END */
-            return $this->update($sql);
-        }
 
         /*更新收入记录函数 */
         public function     updateInCorde($id,$money,$mantype_id,$subtype_id,$address_id,$notes)
         {
-            $sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',in_mantype_id = '".$mantype_id."',in_subtype_id = '".$subtype_id."',addr_id = '".$address_id."', notes = '".$notes."'  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
+            $sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address_id."', notes = '".$notes."'  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
 			/* 记录修改前的资料 START */
 			$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
 			$old_corde1 = $this->select($old_corde_sql);
@@ -1261,11 +1269,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT count(*),sum(money),user_id,out_mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  group by out_mantype_id";
+                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  group by mantype_id";
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT count(*),sum(money),user_id,out_mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by out_mantype_id";
+                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by mantype_id";
             } else {
-                $sql = "SELECT count(*),sum(money),user_id,out_mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by out_mantype_id";
+                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by mantype_id";
             }
             return $this->select($sql);
         }
