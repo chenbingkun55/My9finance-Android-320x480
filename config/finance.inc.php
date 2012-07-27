@@ -201,9 +201,9 @@
          /* 获取主类函数  */
         public function getManType($user_id,$cordtype,$isdisplay=0)
         {
-			if ($cordtype == "out_mantype" ) {
+			if ($cordtype == "out_mantype" || $cordtype == "out_record" ) {
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
-			}else if ($cordtype == "in_mantype" ){
+			}else if ($cordtype == "in_mantype" || $cordtype == "in_record"){
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
 			}
             return $this->select($sql);
