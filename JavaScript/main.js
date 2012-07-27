@@ -290,3 +290,18 @@ function Del(ID){
 	var args=queryStrings();
 	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID);
 }
+
+function ListSubtype(ID){
+	var args=queryStrings();
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID+'ViewS=1');
+}
+
+function MoveUp(ID){
+	var args=queryStrings();
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID+'UP=1');
+}
+
+function MoveDown(ID){
+	var args=queryStrings();
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID+'DOWN=1');
+}

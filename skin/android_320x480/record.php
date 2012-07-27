@@ -34,17 +34,17 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			if ($add_submit == 1){
-				$str = ($Finance->addCordeData("out",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
+				$str = ($Finance->addCordeData($recordtype,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
 				echo $str;
 			}
 			if($alter_submit == 1){
-				$str =($Finance->updateCordeData("out",$alter_id,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
+				$str =($Finance->updateCordeData($recordtype,$alter_id,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
 				echo $str;
 			}
 		}
 
 		if (!(is_null($Did)) && !(is_null($login_user_id))){
-			if ($Finance->delInOutCorde("out",$login_user_id,$Did)){
+			if ($Finance->delInOutCorde($recordtype,$login_user_id,$Did)){
 				echo "成功<br>";
 			}else{
 				echo "失败<br>";
@@ -53,12 +53,12 @@
 
 		echo "支出:&nbsp;";
 		if (!(is_null($Aid)) && !(is_null($login_user_id))){
-			$Finance->select_type($login_user_id,"out",$Aid);
+			$Finance->select_type($login_user_id,$recordtype,$Aid);
 		}else{
-			$Finance->select_type($login_user_id,"out");
+			$Finance->select_type($login_user_id,$recordtype);
 		}
 		
-		$today_corde = $Finance->getCordeData($login_group_id,"out",date("Y-m-d"));
+		$today_corde = $Finance->getCordeData($login_group_id,$recordtype,date("Y-m-d"));
 		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注","操作");
 		
 		echo "<table>";		
@@ -116,17 +116,17 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			if ($add_submit == 1){
-				$str = ($Finance->addCordeData("in",$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
+				$str = ($Finance->addCordeData($recordtype,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
 				echo $str;
 			}
 			if($alter_submit == 1){
-				$str =($Finance->updateCordeData("in",$alter_id,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
+				$str =($Finance->updateCordeData($recordtype,$alter_id,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? "成功<br>":"失败<br>";
 				echo $str;
 			}
 		}
 
 		if (!(is_null($Did)) && !(is_null($login_user_id))){
-			if ($Finance->delInOutCorde("in",$login_user_id,$Did)){
+			if ($Finance->delInOutCorde($recordtype,$login_user_id,$Did)){
 				echo "成功<br>";
 			}else{
 				echo "失败<br>";
@@ -135,12 +135,12 @@
 
 		echo "收入:&nbsp;";
 		if (!(is_null($Aid)) && !(is_null($login_user_id))){
-			$Finance->select_type($login_user_id,"in",$Aid);
+			$Finance->select_type($login_user_id,$recordtype,$Aid);
 		}else{
-			$Finance->select_type($login_user_id,"in");
+			$Finance->select_type($login_user_id,$recordtype);
 		}
 		
-		$today_corde = $Finance->getCordeData($login_group_id,"in",date("Y-m-d"));
+		$today_corde = $Finance->getCordeData($login_group_id,$recordtype,date("Y-m-d"));
 		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注","操作");
 		
 		echo "<table>";		
@@ -176,59 +176,6 @@
 			echo "<Br>".date("Y-m-d");
 			echo "<br>DEBUG END*********************************************<br>";	
 		}
-	} else if ( $recordtype == 'out_record_type' ){
-
-		echo "添加支出主类:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择主类\">";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择子类\"><br>";
-		echo "地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择地址\"><br>";
-		echo "添加支出主类金额:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加支出主类金额\"><br>";
-		echo "添加支出主类说明:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加支出主类说明\"><br>";
-	} else if ( $recordtype == 'in_record_type' ){
-		echo "添加收入主类:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择主类\">";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择子类\"><br>";
-		echo "地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择地址\"><br>";
-		echo "添加收入主类金额:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类金额\"><br>";
-		echo "添加收入主类说明:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类说明\"><br>";
-
-	} else if ( $recordtype == 'address' ){
-		echo "添加地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择主类\">";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择子类\"><br>";
-		echo "地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择地址\"><br>";
-		echo "添加收入主类金额:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类金额\"><br>";
-		echo "添加收入主类说明:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类说明\"><br>";
-	} else if ( $recordtype == 'user' ){
-		echo "添加地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择主类\">";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择子类\"><br>";
-		echo "地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择地址\"><br>";
-		echo "添加收入主类金额:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类金额\"><br>";
-		echo "添加收入主类说明:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类说明\"><br>";
-	} else if ( $recordtype == 'family' ){
-		echo "添加地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择主类\">";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择子类\"><br>";
-		echo "地址:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"选择地址\"><br>";
-		echo "添加收入主类金额:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类金额\"><br>";
-		echo "添加收入主类说明:&nbsp;";
-		echo "<input  type=\"text\" name=\"maintype\" size=\"8\" value=\"添加收入主类说明\"><br>";
-
 	}else{
 		echo "<a href=\"main.php?page=record.php&add_type=out_record\">支出记录</a><br><br>";
 		echo "<a href=\"main.php?page=record.php&add_type=in_record\">收入记录</a><br><br>";

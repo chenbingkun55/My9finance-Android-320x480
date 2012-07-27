@@ -4,7 +4,14 @@
 
 <?PHP 	
 	$recordtype = $_GET['add_type'];
+	$UP = $_GET['UP'];
+	$DOWN = $_GET['DOWN'];
+	$ViewS = $_GET['ViewS'];
+	$Aid = $_GET['Aid'];
+	$Did = $_GET['Did'];
 	$add_submit = $_POST['add_submit'];
+	$alter_submit = $_POST['alter_submit'];
+
 
 	/*
 		添加表单:
@@ -22,7 +29,15 @@
 				echo "is_display值为：".$_POST['is_display']."<br>";
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
-			if ($Finance->addTypeData("out",$login_user_id,$mantype,$is_display,0)){
+			if ($Finance->addTypeData($recordtype,$login_user_id,$mantype,$is_display,0)){
+				echo "成功<br>";
+			}else{
+				echo "失败<br>";
+			}
+		}
+
+		if (!(is_null($Did)) && !(is_null($login_user_id))){
+			if ($Finance->delType($recordtype,$login_user_id,$Did)){
 				echo "成功<br>";
 			}else{
 				echo "失败<br>";
@@ -53,9 +68,9 @@
 			echo "<td>".($i+1)."</td>";
 			echo "<td>".$YesNo=$man_type[$i]['is_display']? "启用":"禁用"."</td>";
 			echo "<td>".$man_type[$i]['name']."</td>";
-			echo "<td>上移\下移</td>";
-			echo "<td>修改\删除</td>";
-			echo "<td>列出子类</td>";
+			echo "<td><span class=\"click\" onClick=\"MoveUp('".$man_type[$i]['id']."')\">上移</span>|<span class=\"click\" onClick=\"MoveDown('".$man_type[$i]['id']."')\">下移</span></td>";
+			echo "<td><span class=\"click\" onClick=\"Alter('".$man_type[$i]['id']."')\">修改</span>|<span class=\"click\" onClick=\"Del('".$man_type[$i]['id']."')\">删除</span></td>";
+			echo "<td><span class=\"click\" onClick=\"ListSubtype('".$man_type[$i]['id']."')\">查看子类</span></td>";
 			echo "</tr>";
 			$c=($c=="#33FFFF") ? "#00CC00":"#33FFFF";
 		}

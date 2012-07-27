@@ -85,9 +85,9 @@
         public function getCordeData($group_id,$in_out,$date,$is_user=0,$Aid=0)
         {
             
-			if ( $in_out == "out" ){
+			if ( $in_out == "out_record" ){
 				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc": $Aid ? "SELECT * FROM  ".$this->_out_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_out_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
-			} else if ( $in_out == "in" ) {
+			} else if ( $in_out == "in_record" ) {
 				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND user_id = '".$user_id."' ORDER BY  create_date desc": $Aid ? "SELECT * FROM  ".$this->_in_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_in_corde." WHERE create_date like '".$date."%' AND group_id = '".$group_id."' ORDER BY  create_date desc";
 			}
 
@@ -100,9 +100,9 @@
         public function addCordeData($in_out,$user_id,$group_id,$mantype_id,$subtype_id,$address,$money,$notes)
         {
             
-			if ( $in_out == "out" ){
+			if ( $in_out == "out_record" ){
 				$sql = "INSERT INTO ".$this->_out_corde ."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
-			} else if (  $in_out == "in"  ) {
+			} else if (  $in_out == "in_record"  ) {
 				$sql = "INSERT INTO ".$this->_in_corde ."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
 			}
 
@@ -112,10 +112,10 @@
 		/*更新收入/支出记录函数 */
         public function updateCordeData($in_out,$Aid,$user_id,$group_id,$mantype_id,$subtype_id,$address,$money,$notes)
         {
-			if ( $in_out == "out" ){
+			if ( $in_out == "out_record" ){
 				$sql = "UPDATE ".$this->_out_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
 				$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
-			}else if ($in_out == "in"){
+			}else if ($in_out == "in_record"){
 				$sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
 				$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
 			}
@@ -137,12 +137,12 @@
 
 		/* 添加收入\支出类别 */
 		public function addTypeData($in_out,$user_id,$typename,$is_display=1,$is_sub=0){
-		if ( $in_out == "out" ){
+		if ( $in_out == "out_mantype" ){
 				$man_store = $this->select("select max(store) from out_mantype");
 				$sub_store = $this->select("select max(store) from out_subtype");
 
 				$sql =($is_sub) ? "INSERT INTO ".$this->_out_subtype ."  VALUES ('','".$user_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_out_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;
-			} else if (  $in_out == "in"  ) {
+			} else if (  $in_out == "in_mantype"  ) {
 				$man_store = $this->select("select max(store) from in_mantype");
 				$sub_store = $this->select("select max(store) from in_subtype");
 
@@ -201,9 +201,9 @@
          /* 获取主类函数  */
         public function getManType($user_id,$cordtype,$isdisplay=0)
         {
-			if ($cordtype == "out" ) {
+			if ($cordtype == "out_record" ) {
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
-			}else if ($cordtype == "in" ){
+			}else if ($cordtype == "in_record" ){
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
 			}
             return $this->select($sql);
@@ -212,9 +212,9 @@
 		 /* 获取子类函数  */
         public function getSubType($user_id,$cordtype,$isdisplay=0)
         {
-			if ($cordtype == "out" ) {
+			if ($cordtype == "out_record" ) {
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND is_display = '1'  order by store";
-			}else if ($cordtype == "in" ){
+			}else if ($cordtype == "in_record" ){
 				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND is_display = '1' order by store";
 			}
             return $this->select($sql);
@@ -326,25 +326,32 @@
         /*删除收入支出记录函数 */
         public function delInOutCorde($in_out,$user_id,$corde_id)
         {
-			if ($in_out == "out"){
-				$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
-			}
-			if ($in_out == "in"){
-				$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+			switch($in_out){
+				case "out_record":
+					$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					break;
+
+				case "in_record":
+					$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+
+				case "out_mantype":
+					$sql = "DELETE FROM ".$this->_out_mantype." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_out_mantype."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					break;
+
+				case "in_mantype":
+					$sql = "DELETE FROM ".$this->_in_mantype." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_in_mantype."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					break;
 			}
 
             
-			/* 记录修改前的资料 START */
-			if ($in_out == "out"){
-				$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
-				$old_corde1 = $this->select($old_corde_sql);
-				$old_corde = "表名:".$this->_out_corde." 原记录: ";
-			}
-			if ($in_out == "in"){
-				$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
-				$old_corde1 = $this->select($old_corde_sql);
-				$old_corde = "表名:".$this->_in_corde." 原记录: ";
-			}
+			/* 记录修改前的资料 START */	
+			$old_corde1 = $this->select($old_corde_sql);
+			$old_corde = "表名:".$this->_out_corde." 原记录: ";
+
 			
 			for($j=0;$j<count($old_corde1);$j++) {
 				for($i=0;$i<count($old_corde1[$j]);$i++) {
@@ -358,6 +365,27 @@
 
             return $this->delete($sql);
         }
+
+        /*删除各种类函数 */
+        public function deleteManType($in_out_type,$type_id)
+        {
+            $sql = "DELETE FROM ".$this->$in_out_type." where id = '".$mantype_id."' AND user_id = '".$_SESSION['__useralive'][0]."'";
+			/* 记录修改前的资料 START */
+			$old_corde_sql = "SELECT * FROM ".$this->$in_out_type."  WHERE id = '".$mantype_id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
+			$old_corde1 = $this->select($old_corde_sql);
+			$old_corde = "表名:".$this->$in_out_type." 原记录: ";
+			for($j=0;$j<count($old_corde1);$j++) {
+				for($i=0;$i<count($old_corde1[$j]);$i++) {
+					$old_corde .= "'".$old_corde1[$j][$i]."',";
+				}
+				$old_corde .= " | ";
+			}
+			$this->corde_sql_log($old_corde);
+			/*  记录修改前的资料 END */
+
+            return $this->delete($sql);
+        }
+
 
 /*  以上内容为优化内容  ####################################################################################################*/
 
@@ -858,27 +886,6 @@
 			$this->corde_sql_log($old_corde);
 			/*  记录修改前的资料 END */
             return $this->update($sql);
-        }
-
-
-        /*删除主类函数 */
-        public function deleteManType($in_out_type,$mantype_id)
-        {
-            $sql = "DELETE FROM ".$this->$in_out_type." where id = '".$mantype_id."' AND user_id = '".$_SESSION['__useralive'][0]."'";
-			/* 记录修改前的资料 START */
-			$old_corde_sql = "SELECT * FROM ".$this->$in_out_type."  WHERE id = '".$mantype_id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
-			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->$in_out_type." 原记录: ";
-			for($j=0;$j<count($old_corde1);$j++) {
-				for($i=0;$i<count($old_corde1[$j]);$i++) {
-					$old_corde .= "'".$old_corde1[$j][$i]."',";
-				}
-				$old_corde .= " | ";
-			}
-			$this->corde_sql_log($old_corde);
-			/*  记录修改前的资料 END */
-
-            return $this->delete($sql);
         }
 
 
