@@ -283,25 +283,36 @@ var queryStrings=function() {//get url querystring
 
 function Alter(ID){
 	var args=queryStrings();
-	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Aid='+ID);
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Aid='+ID+'&Lid='+args.Lid);
 }
 
 function Del(ID){
 	var args=queryStrings();
-	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID);
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID+'&Lid='+args.Lid);
 }
 
 function ListSubtype(ID){
 	var args=queryStrings();
-	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Lid='+ID);
+	window.location.replace('main.php?page='+args.page+'&add_type=out_subtype&Lid='+ID);
+}
+
+function ReturnMantype(){
+	var args=queryStrings();
+	if (args.add_type=="out_subtype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=out_mantype');
+	}else if (args.add_type=="in_subtype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=in_mantype');
+	}
+	
+
 }
 
 function MoveUp(ID){
 	var args=queryStrings();
-	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Mid='+ID+'&UP=1');
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Mid='+ID+'&UP=1&Lid='+args.Lid);
 }
 
 function MoveDown(ID){
 	var args=queryStrings();
-	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Mid='+ID);
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Mid='+ID+'&Lid='+args.Lid);
 }
