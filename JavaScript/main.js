@@ -293,7 +293,7 @@ function Del(ID){
 
 function ListSubtype(ID){
 	var args=queryStrings();
-	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID+'&ViewS=1');
+	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Lid='+ID);
 }
 
 function MoveUp(ID){

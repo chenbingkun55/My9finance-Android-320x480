@@ -112,12 +112,13 @@
 		/*更新收入/支出记录函数 */
         public function updateCordeData($in_out,$Aid,$user_id,$group_id,$mantype_id,$subtype_id,$address,$money,$notes)
         {
-			if ( $in_out == "out_record" ){
-				$sql = "UPDATE ".$this->_out_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
-				$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
-			}else if ($in_out == "in_record"){
-				$sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
-				$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+			switch($in_out){
+				case "out_record":
+					$sql = "UPDATE ".$this->_out_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+				case "in_record":
+					$sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
 			}
 
 			/* 记录修改前的资料 START */
@@ -136,19 +137,42 @@
         }
 
 		/* 添加收入\支出类别 */
-		public function addTypeData($in_out,$user_id,$typename,$is_display=1,$is_sub=0){
+		public function addTypeData($in_out,$user_id,$typename,$is_display=1,$man_id=0){
 		if ( $in_out == "out_mantype" ){
 				$man_store = $this->select("select max(store) from out_mantype");
-				$sub_store = $this->select("select max(store) from out_subtype");
+				$sub_store = $this->select("select max(store) from out_subtype WHERE man_id = '".$man_id."'");
 
-				$sql =($is_sub) ? "INSERT INTO ".$this->_out_subtype ."  VALUES ('','".$user_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_out_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;
+				$sql =($is_sub) ? "INSERT INTO ".$this->_out_subtype ."  VALUES ('','".$user_id."','".$man_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_out_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;
 			} else if (  $in_out == "in_mantype"  ) {
 				$man_store = $this->select("select max(store) from in_mantype");
 				$sub_store = $this->select("select max(store) from in_subtype");
 
-				$sql =($is_sub) ? "INSERT INTO ".$this->_in_subtype ."  VALUES ('','".$user_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_in_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;	
+				$sql =($is_sub) ? "INSERT INTO ".$this->_in_subtype ."  VALUES ('','".$user_id."','".$man_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_in_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;	
 			}
 			return $this->insert($sql);
+		}
+
+		/* 更新收入\支出类别 */
+		public function updateTypeData($in_out,$user_id,$Aid=0,$typename,$is_display=1){
+			switch($in_out){
+				case "out_mantype":
+					$sql ="UPDATE ".$this->_out_mantype." SET name = '".$typename."',is_display = '".$is_display."' WHERE id = '".$Aid."' AND user_id = '". $user_id."'";
+
+					/* 记录修改前的资料 START */
+					$old_corde_sql = "SELECT * FROM ".$this->_out_mantype."  WHERE id = '".$Aid."' AND user_id = '". $user_id."'";
+					$old_corde1 = $this->select($old_corde_sql);
+					$old_corde = "表名:".$this->_out_mantype." 原记录: ";
+					break;
+			case "in_mantype":
+					$sql ="UPDATE ".$this->_in_mantype." SET name = '".$typename."',is_display = '".$is_display."' WHERE id = '".$Aid."' AND user_id = '". $user_id."'";
+
+					/* 记录修改前的资料 START */
+					$old_corde_sql = "SELECT * FROM ".$this->_in_mantype."  WHERE id = '".$Aid."' AND user_id = '". $user_id."'";
+					$old_corde1 = $this->select($old_corde_sql);
+					$old_corde = "表名:".$this->_out_mantype." 原记录: ";
+					break;
+			}
+			return $this->update($sql);
 		}
 
 
@@ -199,23 +223,39 @@
 
 
          /* 获取主类函数  */
-        public function getManType($user_id,$cordtype,$isdisplay=0)
+        public function getManType($user_id,$cordtype,$isdisplay=0,$alter_id=0)
         {
 			if ($cordtype == "out_mantype" || $cordtype == "out_record" ) {
-				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
+				if($alter_id!="0"){
+					$sql = "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' AND id = '".$alter_id."'";
+				}else{
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
+				}
 			}else if ($cordtype == "in_mantype" || $cordtype == "in_record"){
-				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
+				if($alter_id!="0"){
+					$sql = "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' AND id = '".$alter_id."'";
+				}else{
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_mantype." where user_id = '".$user_id."' AND is_display = '1' order by store";
+				}
 			}
             return $this->select($sql);
         }
 
 		 /* 获取子类函数  */
-        public function getSubType($user_id,$cordtype,$isdisplay=0)
+        public function getSubType($user_id,$cordtype,$isdisplay=0,$man_id=0)
         {
-			if ($cordtype == "out_record" ) {
-				$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND is_display = '1'  order by store";
-			}else if ($cordtype == "in_record" ){
-				$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND is_display = '1' order by store";
+			if ($cordtype == "out_mantype"|| $cordtype == "out_record" ) {
+				if($man_id!="0"){
+					$sql = "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."' order by store";
+				}else{
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND is_display = '1'  order by store";
+				}
+			}else if ($cordtype == "in_mantype"|| $cordtype == "in_record" ){
+				if($man_id!="0"){
+					$sql = "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."' order by store";
+				}else{
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND is_display = '1' order by store";
+				}
 			}
             return $this->select($sql);
         }
@@ -369,11 +409,11 @@
         /*  往前地址排序函数 */
         public function down_up($in_out,$user_id,$id,$isup=0)
         {
-
-			$store_num = $this->select("SELECT store from out_mantype where id = '".$id."'");
+			
 			$num = 0;
 			switch($in_out){
 				case "out_mantype":
+					$store_num = $this->select("SELECT store from out_mantype where id = '".$id."'");
 					if ($store_num['0']['0'] != 1 )
 					{
 						if ($isup){
@@ -393,16 +433,21 @@
 					break;
 
 				case "in_mantype":
-					if ($id != 1 )
+					$store_num = $this->select("SELECT store from in_mantype where id = '".$id."'");
+					if ($store_num['0']['0'] != 1 )
 					{
-						$num=$isup==0? ($id-1):($id+1);
+						if ($isup){
+							$num=$store_num['0']['0']-1;
+						}else{
+							$num=$store_num['0']['0']+1;
+						}
 						$sql = "UPDATE in_mantype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE in_mantype SET store = '".$num."' where store = '".$id."' AND user_id ='".$user_id."'";
+						$sql = "UPDATE in_mantype SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE in_mantype SET store = '".$id."' where store = '0' AND user_id ='".$user_id."'";
+						$sql = "UPDATE in_mantype SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
 						$this->update($sql);
 					}
 					break;
