@@ -158,6 +158,11 @@
 
 					$sql =($man_id) ? "INSERT INTO ".$this->_in_subtype ."  VALUES ('','".$user_id."','".$man_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_in_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;
 					break;
+				case 'address':
+					$addr_store = $this->select("select max(store) from ".$this->_address." Where user_id = '".$user_id."'");
+
+					$sql = "INSERT INTO ".$this->_address ."  VALUES ('','".$user_id."','".($addr_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')";
+					break;
 			}
 			return $this->insert($sql);
 		}
@@ -197,6 +202,14 @@
 					$old_corde1 = $this->select($old_corde_sql);
 					$old_corde = "表名:".$this->_in_mantype." 原记录: ";
 					break;
+			case "address":
+					$sql ="UPDATE ".$this->_address." SET name = '".$typename."',is_display = '".$is_display."' WHERE id = '".$Aid."' AND user_id = '". $user_id."'";
+
+					/* 记录修改前的资料 START */
+					$old_corde_sql ="SELECT * FROM ".$this->_address."  WHERE id = '".$Aid."' AND user_id = '". $user_id."'";
+					$old_corde1 = $this->select($old_corde_sql);
+					$old_corde = "表名:".$this->_in_mantype." 原记录: ";
+					break;
 			}
 			return $this->update($sql);
 		}
@@ -222,10 +235,22 @@
             
         }
 
+      /* 获取用户数据函数 */
+        public function getUsers($user_id,$isdisplay=0,$alter_id=0)
+        {
+            if ($alter_id!="0"){
+				$sql = "SELECT * FROM ".$this->_users." WHERE id = '".$alter_id."'";  
+			} else {
+				$sql = $isdisplay ? "SELECT * FROM ".$this->_users." WHERE user_id = '".$user_id:"SELECT * FROM ".$this->_users." WHERE is_display = '1'";  
+			}
+            return $this->select($sql);
+        }
+
+
         /*  获取家庭用户函数 */
         public function getUserData($group_id=0)
         {
-			$users = $this->select("SELECT user_id FROM user_group where group_id ='".$group_id."'");
+			$users = $this->select("SELECT user_id FROM ".$this->_user_group." where group_id ='".$group_id."'");
             for ($i=0;$i<count($users);$i++){
 				if ($i<count($users)-1){
 					$user_list .= "'".$users[$i]['user_id']."',";
@@ -233,7 +258,7 @@
 					$user_list .= "'".$users[$i]['user_id']."'";
 				}
 			}
-			$sql = "SELECT * FROM users where id in (".$user_list.")";
+			$sql = "SELECT * FROM ".$this->_users." where id in (".$user_list.")";
 			return $this->select($sql);
         }
 
@@ -296,9 +321,13 @@
 
 
        /* 获取地址函数 */
-        public function getAddress($user_id,$isdisplay=0)
+        public function getAddress($user_id,$isdisplay=0,$addr_id=0)
         {
-            $sql = $isdisplay ? "SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  order by store":"SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  AND is_display = '1' order by store";        
+            if ($addr_id!="0"){
+				$sql = "SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."' AND id = '".$addr_id."'";  
+			} else {
+				$sql = $isdisplay ? "SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  order by store":"SELECT * FROM ".$this->_address." WHERE user_id = '".$user_id."'  AND is_display = '1' order by store";  
+			}
             return $this->select($sql);
         }
 
@@ -425,6 +454,10 @@
 					$sql = "DELETE from ".$this->_in_subtype." where id='".$corde_id."' AND user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * from ".$this->_in_subtype." where id='".$corde_id."' AND user_id = '".$user_id."'";
 					break;
+				case "address":
+					$sql = "DELETE from ".$this->_address." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * from ".$this->_address." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					break;
 			}
 
             
@@ -453,7 +486,7 @@
 			$num = 0;
 			switch($in_out){
 				case "out_mantype":
-					$store_num = $this->select("SELECT store from out_mantype where id = '".$id."'");
+					$store_num = $this->select("SELECT store from ".$this->_out_mantype." where id = '".$id."'");
 					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
@@ -461,18 +494,18 @@
 						}else{
 							$num=$store_num['0']['0']+1;
 						}
-						$sql = "UPDATE out_mantype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+						$sql = "UPDATE ".$this->_out_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE out_mantype SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+						$sql = "UPDATE ".$this->_out_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE out_mantype SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+						$sql = "UPDATE ".$this->_out_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
 						$this->update($sql);
 					}
 					break;
 				case "out_subtype":
-					$store_num = $this->select("SELECT store from out_subtype where id = '".$id."' AND man_id='".$man_id."'");
+					$store_num = $this->select("SELECT store from ".$this->_out_subtype." where id = '".$id."' AND man_id='".$man_id."'");
 					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
@@ -480,19 +513,19 @@
 						}else{
 							$num=$store_num['0']['0']+1;
 						}
-						$sql = "UPDATE out_subtype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."' AND man_id ='".$man_id."'";
+						$sql = "UPDATE ".$this->_out_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."' AND man_id ='".$man_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE out_subtype SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+						$sql = "UPDATE ".$this->_out_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE out_subtype SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+						$sql = "UPDATE ".$this->_out_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
 						$this->update($sql);
 					}
 					break;
 
 				case "in_mantype":
-					$store_num = $this->select("SELECT store from in_mantype where id = '".$id."'");
+					$store_num = $this->select("SELECT store from ".$this->_in_mantype." where id = '".$id."'");
 					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
@@ -500,18 +533,18 @@
 						}else{
 							$num=$store_num['0']['0']+1;
 						}
-						$sql = "UPDATE in_mantype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+						$sql = "UPDATE ".$this->_in_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE in_mantype SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+						$sql = "UPDATE ".$this->_in_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE in_mantype SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+						$sql = "UPDATE ".$this->_in_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
 						$this->update($sql);
 					}
 					break;
 				case "in_subtype":
-					$store_num = $this->select("SELECT store from in_subtype where id = '".$id."'");
+					$store_num = $this->select("SELECT store from ".$this->_in_subtype." where id = '".$id."'");
 					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
@@ -519,13 +552,32 @@
 						}else{
 							$num=$store_num['0']['0']+1;
 						}
-						$sql = "UPDATE in_subtype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+						$sql = "UPDATE ".$this->_in_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE in_subtype SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+						$sql = "UPDATE ".$this->_in_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
 						$this->update($sql);
 
-						$sql = "UPDATE in_subtype SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+						$sql = "UPDATE ".$this->_in_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+						$this->update($sql);
+					}
+					break;
+				case "address":
+					$store_num = $this->select("SELECT store from ".$this->_address." where id = '".$id."'");
+					if ($store_num['0']['0'] != 0 )
+					{
+						if ($isup){
+							$num=$store_num['0']['0']-1;
+						}else{
+							$num=$store_num['0']['0']+1;
+						}
+						$sql = "UPDATE ".$this->_address." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+						$this->update($sql);
+
+						$sql = "UPDATE ".$this->_address." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+						$this->update($sql);
+
+						$sql = "UPDATE ".$this->_address." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
 						$this->update($sql);
 					}
 					break;

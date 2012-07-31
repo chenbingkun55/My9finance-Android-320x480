@@ -413,132 +413,207 @@
 			}
 			break;
 		case 'address':
-			if ( $add_submit == 1 ){
-			$mantype = $_POST['mantype'];
-			$is_display = $_POST['is_display'];
+			if ( $add_submit == 1 || $alter_submit == 1 ){
+				if(DEBUG_YES){ 
+					echo "<br>DEBUG START*********************************************<br>";
+					echo "add_submit值为：".$_POST['add_submit']."<br>";
+					echo "address值为：".$_POST['address']."<br>";
+					echo "is_display值为：".$_POST['is_display']."<br>";
+					echo "<br>DEBUG END*********************************************<br>";	
+				}
+				if($add_submit == 1){
+					$address = $_POST['address'];
+					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+					$str = ($Finance->addTypeData($recordtype,$login_user_id,$address,1,0))==true ? "成功<br>":"失败<br>";
+						echo $str;
+				}
 
+				if($alter_submit == 1){
+					$alter_id = $_POST['alter_id'];
+					$address = $_POST['address'];
+					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+
+					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$address,$is_display))==true ? "成功<br>":"失败<br>";
+					echo $str;
+				}
+			}
+
+			if (!(is_null($Did)) && !(is_null($login_user_id))){
+				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
+				echo $str;
+			}
+
+			if (!(is_null($Mid)) && !(is_null($login_user_id))){
+				if ($UP == 1){
+					$Finance->down_up($recordtype,$login_user_id,0,$Mid,$UP);
+				}else{
+					$Finance->down_up($recordtype,$login_user_id,0,$Mid);
+				}
+			}
+
+			if (!(is_null($Aid)) && !(is_null($login_user_id))){
+				$alter_corde=$Finance->getAddress($login_user_id,1,$Aid);
+
+				echo "修改地址名称:&nbsp;<br>";
+				echo "<input  type=\"text\" name=\"address\" size=\"10\" value=\"".$alter_corde['0']['name']."\"></span>";
+				echo "是否显示";
+				if ($alter_corde['0']['is_display']=="1"){
+					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
+				}else{
+					echo "<INPUT TYPE=\"checkbox\" name=\"is_display\" ></span>";
+				}
+				echo "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\">";
+				echo "<INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\">";
+				echo "<INPUT  TYPE=\"submit\" value=\"".$_ALTER."\">";
+			}else{
+				echo "添加地址名称:&nbsp;<br>";
+				echo "<input  type=\"text\" name=\"address\" size=\"10\" value=\"\"></span>";
+				echo "是否显示";
+				echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
+				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
+				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
+			}
+	
+			$address_corde = $Finance->getAddress($login_user_id,1);
+
+			$table_title = array("序号","状态","名称","排序","操作");
+			
+			echo "<table>";		
+			echo "<tr class='ContentTdColor'>";
+			for ($i=0;$i<count($table_title);$i++){
+				echo "<th>".$table_title[$i]."</th>";
+			}
+
+			$c="ContentTdColor1";
+			for ($i=0;$i<count($address_corde);$i++){
+				echo "<tr class=\"".$c."\">";
+				echo "<td>".($i+1)."</td>";
+				echo "<td>".$YesNo=$address_corde[$i]['is_display']? "启用":"禁用"."</td>";
+				echo "<td>".$address_corde[$i]['name']."</td>";
+				echo "<td><span class=\"click\" onClick=\"MoveUp('".$address_corde[$i]['id']."')\">上移</span>|<span class=\"click\" onClick=\"MoveDown('".$address_corde[$i]['id']."')\">下移</span></td>";
+				echo "<td><span class=\"click\" onClick=\"Alter('".$address_corde[$i]['id']."')\">修改</span>|<span class=\"click\" onClick=\"Del('".$address_corde[$i]['id']."')\">删除</span></td>";
+				echo "</tr>";
+				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			}
+
+			echo "</table>";
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";
-				echo "add_submit值为：".$_POST['add_submit']."<br>";
-				echo "mantype值为：".$_POST['mantype']."<br>";
-				echo "is_display值为：".$_POST['is_display']."<br>";
+				print_r($address);
+				echo "<Br>".date("Y-m-d");
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
-			if ($Finance->addTypeData("in",$login_user_id,$mantype,1,0)){
-				echo "成功<br>";
-			}else{
-				echo "失败<br>";
-			}
-		}
-
-
-		echo "地址名称:&nbsp;<br>";
-		echo "<input  type=\"text\" name=\"address\" size=\"10\" value=\"\"></span>";
-		echo "是否显示";
-		echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
-		echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
-		echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
-
-		$address = $Finance->getAddress($login_user_id,1);
-
-		$table_title = array("序号","状态","名称","排序","操作");
-		
-		echo "<table>";		
-		echo "<tr bgcolor=\"#66CC00\">";
-		for ($i=0;$i<count($table_title);$i++){
-			echo "<th>".$table_title[$i]."</th>";
-		}
-
-		$c="#33FFFF";
-		for ($i=0;$i<count($address);$i++){
-			echo "<tr bgcolor=\"".$c."\">";
-			echo "<td>".($i+1)."</td>";
-			echo "<td>".$YesNo=$address[$i]['is_display'] ? "启用":"禁用"."</td>";
-			echo "<td>".$address[$i]['name']."</td>";
-			echo "<td>上\下</td>";
-			echo "<td>修改\删除</td>";
-			echo "</tr>";
-			$c=($c=="#33FFFF") ? "#00CC00":"#33FFFF";
-		}
-
-		echo "</table>";
-		if(DEBUG_YES){ 
-			echo "<br>DEBUG START*********************************************<br>";
-			print_r($address);
-			echo "<Br>".date("Y-m-d");
-			echo "<br>DEBUG END*********************************************<br>";	
-		}
-		break;
+			break;
 	case 'family':
-			if ( $add_submit == 1 ){
-			$user_name = $_POST['user_name'];
-			$user_alias = $_POST['user_alias'];
-			$user_password = $_POST['user_password'];
-			$notes = $_POST['notes'];
+			if ( $add_submit == 1 || $alter_submit == 1 ){
+				if(DEBUG_YES){ 
+					echo "<br>DEBUG START*********************************************<br>";
+					echo "add_submit值为：".$_POST['add_submit']."<br>";
+					echo "mantype值为：".$_POST['mantype']."<br>";
+					echo "is_display值为：".$_POST['is_display']."<br>";
+					echo "<br>DEBUG END*********************************************<br>";	
+				}
+				if($add_submit == 1){
+					$user_name = $_POST['user_name'];
+					$user_alias = $_POST['user_alias'];
+					$user_password = $_POST['user_password'];
+					$notes = $_POST['notes'];
+					$str = ($Finance->AddUser($user_name,$user_alias,$user_password,$notes,$login_group_id))==true ? "成功<br>":"失败<br>";
+						echo $str;
+				}
 
+				if($alter_submit == 1){
+					$alter_id = $_POST['alter_id'];
+					$mantype = $_POST['mantype'];
+					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+
+					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? "成功<br>":"失败<br>";
+					echo $str;
+				}
+			}
+
+			if (!(is_null($Did)) && !(is_null($login_user_id))){
+				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
+				echo $str;
+			}
+
+			if (!(is_null($Mid)) && !(is_null($login_user_id))){
+				if ($UP == 1){
+					$Finance->down_up($recordtype,$login_user_id,0,$Mid,$UP);
+				}else{
+					$Finance->down_up($recordtype,$login_user_id,0,$Mid);
+				}
+			}
+
+			if (!(is_null($Aid)) && !(is_null($login_user_id))){
+				$alter_corde=$Finance->getUsers($login_user_id,1,$Aid);
+
+				echo "状态:";
+				if ($alter_corde['0']['is_display']=="1"){
+					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
+				}else{
+					echo "<INPUT TYPE=\"checkbox\" name=\"is_display\" ></span>";
+				}
+				echo "<br>";
+				echo "修改用户名:&nbsp;";
+				echo "<input type=\"text\" name=\"user_name\" size=\"12\" maxlength=\"20\" value=\"".$alter_corde['0']['username']."\"></span>";
+				echo "<br>别名:";
+				echo "<input type=\"text\" name=\"user_alias\" size=\"12\" maxlength=\"20\" value =\"".$alter_corde['0']['user_alias']."\">";
+				echo "<br>密码:";
+				echo "<input type=\"password\" name=\"user_password\" size=\"11\" maxlength=\"20\">";
+				echo "<br>备注:";
+				echo "<input type=\"text\" name=\"notes\" size=\"12\" maxlength=\"20\" value =\"\">";
+				echo "<br>";
+				echo "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\">";
+				echo "<INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\">";
+				echo "<INPUT  TYPE=\"submit\" value=\"".$_ALTER."\">";
+			}else{
+				echo "用户名:&nbsp;";
+				echo "<input type=\"text\" name=\"user_name\" size=\"12\" maxlength=\"20\" value = \"\">";
+				echo "<br>别名:";
+				echo "<input type=\"text\" name=\"user_alias\" size=\"12\" maxlength=\"20\" value =\"\">";
+				echo "<br>密码:";
+				echo "<input type=\"password\" name=\"user_password\" size=\"11\" maxlength=\"20\">";
+				echo "<br>备注:";
+				echo "<input type=\"text\" name=\"notes\" size=\"12\" maxlength=\"20\" value =\"\">";
+				echo "<br>";
+				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
+				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
+			}
+
+			$users_corde = $Finance->getUserData($login_group_id);
+			
+			$table_title = array("序号","状态","用户名","别名","家庭","备注","最后登录","操作");
+			
+			echo "<table>";		
+			echo "<tr class='ContentTdColor'>";
+			for ($i=0;$i<count($table_title);$i++){
+				echo "<th>".$table_title[$i]."</th>";
+			}
+
+			$c="ContentTdColor1";
+			for ($i=0;$i<count($users);$i++){
+				echo "<tr class=\"".$c."\">";
+				echo "<td>".($i+1)."</td>";
+				echo "<td>".$YesNo=$users_corde[$i]['is_display']? "启用":"禁用"."</td>";
+				echo "<td>".$users_corde[$i]['username']."</td>";
+				echo "<td>".$users_corde[$i]['user_alias']."</td>";
+				echo "<td>".$login_groupname."</td>";
+				echo "<td>".$users[$i]['notes']."</td>";
+				echo "<td>".$users[$i]['last_date']."</td>";
+				echo "<td><span class=\"click\" onClick=\"Alter('".$type_corde[$i]['id']."')\">修改</span>|<span class=\"click\" onClick=\"Del('".$type_corde[$i]['id']."')\">删除</span></td>";
+				echo "</tr>";
+				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			}
+
+			echo "</table>";
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";
-				echo "add_submit值为：".$_POST['add_submit']."<br>";
-				echo "user_name值为：".$_POST['user_name']."<br>";
-				echo "user_alias值为：".$_POST['user_alias']."<br>";
-				echo "user_password值为：".$_POST['user_password']."<br>";
-				echo "notes值为：".$_POST['notes']."<br>";
+				print_r($type_corde);
+				echo "<Br>".date("Y-m-d");
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
-			if ($Finance->AddUser($user_name,$user_alias,$user_password,$notes,$login_group_id)){
-				echo "成功<br>";
-			}else{
-				echo "失败<br>";
-			}
-		}
-
-
-		echo "用户名:&nbsp;";
-		echo "<input type=\"text\" name=\"user_name\" size=\"12\" maxlength=\"20\" value = \"\">";
-		echo "<br>别名:";
-		echo "<input type=\"text\" name=\"user_alias\" size=\"12\" maxlength=\"20\" value =\"\">";
-		echo "<br>密码:";
-		echo "<input type=\"password\" name=\"user_password\" size=\"11\" maxlength=\"20\">";
-		echo "<br>备注:";
-		echo "<input type=\"text\" name=\"notes\" size=\"12\" maxlength=\"20\" value =\"\">";
-		echo "<br>";
-		echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
-		echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
-
-		$users = $Finance->getUserData($login_group_id);
-		
-		$table_title = array("序号","状态","用户名","别名","家庭","备注","最后登录","操作");
-		
-		echo "<table>";		
-		echo "<tr bgcolor=\"#66CC00\">";
-		for ($i=0;$i<count($table_title);$i++){
-			echo "<th>".$table_title[$i]."</th>";
-		}
-
-		$c="#33FFFF";
-		for ($i=0;$i<count($users);$i++){
-			echo "<tr bgcolor=\"".$c."\">";
-			echo "<td>".($i+1)."</td>";
-			echo "<td>".$YesNo=$users[$i]['disable']? "禁用":"启用"."</td>";
-			echo "<td>".$users[$i]['username']."</td>";
-			echo "<td>".$users[$i]['user_alias']."</td>";
-			echo "<td>".$login_groupname."</td>";
-			echo "<td>".$users[$i]['notes']."</td>";
-			echo "<td>".$users[$i]['last_date']."</td>";
-
-			echo "<td>修改\删除</td>";
-			echo "</tr>";
-			$c=($c=="#33FFFF") ? "#00CC00":"#33FFFF";
-		}
-
-		echo "</table>";
-		if(DEBUG_YES){ 
-			echo "<br>DEBUG START*********************************************<br>";
-			print_r($users);
-			echo "<Br>".date("Y-m-d");
-			echo "<br>DEBUG END*********************************************<br>";	
-		}	
-		break;
+			break;
 	default:
 		echo "<a href=\"main.php?page=fun_manager.php&add_type=out_mantype\"><span>支出类别管理</span></a>";
 		echo "<br><br>";
