@@ -216,24 +216,48 @@
 
 
         /*  添加用户函数 */
-        public function AddUser($user_name,$user_alias,$user_password,$notes,$group_id)
+        public function AddUser($is_disable=0,$user_name,$user_alias,$user_password,$notes,$group_id)
         {
-            $sql = "INSERT INTO ".$this->_users." (id,username,user_alias,password,notes,create_date)   VALUES  ('','".$user_name."','".$user_alias."',password('".$user_password."'),'".$notes."','".date("Y-m-d H:i:s")."')";
+            $sql = "INSERT INTO ".$this->_users." (id,is_disable,username,user_alias,password,notes,create_date)   VALUES  ('','".$is_disable."','".$user_name."','".$user_alias."',password('".$user_password."'),'".$notes."','".date("Y-m-d H:i:s")."')";
 			if ($this->insert($sql) != false){
-				$user_id = $this->select("SELECT * from users where username = '".$user_name."'");
+				$user_id = $this->select("SELECT * from ".$this->_users." where username = '".$user_name."'");
 				$sql = "INSERT INTO ".$this->_user_group." (id,user_id,group_id,create_date,disable)   VALUES  ('','".$user_id['0']['id']."','".$group_id."','".date("Y-m-d H:i:s")."','0')";
 				if ($this->insert($sql) != false){
 					return true;
 				}else{
-					$this->select("DELETE from users where id = '".$user_id['0']['id']."'");
+					$this->select("DELETE from ".$this->_users." where id = '".$user_id['0']['id']."'");
 					return false;
 				}
 			} else {
-				
 				return false;
 			}
             
         }
+
+      /* 更新用户数据函数 */
+        public function updateUser($is_disable,$user_name,$user_alias,$user_password=0,$notes,$alter_id=0)
+        {
+			$sql = ($user_password) ? "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',user_name = '".$user_name."',user_alias = '".$user_alias."',user_password = password('".$user_password."'), notes = '".$notes."'  WHERE id = '".$alter_id : "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',user_name = '".$user_name."',user_alias = '".$user_alias."', notes = '".$notes."'  WHERE id = '".$alter_id;
+			
+			$old_corde_sql = "SELECT * FROM ".$this->_users."  WHERE id = '".$Aid;
+
+
+			/* 记录修改前的资料 START */
+			$old_corde1 = $this->select($old_corde_sql);
+			$old_corde = "表名:".$this->_users." 原记录: ";
+			for($j=0;$j<count($old_corde1);$j++) {
+				for($i=0;$i<count($old_corde1[$j]);$i++) {
+					$old_corde .= "'".$old_corde1[$j][$i]."',";
+				}
+				$old_corde .= " | ";
+			}
+
+			$this->corde_sql_log($old_corde);
+			/*  记录修改前的资料 END */
+            return $this->update($sql);
+        }
+
+
 
       /* 获取用户数据函数 */
         public function getUsers($user_id,$isdisplay=0,$alter_id=0)
@@ -457,6 +481,10 @@
 				case "address":
 					$sql = "DELETE from ".$this->_address." where id='".$corde_id."' AND user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * from ".$this->_address." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					break;
+				case "family":
+					$sql = "DELETE from ".$this->_users." where id='".$corde_id."'";
+					$old_corde_sql = "SELECT * from ".$this->_users." where id='".$corde_id."'";
 					break;
 			}
 
@@ -706,33 +734,6 @@
             $this->insert($sql);
         }
 
-
-        /*更新用户函数 */
-        public function updateUser($user_name,$user_alias,$user_password,$notes)
-        {
-            if  ( $_SESSION['__useralive'][0] == 1 )
-            {
-                    $sql = "UPDATE ".$this->_users." SET username = '".$user_name."',user_alias = '".$user_alias."', password = '".$user_password."' ,notes = '".$notes."'  WHERE id = '".$_SESSION['__gettype_id']."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_users." WHERE id = '".$_SESSION['__gettype_id']."'";
-            } else {
-                    $sql = "UPDATE ".$this->_users." SET username = '".$user_name."',user_alias = '".$user_alias."', password = '".$user_password."' ,notes = '".$notes."'  WHERE id = '".$_SESSION['__useralive'][0]."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_users." WHERE id = '".$_SESSION['__useralive'][0]."'";
-            }
-			/* 记录修改前的资料 START */
-			
-			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->_users." 原记录: ";
-			for($j=0;$j<count($old_corde1);$j++) {
-				for($i=0;$i<count($old_corde1[$j]);$i++) {
-					$old_corde .= "'".$old_corde1[$j][$i]."',";
-				}
-				$old_corde .= " | ";
-			}
-
-			$this->corde_sql_log($old_corde);
-			/*  记录修改前的资料 END */
-            return $this->update($sql);
-        }
 
         /*删除用户函数 */
         public function deleteUser($user_id)

@@ -508,26 +508,32 @@
 			if ( $add_submit == 1 || $alter_submit == 1 ){
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
-					echo "add_submit值为：".$_POST['add_submit']."<br>";
-					echo "mantype值为：".$_POST['mantype']."<br>";
-					echo "is_display值为：".$_POST['is_display']."<br>";
+					echo "user_name值为：".$_POST['user_name']."<br>";
+					echo "user_alias值为：".$_POST['user_alias']."<br>";
+					echo "user_password值为：".$_POST['user_password']."<br>";
+					echo "notes值为：".$_POST['notes']."<br>";
+					echo "is_disable值为：".$_POST['is_disable']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
 				if($add_submit == 1){
+					$_POST['is_disable'] == "on" ? $is_disable = "1" : $is_disable = "0" ;
 					$user_name = $_POST['user_name'];
 					$user_alias = $_POST['user_alias'];
 					$user_password = $_POST['user_password'];
 					$notes = $_POST['notes'];
-					$str = ($Finance->AddUser($user_name,$user_alias,$user_password,$notes,$login_group_id))==true ? "成功<br>":"失败<br>";
+					$str = ($Finance->AddUser($is_disable,$user_name,$user_alias,$user_password,$notes,$login_group_id))==true ? "成功<br>":"失败<br>";
 						echo $str;
 				}
 
 				if($alter_submit == 1){
+					$_POST['is_disable'] == "on" ? $is_disable = "1" : $is_disable = "0" ;
+					$user_name = $_POST['user_name'];
+					$user_alias = $_POST['user_alias'];
+					$user_password = $_POST['user_password'];
+					$notes = $_POST['notes'];
 					$alter_id = $_POST['alter_id'];
-					$mantype = $_POST['mantype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 
-					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? "成功<br>":"失败<br>";
+					$str =($Finance->updateUser($is_disable,$user_name,$user_alias,$user_password,$notes,$alter_id))==true ? "成功<br>":"失败<br>";
 					echo $str;
 				}
 			}
@@ -549,7 +555,7 @@
 				$alter_corde=$Finance->getUsers($login_user_id,1,$Aid);
 
 				echo "状态:";
-				if ($alter_corde['0']['is_display']=="1"){
+				if ($alter_corde['0']['is_disable']=="1"){
 					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
 				}else{
 					echo "<INPUT TYPE=\"checkbox\" name=\"is_display\" ></span>";
@@ -562,13 +568,15 @@
 				echo "<br>密码:";
 				echo "<input type=\"password\" name=\"user_password\" size=\"11\" maxlength=\"20\">";
 				echo "<br>备注:";
-				echo "<input type=\"text\" name=\"notes\" size=\"12\" maxlength=\"20\" value =\"\">";
+				echo "<input type=\"text\" name=\"notes\" size=\"12\" maxlength=\"20\" value =\"".$alter_corde['0']['notes']."\">";
 				echo "<br>";
 				echo "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\">";
 				echo "<INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\">";
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ALTER."\">";
 			}else{
-				echo "用户名:&nbsp;";
+				echo "启用:&nbsp;";
+				echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_disable\" ></span>";
+				echo "<BR>用户名:&nbsp;";
 				echo "<input type=\"text\" name=\"user_name\" size=\"12\" maxlength=\"20\" value = \"\">";
 				echo "<br>别名:";
 				echo "<input type=\"text\" name=\"user_alias\" size=\"12\" maxlength=\"20\" value =\"\">";
@@ -592,16 +600,16 @@
 			}
 
 			$c="ContentTdColor1";
-			for ($i=0;$i<count($users);$i++){
+			for ($i=0;$i<count($users_corde);$i++){
 				echo "<tr class=\"".$c."\">";
 				echo "<td>".($i+1)."</td>";
-				echo "<td>".$YesNo=$users_corde[$i]['is_display']? "启用":"禁用"."</td>";
+				echo "<td>".$YesNo=$users_corde[$i]['is_disable']? "启用":"禁用"."</td>";
 				echo "<td>".$users_corde[$i]['username']."</td>";
 				echo "<td>".$users_corde[$i]['user_alias']."</td>";
 				echo "<td>".$login_groupname."</td>";
-				echo "<td>".$users[$i]['notes']."</td>";
-				echo "<td>".$users[$i]['last_date']."</td>";
-				echo "<td><span class=\"click\" onClick=\"Alter('".$type_corde[$i]['id']."')\">修改</span>|<span class=\"click\" onClick=\"Del('".$type_corde[$i]['id']."')\">删除</span></td>";
+				echo "<td>".$users_corde[$i]['notes']."</td>";
+				echo "<td>".$users_corde[$i]['last_date']."</td>";
+				echo "<td><span class=\"click\" onClick=\"Alter('".$users_corde[$i]['id']."')\">修改</span>|<span class=\"click\" onClick=\"Del('".$users_corde[$i]['id']."')\">删除</span></td>";
 				echo "</tr>";
 				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 			}
@@ -609,7 +617,7 @@
 			echo "</table>";
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";
-				print_r($type_corde);
+				print_r($users_corde);
 				echo "<Br>".date("Y-m-d");
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
