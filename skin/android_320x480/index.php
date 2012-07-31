@@ -10,6 +10,9 @@
 <title><?PHP echo $_TITLE?></title>
 <link href="<?PHP echo CSS_PATH."main.css"?>" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
+<script>
+	window.resizeTo(355,545);
+</script>
 </head>
 
 <body onload="document.getElementById('login-form').username.focus()">

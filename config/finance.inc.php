@@ -144,15 +144,17 @@
 		/* 添加收入\支出类别 */
 		public function addTypeData($in_out,$user_id,$typename,$is_display=1,$man_id=0){
 			switch($in_out){
-				case "out_mantype"||"out_subtype":
-					$man_store = $this->select("select max(store) from out_mantype");
-					$sub_store = $this->select("select max(store) from out_subtype WHERE man_id = '".$man_id."'");
+				case 'out_mantype':
+				case 'out_subtype':
+					$man_store = $this->select("select max(store) from out_mantype Where user_id = '".$user_id."'");
+					$sub_store = $this->select("select max(store) from out_subtype WHERE man_id = '".$man_id."' AND user_id ='".$user_id."'");
 
 					$sql =($man_id) ? "INSERT INTO ".$this->_out_subtype ."  VALUES ('','".$user_id."','".$man_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_out_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;
 					break;
-				case "in_mantype"||"in_subtype":
-					$man_store = $this->select("select max(store) from in_mantype");
-					$sub_store = $this->select("select max(store) from in_subtype WHERE man_id = '".$man_id."'");
+				case 'in_mantype':
+				case 'in_subtype':
+					$man_store = $this->select("select max(store) from in_mantype Where user_id = '".$user_id."'");
+					$sub_store = $this->select("select max(store) from in_subtype WHERE man_id = '".$man_id."' AND user_id ='".$user_id."'");
 
 					$sql =($man_id) ? "INSERT INTO ".$this->_in_subtype ."  VALUES ('','".$user_id."','".$man_id."','".($sub_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')":"INSERT INTO ".$this->_in_mantype ."  VALUES ('','".$user_id."','".($man_store['0']['0']+1)."','".$is_display."','".$typename."','".date("Y-m-d H:i:s")."')" ;
 					break;
@@ -271,19 +273,23 @@
 			if ($cordtype == "out_subtype"|| $cordtype == "out_record" ) {
 				if($man_id!="0"){
 					if($sub_id !="0"){
-						$sql = "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."' AND id = '".$sub_id."'";
+						$sql = "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."' AND id = '".$sub_id."' order by store";
 					}else{
-						$sql = "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."'";
+						$sql = "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."' order by store";
 					}
 				}else{
 					$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_out_subtype." where user_id = '".$user_id."' AND is_display = '1'  order by store";
 				}
 			}else if ($cordtype == "in_subtype"|| $cordtype == "in_record" ){
-				if($sub_id!="0"){
-					$sql = "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND id = '".$sub_id;
+				if($man_id!="0"){
+					if($sub_id !="0"){
+						$sql = "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."' AND id = '".$sub_id."' order by store";
+					}else{
+						$sql = "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND man_id = '".$man_id."' order by store";
+					}
 				}else{
-					$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND is_display = '1' order by store";
-				}
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' order by store":"SELECT * FROM  ".$this->_in_subtype." where user_id = '".$user_id."' AND is_display = '1'  order by store";
+				}			
 			}
             return $this->select($sql);
         }
@@ -448,7 +454,7 @@
 			switch($in_out){
 				case "out_mantype":
 					$store_num = $this->select("SELECT store from out_mantype where id = '".$id."'");
-					if ($store_num['0']['0'] != 1 )
+					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
 							$num=$store_num['0']['0']-1;
@@ -466,15 +472,15 @@
 					}
 					break;
 				case "out_subtype":
-					$store_num = $this->select("SELECT store from out_subtype where id = '".$id."'");
-					if ($store_num['0']['0'] != 1 )
+					$store_num = $this->select("SELECT store from out_subtype where id = '".$id."' AND man_id='".$man_id."'");
+					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
 							$num=$store_num['0']['0']-1;
 						}else{
 							$num=$store_num['0']['0']+1;
 						}
-						$sql = "UPDATE out_subtype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+						$sql = "UPDATE out_subtype SET store = '0' where store = '".$num."' AND user_id ='".$user_id."' AND man_id ='".$man_id."'";
 						$this->update($sql);
 
 						$sql = "UPDATE out_subtype SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
@@ -487,7 +493,7 @@
 
 				case "in_mantype":
 					$store_num = $this->select("SELECT store from in_mantype where id = '".$id."'");
-					if ($store_num['0']['0'] != 1 )
+					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
 							$num=$store_num['0']['0']-1;
@@ -506,7 +512,7 @@
 					break;
 				case "in_subtype":
 					$store_num = $this->select("SELECT store from in_subtype where id = '".$id."'");
-					if ($store_num['0']['0'] != 1 )
+					if ($store_num['0']['0'] != 0 )
 					{
 						if ($isup){
 							$num=$store_num['0']['0']-1;

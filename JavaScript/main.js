@@ -293,7 +293,11 @@ function Del(ID){
 
 function ListSubtype(ID){
 	var args=queryStrings();
-	window.location.replace('main.php?page='+args.page+'&add_type=out_subtype&Lid='+ID);
+	if (args.add_type=="out_mantype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=out_subtype&Lid='+ID);
+	}else if (args.add_type=="in_mantype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=in_subtype&Lid='+ID);
+	}
 }
 
 function ReturnMantype(){
