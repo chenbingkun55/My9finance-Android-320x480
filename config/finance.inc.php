@@ -100,10 +100,13 @@
         public function addCordeData($in_out,$user_id,$group_id,$mantype_id,$subtype_id,$address,$money,$notes)
         {
             
-			if ( $in_out == "out_record" ){
-				$sql = "INSERT INTO ".$this->_out_corde ."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
-			} else if (  $in_out == "in_record"  ) {
-				$sql = "INSERT INTO ".$this->_in_corde ."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
+			switch($in_out){
+				case "out_record":
+					$sql = "INSERT INTO ".$this->_out_corde."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
+					break;
+				case "in_record":
+					$sql = "INSERT INTO ".$this->_in_corde."  VALUES ('','".$money."','".$user_id."','".$group_id."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".date("Y-m-d H:i:s")."')";
+					break;
 			}
 
             return $this->insert($sql);
@@ -116,9 +119,11 @@
 				case "out_record":
 					$sql = "UPDATE ".$this->_out_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+					break;
 				case "in_record":
 					$sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address."', notes = '".$notes."'  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE id = '".$Aid."' AND user_id = '".$user_id."'";
+					break;
 			}
 
 			/* 记录修改前的资料 START */
@@ -394,11 +399,10 @@
 					$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
 					break;
-
 				case "in_record":
 					$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
-
+					break;
 				case "out_mantype":
 					$sql = "DELETE out_mantype,out_subtype from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.user_id = '".$user_id."'";
