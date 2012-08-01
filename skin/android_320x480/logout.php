@@ -21,6 +21,7 @@
 	$_SESSION['__global_logid']=6000;
 	$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
 	echo "<br><br>&nbsp;".$error_info['0']['content'];
+	$text_log = "用户: [".$_SESSION['__userdata']['0']["username"]."] 注销成功";
 	session_destroy();
 	/*
 		跳转到登录页面。
@@ -31,6 +32,11 @@
 		echo "<br>DEBUG END*********************************************<br>";	
 	}else {
 		echo "<script>window.location.href='index.php';</script>";
+	}
+
+	/*  记录Log  */
+	if (! empty($text_log)) {
+		$Finance->CrodeLog($text_log);
 	}
 ?>
 	</div>

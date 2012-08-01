@@ -27,7 +27,7 @@
         public $_user_group = 'user_group';
         public $_log_resolve = 'log_resolve';
         public $_address = 'address';
-		public $_log = 'log';
+		public $_log = "log_";
 
 
         public $_pagesize = 10;
@@ -612,6 +612,13 @@
 			}
         }
 
+		/*  记录事件日志 */
+        public function CrodeLog($text_log = "")
+        {
+			$info_log = "文件:".$_SERVER['PHP_SELF']." 上一页面:".$_SERVER['HTTP_REFERER']." 协议:".$_SERVER['SERVER_PROTOCOL']." 当前主机:".$_SERVER['SERVER_NAME']." 当标识:".$_SERVER['SERVER_SOFTWARE']." 方法:".$_SERVER['REQUEST_METHOD']." HTTP主机:".$_SERVER['HTTP_HOST']." 客户端主机名:".$_SERVER['REMOTE_HOST']." 客户端浏览器:".$_SERVER['HTTP_USER_AGENT']." 客户端IP:".$_SERVER['REMOTE_ADDR']." 请求头信息:".$_SERVER['HTTP_ACCEPT']." 代理头信息:".$_SERVER['HTTP_USER_AGENT'];
+            $sql = "INSERT INTO ".$this->_log.date('Ym')."  VALUES ('','".$_SESSION['__userdata']['0']["id"]."','".$_SESSION['__groupdata']['0']['id']."',\"".$text_log."\",\"".$info_log."\",'".$_SESSION['__global_logid']."','".date("Y-m-d H:i:s")."')";
+            return $this->insert_log($sql);
+        }
 
 /*  以上内容为优化内容  ####################################################################################################*/
 
@@ -1841,13 +1848,6 @@
             return $this->select($sql);
         }
 		
-		/*  记录事件日志 */
-        public function CrodeLog($text_log = "")
-        {
-			$info_log = "文件:".$_SERVER['PHP_SELF']." 上一页面:".$_SERVER['HTTP_REFERER']." 协议:".$_SERVER['SERVER_PROTOCOL']." 当前主机:".$_SERVER['SERVER_NAME']." 当标识:".$_SERVER['SERVER_SOFTWARE']." 方法:".$_SERVER['REQUEST_METHOD']." HTTP主机:".$_SERVER['HTTP_HOST']." 客户端主机名:".$_SERVER['REMOTE_HOST']." 客户端浏览器:".$_SERVER['HTTP_USER_AGENT']." 客户端IP:".$_SERVER['REMOTE_ADDR']." 请求头信息:".$_SERVER['HTTP_ACCEPT']." 代理头信息:".$_SERVER['HTTP_USER_AGENT'];
-            $sql = "INSERT INTO ".$this->_log."  VALUES ('','".$_SESSION['__useralive'][0]."','".$_SESSION['__group_id']."',\"".$text_log."\",\"".$info_log."\",'".$_SESSION['__global_logid']."','".date("Y-m-d H:i:s")."')";
-            return $this->insert($sql);
-        }
 
 
     }

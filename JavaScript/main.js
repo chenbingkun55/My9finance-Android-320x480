@@ -149,19 +149,9 @@ function HandleStateChange(){
 	}
 }
 
-function PostErrorInfo(GlobalError,type){
-	var ErrorInfo = document.getElementById('ErrorInfo');
-	if (GlobalError)
-	{
-		if (type == '1')
-		{
-			ErrorInfo.innerHTML = "<b>"+GlobalError+"</b>";
-			ErrorInfo.style.Color = "#FF0000";
-		}
-		ErrorInfo.innerHTML = GlobalError;
-	} else {
-		ErrorInfo.innerHTML = "彩贝壳之家 -- 欢迎您!!!";
-	}
+function PostMessage(GlobalMSG){
+	var Message = document.getElementById('MainMessage');
+	Message.text.innerHTML = GlobalMSG;
 }
 
 
@@ -266,6 +256,12 @@ function PrintDate(){
 	text += '<br>'+Hours+':'+Minutes;
 
 	DateTimePlane.innerHTML=text;
+}
+
+function PrintMessage(str){
+	var MainMessage=document.getElementById("MainMessage");
+	MainMessage.innerHTML="TESTETSE";
+	setInterval(MainMessage.text.innerHTML="<BLINK>彩贝壳之家 -- 欢迎您!!!</BLINK>",60000);
 }
 
 

@@ -625,6 +625,9 @@
 		echo "<a href=\"main.php?page=fun_manager.php&add_type=address\"><span>地址管理</span></a><br><br>";
 		echo "<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>家庭管理</span></a>";
 	}
+	if (! empty($text_log)) {
+		$Finance->CrodeLog($text_log);
+	}
 ?>
 </form>
 </div>

@@ -159,6 +159,9 @@ class DBSQL{
 		try{		
 			$create_sql = "CREATE TABLE IF NOT EXISTS `log_sql_".date('Ym')."` (`id` smallint(4) NOT NULL AUTO_INCREMENT,`user_id` smallint(4) NOT NULL,`group_id` smallint(4) NOT NULL,`log` text NOT NULL,`create_date` datetime NOT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 			$results = mysql_query($create_sql,$this->CONN_LOG);
+
+			$create_sql = "CREATE TABLE IF NOT EXISTS `log_".date('Ym')."` (`id` smallint(4) NOT NULL AUTO_INCREMENT,`user_id` smallint(4) DEFAULT NULL,`group_id` smallint(4) DEFAULT NULL,`log` text,`info` text,`global_logid` int(8) DEFAULT NULL,`create_date` datetime DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+			$results = mysql_query($create_sql,$this->CONN_LOG);
 		}catch(Exception $e){
 			$msg = $e;
 			include(ERRORFILE);
@@ -170,6 +173,30 @@ class DBSQL{
 			return @mysql_affected_rows($this->CONN_LOG);
 		}
 	}
+
+/*------------------------------------------------------------------------------------------*/
+
+	public function insert_log($sql = "" )
+	{
+		/* 添加日志记录*/
+		$this->corde_sql_log($sql); 
+
+		if(empty($sql)) return false;
+		if(empty($this->CONN_LOG)) return false;
+		try{
+			$results = mysql_query($sql,$this->CONN_LOG);
+		}catch(Exception $e){
+			$msg = $e;
+			include(ERRORFILE);
+		}
+		if (!$results)
+		{
+			return false;
+		}else{
+			return @mysql_insert_id($this->CONN_LOG);
+		}
+	}
+
 
 /*------------------------------------------------------------------------------------------*/
 	public function corde_sql_log($sql = "" )
