@@ -2,6 +2,7 @@
 	
 class DBSQL{
 	private $CONN="";
+	private $CONN_LOG="";
 	
 /*------------------------------------------------------------------------------------------*/
 	public function _construct()
@@ -19,13 +20,41 @@ class DBSQL{
 		}
 		try{
 			mysql_select_db(DBName,$conn);
+			
 		}catch(Exception $e)
 		{
 			$msg = $e;
 			include(ERRORFILE);
 		}
-		$this->CONN = $conn;
+	$this->CONN = $conn;
+	}
+
+	public function _construct_log()
+	{	
+		try{
+			$conn_log = mysql_connect(ServerName,LogUserName,LogPassWord);
+			mysql_query("SET CHARACTER utf8",$conn_log);
+			mysql_query("SET NAMES utf8",$conn_log);
+			//mysql_query("SET COLLATION_CONNECTION utf8_general_ci",$conn);
+			//mysql_query("SET COLLATION_DATABASE utf8_general_ci",$conn);
+		}catch(Exception $e)
+		{
+			$msg = $e;
+			include(ERRORFILE);
 		}
+		try{
+			mysql_select_db(LOGDBName,$conn_log);			
+		}catch(Exception $e)
+		{
+			$msg = $e;
+			include(ERRORFILE);
+		}
+	$this->CONN_LOG = $conn_log;
+	}
+
+
+
+		
 
 /*------------------------------------------------------------------------------------------*/
 		public function select($sql = "")
@@ -123,15 +152,13 @@ class DBSQL{
 		}
 	}
 
-/*------------------------------------------------------------------------------------------*/
-	public function corde_sql_log($sql = "" )
+/*-----------------------------------------------------------------------------------------*/
+	public function create_log_table()
 	{
-
-		if(empty($sql)) return false;
-		if(empty($this->CONN)) return false;
+		if(empty($this->CONN_LOG)) return false;
 		try{		
-			$corde_sql_log = "INSERT INTO  log_sql (id,user_id,group_id,log,create_date) VALUES ('','".$_SESSION['__useralive'][0]."','".$_SESSION['__group_id']."',\"".$sql."\",'".date("Y-m-d H:i:s")."')";
-			$results = mysql_query($corde_sql_log,$this->CONN);
+			$create_sql = "CREATE TABLE IF NOT EXISTS `log_sql_".date('Ym')."` (`id` smallint(4) NOT NULL AUTO_INCREMENT,`user_id` smallint(4) NOT NULL,`group_id` smallint(4) NOT NULL,`log` text NOT NULL,`create_date` datetime NOT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+			$results = mysql_query($create_sql,$this->CONN_LOG);
 		}catch(Exception $e){
 			$msg = $e;
 			include(ERRORFILE);
@@ -140,7 +167,27 @@ class DBSQL{
 		{
 			return false;
 		} else {
-			return @mysql_affected_rows($this->CONN);
+			return @mysql_affected_rows($this->CONN_LOG);
+		}
+	}
+
+/*------------------------------------------------------------------------------------------*/
+	public function corde_sql_log($sql = "" )
+	{
+		if(empty($sql)) return false;
+		if(empty($this->CONN_LOG)) return false;
+		try{		
+			$corde_sql_log = "INSERT INTO  log_sql_".date('Ym')." (id,user_id,group_id,log,create_date) VALUES ('','".$_SESSION['__userdata']['0']["id"]."','".$_SESSION['__groupdata']['0']['id']."',\"".$sql."\",'".date("Y-m-d H:i:s")."')";
+			$results = mysql_query($corde_sql_log,$this->CONN_LOG);
+		}catch(Exception $e){
+			$msg = $e;
+			include(ERRORFILE);
+		}
+		if (!$results)
+		{
+			return false;
+		} else {
+			return @mysql_affected_rows($this->CONN_LOG);
 		}
 	}
 

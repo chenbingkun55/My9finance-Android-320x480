@@ -1858,9 +1858,14 @@
     /* 创建一个类变量 */
     $Finance = new Finance();
 
-    /* 连接到数据库 */
+
+	
+	/* 连接到日志数据库 */
+	$Finance->_construct_log();
+
+    /* 连接到主数据库 */
     $Finance->_construct();
 
-
-
+	/* 创建日志表 */
+	$Finance->create_log_table();
 ?>
