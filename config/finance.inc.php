@@ -515,99 +515,99 @@
 			switch($in_out){
 				case "out_mantype":
 					$store_num = $this->select("SELECT store from ".$this->_out_mantype." where id = '".$id."'");
-					if ($store_num['0']['0'] != 0 )
-					{
-						if ($isup){
-							$num=$store_num['0']['0']-1;
-						}else{
-							$num=$store_num['0']['0']+1;
-						}
-						$sql = "UPDATE ".$this->_out_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_out_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_out_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
-						$this->update($sql);
+					$store_max = $this->select("SELECT max(store) from ".$this->_out_mantype." where user_id = '".$user_id."'");
+					if ($isup && $store_num['0']['0'] > 0){
+						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
+					}else if($store_num['0']['0'] <= $store_max['0']['0']){
+						$num=$store_num['0']['0']+1 > $store_max['0']['0'] ? 1:$store_num['0']['0']+1;
+					} else{
+						break;
 					}
+					$sql = "UPDATE ".$this->_out_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_out_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_out_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+					$this->update($sql);
 					break;
 				case "out_subtype":
 					$store_num = $this->select("SELECT store from ".$this->_out_subtype." where id = '".$id."' AND man_id='".$man_id."'");
-					if ($store_num['0']['0'] != 0 )
-					{
-						if ($isup){
-							$num=$store_num['0']['0']-1;
-						}else{
-							$num=$store_num['0']['0']+1;
-						}
-						$sql = "UPDATE ".$this->_out_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."' AND man_id ='".$man_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_out_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_out_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
-						$this->update($sql);
+					$store_max = $this->select("SELECT max(store) from ".$this->_out_subtype." where man_id = '".$man_id."'");
+					if ($isup && $store_num['0']['0'] > 0){
+						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
+					}else if($store_num['0']['0'] <= $store_max['0']['0']){
+						$num=$store_num['0']['0']+1 > $store_max['0']['0'] ? 1:$store_num['0']['0']+1;
+					} else{
+						break;
 					}
+					$sql = "UPDATE ".$this->_out_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."' AND man_id ='".$man_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_out_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_out_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$this->update($sql);
 					break;
 
 				case "in_mantype":
 					$store_num = $this->select("SELECT store from ".$this->_in_mantype." where id = '".$id."'");
-					if ($store_num['0']['0'] != 0 )
-					{
-						if ($isup){
-							$num=$store_num['0']['0']-1;
-						}else{
-							$num=$store_num['0']['0']+1;
-						}
-						$sql = "UPDATE ".$this->_in_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_in_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_in_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
-						$this->update($sql);
+					$store_max = $this->select("SELECT max(store) from ".$this->_in_mantype." where user_id = '".$user_id."'");
+					if ($isup && $store_num['0']['0'] > 0){
+						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
+					}else if($store_num['0']['0'] <= $store_max['0']['0']){
+						$num=$store_num['0']['0']+1 > $store_max['0']['0'] ? 1:$store_num['0']['0']+1;
+					} else{
+						break;
 					}
+					$sql = "UPDATE ".$this->_in_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_in_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_in_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+					$this->update($sql);
 					break;
 				case "in_subtype":
 					$store_num = $this->select("SELECT store from ".$this->_in_subtype." where id = '".$id."'");
-					if ($store_num['0']['0'] != 0 )
-					{
-						if ($isup){
-							$num=$store_num['0']['0']-1;
-						}else{
-							$num=$store_num['0']['0']+1;
-						}
-						$sql = "UPDATE ".$this->_in_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_in_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_in_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
-						$this->update($sql);
+					$store_max = $this->select("SELECT max(store) from ".$this->_out_subtype." where man_id = '".$man_id."'");
+					if ($isup && $store_num['0']['0'] > 0){
+						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
+					}else if($store_num['0']['0'] <= $store_max['0']['0']){
+						$num=$store_num['0']['0']+1 > $store_max['0']['0'] ? 1:$store_num['0']['0']+1;
+					} else{
+						break;
 					}
+					$sql = "UPDATE ".$this->_in_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_in_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_in_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$this->update($sql);
 					break;
 				case "address":
 					$store_num = $this->select("SELECT store from ".$this->_address." where id = '".$id."'");
-					if ($store_num['0']['0'] != 0 )
-					{
-						if ($isup){
-							$num=$store_num['0']['0']-1;
-						}else{
-							$num=$store_num['0']['0']+1;
-						}
-						$sql = "UPDATE ".$this->_address." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_address." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
-						$this->update($sql);
-
-						$sql = "UPDATE ".$this->_address." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
-						$this->update($sql);
+					$store_max = $this->select("SELECT max(store) from ".$this->_address." where user_id = '".$user_id."'");
+					if ($isup && $store_num['0']['0'] > 0){
+						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
+					}else if($store_num['0']['0'] <= $store_max['0']['0']){
+						$num=$store_num['0']['0']+1 > $store_max['0']['0'] ? 1:$store_num['0']['0']+1;
+					} else{
+						break;
 					}
+					$sql = "UPDATE ".$this->_address." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_address." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+					$this->update($sql);
+
+					$sql = "UPDATE ".$this->_address." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+					$this->update($sql);
 					break;
 			}
         }
