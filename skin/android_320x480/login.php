@@ -13,10 +13,14 @@
 <script type="text/javascript" src="<?PHP echo JS_PATH."TwoSelect.js"?>"></script>
 </head>
 
-<body class="mainfont">
-	<div class="BodyDiv" id="BodyDiv">
+<body>
+	<div class="BackPlane" id="BodyDiv">
 
 <?PHP
+	$_SESSION['__global_logid']=6001;
+	$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
+	echo "<br><br>&nbsp;".$error_info['0']['content'];
+
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
