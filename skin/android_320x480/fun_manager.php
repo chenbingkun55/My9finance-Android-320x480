@@ -40,26 +40,41 @@
 					echo "is_display值为：".$_POST['is_display']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
+				$mantype = $_POST['mantype'];
+				$is_display = $_POST['is_display'] == "on" ?  1 : 0;
 				if($add_submit == 1){
-					$mantype = $_POST['mantype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
-					$str = ($Finance->addTypeData($recordtype,$login_user_id,$mantype,$is_display,0))==true ? "成功<br>":"失败<br>";
-						echo $str;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$mantype,$is_display,0))==true ? true:false;
+
+					/*  记录日志  */
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "添加支出主类-成功,主类名称: ".$mantype." 显示: ".$is_display : "添加支出主类-失败,主类名称: ".$mantype." 显示: ".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$mantype = $_POST['mantype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+					$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$alter_id);
+					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? true:false;
 
-					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? "成功<br>":"失败<br>";
-					echo $str;
+					/*  记录日志  */
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "修改支出主类-成功,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."  改为:".$is_display : "修改支出主类-失败,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."改为:".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
+				$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$Did);
 				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
-				echo $str;
+					
+				/*  记录日志  */
+				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
+				$text_log = $YesNo ? "删除支出主类-成功,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display : "删除支出主类-失败,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display;
+				/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -135,27 +150,46 @@
 					echo "is_display值为：".$_POST['is_display']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
+				$subtype = $_POST['subtype'];
+				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+				$man_id = $_POST['man_id'];
 				if($add_submit == 1){
-					$subtype = $_POST['subtype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
-					$str = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ? "成功<br>":"失败<br>";
-						echo $str;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ? true:false;
+					
+					/*  记录日志  */
+					$man_name=$Finance->convertID($login_user_id,$man_id,"out_mantype");
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "添加支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display : "添加支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$man_id = $_POST['man_id'];
-					$subtype = $_POST['subtype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+					$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$man_id,$alter_id);
 
-					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$subtype,$is_display,$man_id))==true ? "成功<br>":"失败<br>";
-					echo $str;
+					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
+
+					/*  记录日志  */
+					$man_name=$Finance->convertID($login_user_id,$man_id,"out_mantype");
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "修改支出子类-成功,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display : "修改支出子类-失败,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
-				echo $str;
+				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+
+				/*  记录日志  */
+				$man_name=$Finance->convertID($login_user_id,$Lid,"out_mantype");
+				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+				$text_log = $YesNo ? "删除支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
+					/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -187,6 +221,7 @@
 				echo "<input  type=\"text\" name=\"subtype\" size=\"10\" value=\"\"></span>";
 				echo "是否显示";
 				echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
+				echo "<INPUT type=\"hidden\" name=\"man_id\" value=\"".$Lid."\">";
 				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
 			}
@@ -231,26 +266,42 @@
 					echo "is_display值为：".$_POST['is_display']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
+				$mantype = $_POST['mantype'];
+				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 				if($add_submit == 1){
-					$mantype = $_POST['mantype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
-					$str = ($Finance->addTypeData($recordtype,$login_user_id,$mantype,$is_display,0))==true ? "成功<br>":"失败<br>";
-						echo $str;
+
+					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$mantype,$is_display,0))==true ? true:false;
+
+					/*  记录日志  */
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "添加收入主类-成功,主类名称: ".$mantype." 显示: ".$is_display : "添加收入主类-失败,主类名称: ".$mantype." 显示: ".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$mantype = $_POST['mantype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
-
-					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? "成功<br>":"失败<br>";
-					echo $str;
+					$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$alter_id);
+					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? true:false;
+					
+					/*  记录日志  */
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "修改收入主类-成功,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."  改为:".$is_display : "修改收入主类-失败,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."改为:".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
-				echo $str;
+				$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+				
+				/*  记录日志  */
+				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
+				$text_log = $YesNo ? "删除收入主类-成功,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display : "删除收入主类-失败,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display;
+				/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -326,27 +377,46 @@
 					echo "is_display值为：".$_POST['is_display']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
+				$man_id = $_POST['man_id'];
+				$subtype = $_POST['subtype'];
+				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 				if($add_submit == 1){
-					$subtype = $_POST['subtype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
-					$str = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ? "成功<br>":"失败<br>";
-						echo $str;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ?  true:false;
+
+					/*  记录日志  */
+					$man_name=$Finance->convertID($login_user_id,$man_id,"out_mantype");
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "添加收入子类-成功,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display : "添加收入子类-失败,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$man_id = $_POST['man_id'];
-					$subtype = $_POST['subtype'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+					$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$man_id,$alter_id);
 
-					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$subtype,$is_display,$man_id))==true ? "成功<br>":"失败<br>";
-					echo $str;
+					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
+					
+					/*  记录日志  */
+					$man_name=$Finance->convertID($login_user_id,$man_id,"in_mantype");
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "修改收入子类-成功,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display : "修改收入子类-失败,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
-				echo $str;
+				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+				
+				/*  记录日志  */
+				$man_name=$Finance->convertID($login_user_id,$Lid,"in_mantype");
+				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+				$text_log = $YesNo ? "删除支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
+					/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -421,26 +491,42 @@
 					echo "is_display值为：".$_POST['is_display']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
+				$address = $_POST['address'];
+				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 				if($add_submit == 1){
-					$address = $_POST['address'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
-					$str = ($Finance->addTypeData($recordtype,$login_user_id,$address,1,0))==true ? "成功<br>":"失败<br>";
-						echo $str;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$address,1,0))==true ? true:false;
+
+					/*  记录日志  */
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "添加地址-成功,地址名称: ".$address.",显示: ".$is_display : "添加地址-失败,地址名称: ".$address.",显示: ".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$address = $_POST['address'];
-					$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
+					$alter_corde=$Finance->getAddress($login_user_id,1,$alter_id);
+					
+					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$address,$is_display))==true ? true:false;
 
-					$str =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$address,$is_display))==true ? "成功<br>":"失败<br>";
-					echo $str;
+					/*  记录日志  */
+					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
+					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+					$text_log = $YesNo ? "修改地址-成功,原地址名称:".$alter_corde['0']['name'].",改为:".$address.",原显示: ".$is_display2.",改为:".$is_display : "修改地址-失败,原地址名称:".$alter_corde['0']['name'].",改为:".$address.",原显示: ".$is_display2.",改为:".$is_display;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
-				echo $str;
+				$alter_corde=$Finance->getAddress($login_user_id,1,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+					
+				/*  记录日志  */
+				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
+				$text_log = $YesNo ? "删除地址-成功,地址名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除地址-失败,地址名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
+				/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -523,19 +609,39 @@
 				$alter_id = $_POST['alter_id'];
 
 				if($add_submit == 1){
-					$str = ($Finance->AddUser($is_disable,$user_name,$user_alias,$user_password,$notes,$login_group_id))==true ? "成功<br>":"失败<br>";
-						echo $str;
+					$YesNo = ($Finance->AddUser($is_disable,$user_name,$user_alias,$user_password,$notes,$login_group_id))==true ? true:false;
+
+					/*  记录日志  */
+					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
+					$text_log = $YesNo ? "添加用户-成功,状态:".$is_disable."用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_groupname.",备注:".$notes : "添加用户-失败,用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_groupname.",备注:".$notes;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 
 				if($alter_submit == 1){
-					$str =($Finance->updateUser($is_disable,$user_name,$user_alias,$user_password,$notes,$alter_id))==true ? "成功<br>":"失败<br>";
-					echo $str;
+					$alter_corde=$Finance->getUsers($login_user_id,1,$alter_id);
+
+					$YesNo =($Finance->updateUser($is_disable,$user_name,$user_alias,$user_password,$notes,$alter_id))==true ? true:false;
+					
+					/*  记录日志  */
+					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
+					$is_disable2 = $alter_corde['0']['is_disable'] == "1" ?  "启用" : "禁用";
+
+					$text_log = $YesNo ? "修改用户-成功,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes : "修改用户-失败,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 				}
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
-				echo $str;
+				$alter_corde=$Finance->getUsers($login_user_id,1,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+					
+				/*  记录日志  */
+				$is_disable2 = $alter_corde['0']['is_disable'] == "1" ?  "启用" : "禁用";
+				$text_log = $YesNo ? "删除用户-成功,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'] : "删除用户-失败,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'];
+				/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
