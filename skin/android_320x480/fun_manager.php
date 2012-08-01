@@ -515,24 +515,19 @@
 					echo "is_disable值为：".$_POST['is_disable']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
+				$_POST['is_disable'] == "on" ? $is_disable = "1" : $is_disable = "0" ;
+				$user_name = $_POST['user_name'];
+				$user_alias = $_POST['user_alias'];
+				$user_password = $_POST['user_password'];
+				$notes = $_POST['notes'];
+				$alter_id = $_POST['alter_id'];
+
 				if($add_submit == 1){
-					$_POST['is_disable'] == "on" ? $is_disable = "1" : $is_disable = "0" ;
-					$user_name = $_POST['user_name'];
-					$user_alias = $_POST['user_alias'];
-					$user_password = $_POST['user_password'];
-					$notes = $_POST['notes'];
 					$str = ($Finance->AddUser($is_disable,$user_name,$user_alias,$user_password,$notes,$login_group_id))==true ? "成功<br>":"失败<br>";
 						echo $str;
 				}
 
 				if($alter_submit == 1){
-					$_POST['is_disable'] == "on" ? $is_disable = "1" : $is_disable = "0" ;
-					$user_name = $_POST['user_name'];
-					$user_alias = $_POST['user_alias'];
-					$user_password = $_POST['user_password'];
-					$notes = $_POST['notes'];
-					$alter_id = $_POST['alter_id'];
-
 					$str =($Finance->updateUser($is_disable,$user_name,$user_alias,$user_password,$notes,$alter_id))==true ? "成功<br>":"失败<br>";
 					echo $str;
 				}
@@ -556,9 +551,9 @@
 
 				echo "状态:";
 				if ($alter_corde['0']['is_disable']=="1"){
-					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
+					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_disable\" ></span>";
 				}else{
-					echo "<INPUT TYPE=\"checkbox\" name=\"is_display\" ></span>";
+					echo "<INPUT TYPE=\"checkbox\" name=\"is_disable\" ></span>";
 				}
 				echo "<br>";
 				echo "修改用户名:&nbsp;";
