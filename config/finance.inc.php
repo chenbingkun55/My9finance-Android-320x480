@@ -265,7 +265,7 @@
       /* 更新用户数据函数 */
         public function updateUser($is_disable,$user_name,$user_alias,$user_password=0,$notes,$alter_id=0)
         {
-			$sql = ($user_password=="0") ? "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."', notes = '".$notes."'  WHERE id = '".$alter_id."'" : "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."',password = password('".$user_password."'),notes = '".$notes."'  WHERE id = '".$alter_id."'";
+			$sql = ($user_password== 0 || is_null($user_password)) ? "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."', notes = '".$notes."'  WHERE id = '".$alter_id."'" : "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."',password = password('".$user_password."'),notes = '".$notes."'  WHERE id = '".$alter_id."'";
 			
 			$old_corde_sql = "SELECT * FROM ".$this->_users."  WHERE id = '".$Aid."'";
 

@@ -601,7 +601,7 @@
 					echo "is_disable值为：".$_POST['is_disable']."<br>";
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
-				$_POST['is_disable'] == "on" ? $is_disable = "1" : $is_disable = "0" ;
+				$_POST['is_disable'] == "on" ? $is_disable = "0" : $is_disable = "1" ;
 				$user_name = $_POST['user_name'];
 				$user_alias = $_POST['user_alias'];
 				$user_password = $_POST['user_password'];
