@@ -625,7 +625,7 @@
 					
 					/*  记录日志  */
 					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
-					$is_disable2 = $alter_corde['0']['is_disable'] == "1" ?  "启用" : "禁用";
+					$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";
 
 					$text_log = $YesNo ? "修改用户-成功,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes : "修改用户-失败,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes;
 					/*  消息提醒  */
@@ -638,7 +638,7 @@
 				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
 					
 				/*  记录日志  */
-				$is_disable2 = $alter_corde['0']['is_disable'] == "1" ?  "启用" : "禁用";
+				$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";
 				$text_log = $YesNo ? "删除用户-成功,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'] : "删除用户-失败,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'];
 				/*  消息提醒  */
 				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
@@ -656,7 +656,7 @@
 				$alter_corde=$Finance->getUsers($login_user_id,1,$Aid);
 
 				echo "状态:";
-				if ($alter_corde['0']['is_disable']=="1"){
+				if ($alter_corde['0']['is_disable']=="0"){
 					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_disable\" ></span>";
 				}else{
 					echo "<INPUT TYPE=\"checkbox\" name=\"is_disable\" ></span>";
@@ -704,7 +704,7 @@
 			for ($i=0;$i<count($users_corde);$i++){
 				echo "<tr class=\"".$c."\">";
 				echo "<td>".($i+1)."</td>";
-				echo "<td>".$YesNo=$users_corde[$i]['is_disable']? "启用":"禁用"."</td>";
+				echo "<td>".$YesNo=$users_corde[$i]['is_disable']? "禁用":"启用"."</td>";
 				echo "<td>".$users_corde[$i]['username']."</td>";
 				echo "<td>".$users_corde[$i]['user_alias']."</td>";
 				echo "<td>".$login_groupname."</td>";

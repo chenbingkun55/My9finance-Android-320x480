@@ -234,6 +234,34 @@
             
         }
 
+
+        /*  注册用户函数 */
+        public function RegistrUser($user_name,$user_alias,$user_password,$family)
+        {
+			$this->begintransaction();
+
+			$sql = "INSERT INTO ".$this->_users." (id,is_disable,username,user_alias,password,notes,create_date)   VALUES  ('','0','".$user_name."','".$user_alias."',password('".$user_password."'),'','".date("Y-m-d H:i:s")."')";
+			if ($this->insert($sql) != false){
+				$user_id = $this->select("SELECT * from ".$this->_users." where username = '".$user_name."'");
+
+				$sql = "INSERT INTO ".$this->_groups." (id,groupname,group_alias,groupadmin_id,password,notes,create_date)   VALUES  ('','".$family."','".$family."','".$user_id['0']['id']."',password('".$user_password."'),'".$family."','".date("Y-m-d H:i:s")."')";
+				if ($this->insert($sql) != false)
+					$group_id = $this->select("SELECT * from ".$this->_groups." where groupname = '".$family."'");
+
+					$sql = "INSERT INTO ".$this->_user_group." (id,user_id,group_id,create_date,disable)   VALUES  ('','".$user_id['0']['id']."','".$group_id['0']['id']."','".date("Y-m-d H:i:s")."','0')";
+				if ($this->insert($sql) != false){
+					$this->commit();
+					return true;
+				}else{
+					$this->rollback();
+					return false;
+				}
+			} else {
+				return false;
+			}
+            
+        }
+
       /* 更新用户数据函数 */
         public function updateUser($is_disable,$user_name,$user_alias,$user_password=0,$notes,$alter_id=0)
         {
@@ -573,7 +601,7 @@
 					break;
 				case "in_subtype":
 					$store_num = $this->select("SELECT store from ".$this->_in_subtype." where id = '".$id."'");
-					$store_max = $this->select("SELECT max(store) from ".$this->_out_subtype." where man_id = '".$man_id."'");
+					$store_max = $this->select("SELECT max(store) from ".$this->_in_subtype." where man_id = '".$man_id."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){

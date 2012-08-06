@@ -10,7 +10,6 @@
 <title><?PHP echo $_TITLE?></title>
 <link href="<?PHP echo CSS_PATH."main.css"?>" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
-<script type="text/javascript" src="<?PHP echo JS_PATH."TwoSelect.js"?>"></script>
 </head>
 <body>
 	<div class="BackPlane" id="BodyDiv">

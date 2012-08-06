@@ -33,7 +33,7 @@
 				print_r($error_info); 
 				echo "<br>DEBUG END*********************************************<br>";	
 			} else {
-				echo "ERROR: ".$error_info['0']['content'];
+				echo "INFO: ".$error_info['0']['content'];
 			}
 			echo "</div>";
 	  }
@@ -56,7 +56,7 @@
 			</TD>
 			<TD align="right">
             <INPUT type="hidden" name="login" value="LOGIN">
-			<a href="regedit_user.php?registr=1"><?PHP echo $_REGISTR?></a>&nbsp;
+			<a href="registr.php"><?PHP echo $_REGISTR?></a>&nbsp;
             <INPUT class="LoginButton" type="submit" value="<?PHP echo $_LOGIN?>">
 			
 			</TD>
