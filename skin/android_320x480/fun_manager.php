@@ -49,7 +49,7 @@
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "添加支出主类-成功,主类名称: ".$mantype." 显示: ".$is_display : "添加支出主类-失败,主类名称: ".$mantype." 显示: ".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5016 : 1016;
 				}
 
 				if($alter_submit == 1){
@@ -62,7 +62,7 @@
 					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "修改支出主类-成功,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."  改为:".$is_display : "修改支出主类-失败,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."改为:".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5017 : 1017;
 				}
 			}
 
@@ -74,7 +74,7 @@
 				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
 				$text_log = $YesNo ? "删除支出主类-成功,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display : "删除支出主类-失败,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display;
 				/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+				$_SESSION['__global_logid'] = $YesNo ?  5018 : 1018;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -161,7 +161,7 @@
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "添加支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display : "添加支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5019 : 1019;
 				}
 
 				if($alter_submit == 1){
@@ -176,7 +176,7 @@
 					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "修改支出子类-成功,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display : "修改支出子类-失败,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5020 : 1020;
 				}
 			}
 
@@ -189,7 +189,7 @@
 				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 				$text_log = $YesNo ? "删除支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
 					/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+				$_SESSION['__global_logid'] = $YesNo ?  5021 : 1021;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -276,7 +276,7 @@
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "添加收入主类-成功,主类名称: ".$mantype." 显示: ".$is_display : "添加收入主类-失败,主类名称: ".$mantype." 显示: ".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5022 : 1022;
 				}
 
 				if($alter_submit == 1){
@@ -289,7 +289,7 @@
 					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "修改收入主类-成功,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."  改为:".$is_display : "修改收入主类-失败,主类原名称: ".$alter_corde['0']['name']." 改为:".$mantype." 原显示: ".$is_display2."改为:".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5023 : 1023;
 				}
 			}
 
@@ -301,7 +301,7 @@
 				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
 				$text_log = $YesNo ? "删除收入主类-成功,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display : "删除收入主类-失败,主类名称: ".$alter_corde['0']['name']." 显示: ".$is_display;
 				/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+				$_SESSION['__global_logid'] = $YesNo ?  5024 : 1024;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -388,7 +388,7 @@
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "添加收入子类-成功,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display : "添加收入子类-失败,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5025 : 1025;
 				}
 
 				if($alter_submit == 1){
@@ -403,7 +403,7 @@
 					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "修改收入子类-成功,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display : "修改收入子类-失败,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5026 : 1026;
 				}
 			}
 
@@ -416,7 +416,7 @@
 				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 				$text_log = $YesNo ? "删除支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
 					/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+				$_SESSION['__global_logid'] = $YesNo ?  5027 : 1027;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -500,7 +500,7 @@
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "添加地址-成功,地址名称: ".$address.",显示: ".$is_display : "添加地址-失败,地址名称: ".$address.",显示: ".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5028 : 1028;
 				}
 
 				if($alter_submit == 1){
@@ -514,7 +514,7 @@
 					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "修改地址-成功,原地址名称:".$alter_corde['0']['name'].",改为:".$address.",原显示: ".$is_display2.",改为:".$is_display : "修改地址-失败,原地址名称:".$alter_corde['0']['name'].",改为:".$address.",原显示: ".$is_display2.",改为:".$is_display;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5029 : 1029;
 				}
 			}
 
@@ -526,7 +526,7 @@
 				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 				$text_log = $YesNo ? "删除地址-成功,地址名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除地址-失败,地址名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
 				/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+				$_SESSION['__global_logid'] = $YesNo ?  5029 : 1029;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
@@ -615,7 +615,7 @@
 					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
 					$text_log = $YesNo ? "添加用户-成功,状态:".$is_disable."用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_groupname.",备注:".$notes : "添加用户-失败,用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_groupname.",备注:".$notes;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5030 : 1030;
 				}
 
 				if($alter_submit == 1){
@@ -629,7 +629,7 @@
 
 					$text_log = $YesNo ? "修改用户-成功,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes : "修改用户-失败,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes;
 					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+					$_SESSION['__global_logid'] = $YesNo ?  5031 : 1031;
 				}
 			}
 
@@ -641,7 +641,7 @@
 				$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";
 				$text_log = $YesNo ? "删除用户-成功,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'] : "删除用户-失败,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'];
 				/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+				$_SESSION['__global_logid'] = $YesNo ?  5032 : 1032;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){

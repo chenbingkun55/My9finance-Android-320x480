@@ -152,10 +152,10 @@ function HandleStateChange(){
 function PostMessage(TXT){
 	var MainMessage = document.getElementById('MainMessage');
 	if (TXT){
-		MainMessage.innerHTML="<BLINK style=\"color: #3333FF;\">"+TXT+"</BLINK>";
+		MainMessage.innerHTML="<BLINK>"+TXT+"</BLINK>";
 		setInterval("PostMessage()",15000);
 	} else {
-		MainMessage.innerHTML="<BLINK style=\"font-size: 16px;color: #3333FF;\">彩贝壳之家 -- 欢迎您!!!</BLINK>";
+		MainMessage.innerHTML="<BLINK style=\"font-size: 16px;\">彩贝壳之家 -- 欢迎您!!!</BLINK>";
 	}
 	
 }

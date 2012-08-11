@@ -305,7 +305,10 @@ span.click{
 	text-align : center;
 	    cursor: pointer;
 }
-
+.MainMessageFont {
+	font-family: "微软雅黑";
+	color: #3333FF;
+}
 
 .Content {
 	background-color: #C7EDCC;

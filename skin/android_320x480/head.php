@@ -29,9 +29,9 @@
 <div class="UserInfo">
 	<?PHP
 		if ( $login_user_alias ) {
-			echo "<div>".$login_user_alias."&nbsp;&nbsp;".$_HELLO;
+			echo "<div><a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_alias."</a>&nbsp;&nbsp;".$_HELLO;
 		} else {
-			echo "<div>".$login_user_name."&nbsp;&nbsp;".$_HELLO;
+			echo "<div><a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_name."&</a>nbsp;&nbsp;".$_HELLO;
 		}
 
 		if ( $login_group_alias ) {
@@ -57,7 +57,7 @@
 	<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
 </div>
 
-<div class="MainMessage" id="MainMessage" onLoad=PostMessage()>
+<div class="MainMessage MainMessageFont" id="MainMessage" onLoad=PostMessage()>
 </div>
   
 <div class="FunTitle1 FunTitleFont" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
