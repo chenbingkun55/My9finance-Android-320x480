@@ -1,8 +1,7 @@
 <?PHP 	
 	require_once("../../config/config.inc.php");
-	require_once(INCLUDE_PATH.'finance.inc.php');	
-	header("Content-Type:text/html;charset=UTF-8"); 	
-	date_default_timezone_set('PRC');
+	require_once(INCLUDE_PATH.'finance.inc.php');		
+
 
 	/* 初始化用户环境变量 */
 	$login_username = $_SESSION['__userdata']['0']["username"];

@@ -281,11 +281,6 @@ span.click{
 
 }
 
-.MainMessage{
-	font-family: "微软雅黑";
-	font-size: 16px;
-}
-
 .ChangeSkinPlane{
     cursor: pointer;
 	border-style: ridge;

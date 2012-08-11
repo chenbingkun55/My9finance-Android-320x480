@@ -648,6 +648,26 @@
             return $this->insert_log($sql);
         }
 
+
+	 public function PostMessage(){
+		if ( !is_null($_SESSION['__global_logid'])) {
+			$error_info	= $this->convertLogIdToContent($_SESSION['__global_logid']);
+			if(DEBUG_YES){ 
+				echo "<br>DEBUG START*********************************************<br>";
+				print_r($error_info); 
+				echo "<br>DEBUG END*********************************************<br>";	
+			} else {
+				echo "<script>PostMessage(\"".$error_info['0']['content']."\");</script>";
+				$_SESSION['__global_logid']=NULL;
+			}
+		} else {
+			echo "<script>PostMessage();</script>";
+		}
+	 }
+
+
+
+
 /*  以上内容为优化内容  ####################################################################################################*/
 
 

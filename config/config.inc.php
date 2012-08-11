@@ -15,5 +15,5 @@ define("JS_PATH",'../../JavaScript/');
 define("CSS_PATH",'../../CssScript/');
 define("LIB_PATH",'../../Lib/');
 define("DEBUG_YES","0");
-date_default_timezone_set('PRC') or die('璁剧疆鏃跺尯閿欒,璇疯仈绯荤鐞嗗憳.');
+date_default_timezone_set('PRC') or die('设置时区错误,请联系管理员.');
 ?>
