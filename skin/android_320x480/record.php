@@ -9,6 +9,7 @@
 	$Aid = $_GET['Aid'];
 	$Did = $_GET['Did'];
 
+
 	/*
 		添加表单:
 	*/
@@ -39,7 +40,7 @@
 				/*  记录日志   */
 				$text_log = $YesNo ? "添加支出-成功,金额:".$money." 支出主类: ".$Finance->convertID($login_user_id,$mantype_id,"out_mantype")." 支出子类: ".$Finance->convertID($login_user_id,$subtype_id,"out_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes : "添加支出-失败,金额:".$money." 支出主类: ".$Finance->convertID($login_user_id,$mantype_id,"out_mantype")." 支出子类: ".$Finance->convertID($login_user_id,$subtype_id,"out_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes;
 				/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  2 : 1;  
+				$_SESSION['__global_logid'] = $YesNo ?  5010 : 1010;  
 			}
 			if($alter_submit == 1){
 				$YesNo =($Finance->updateCordeData($recordtype,$alter_id,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
@@ -47,7 +48,7 @@
 				/*  记录日志   */
 				$text_log = $YesNo ?  "修改支出-成功,金额:".$money." 支出主类: ".$Finance->convertID($login_user_id,$mantype_id,"out_mantype")." 支出子类: ".$Finance->convertID($login_user_id,$subtype_id,"out_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes : "添加支出-失败,金额:".$money." 支出主类: ".$Finance->convertID($login_user_id,$mantype_id,"out_mantype")." 支出子类: ".$Finance->convertID($login_user_id,$subtype_id,"out_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes;
 				/*  消息提醒  */
-				$_SESSION['__global_logid']= $YesNo ?  2:1;  
+				$_SESSION['__global_logid']= $YesNo ?  5012:1012;  
 			}
 		}
 
@@ -58,7 +59,7 @@
 			/*  记录日志   */
 			$text_log = $YesNo ? "删除支出-成功,金额:".$Did_data['0']['money']." 支出主类: ".$Finance->convertID($login_user_id,$Did_data['0']['mantype_id'],"out_mantype")." 支出子类: ".$Finance->convertID($login_user_id,$Did_data['0']['subtype_id'],"out_subtype")." 地址:".$Finance->convertID($login_user_id,$Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'] : "删除支出-失败,金额:".$Did_data['0']['money']." 支出主类: ".$Finance->convertID($login_user_id,$Did_data['0']['mantype_id'],"out_mantype")." 支出子类: ".$Finance->convertID($login_user_id,$Did_data['0']['subtype_id'],"out_subtype")." 地址:".$Finance->convertID($login_user_id,$Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'];
 			/*  消息提醒  */
-			$_SESSION['__global_logid'] = $YesNo ?  2 : 1; 
+			$_SESSION['__global_logid'] = $YesNo ?  5014 : 1014; 
 		}
 
 		echo "支出:&nbsp;";
@@ -131,7 +132,7 @@
 				/*  记录日志   */
 				$text_log = $YesNo ?  "添加收入-成功,金额:".$money." 收入主类: ".$Finance->convertID($login_user_id,$mantype_id,"in_mantype")." 收入子类: ".$Finance->convertID($login_user_id,$subtype_id,"in_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes : "添加收入-失败,金额:".$money." 收入主类: ".$Finance->convertID($login_user_id,$mantype_id,"in_mantype")." 收入子类: ".$Finance->convertID($login_user_id,$subtype_id,"in_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes;
 				/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ? 2 : 1;  
+				$_SESSION['__global_logid'] = $YesNo ? 5011 : 1011;  
 			}
 			if($alter_submit == 1){
 				$YesNo =($Finance->updateCordeData($recordtype,$alter_id,$login_user_id,$login_group_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
@@ -139,7 +140,7 @@
 				/*  记录日志   */
 				$text_log = $YesNo ?  "修改收入-成功,金额:".$money." 收入主类: ".$Finance->convertID($login_user_id,$mantype_id,"in_mantype")." 收入子类: ".$Finance->convertID($login_user_id,$subtype_id,"in_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes : "添加收入-失败,金额:".$money." 收入主类: ".$Finance->convertID($login_user_id,$mantype_id,"in_mantype")." 收入子类: ".$Finance->convertID($login_user_id,$subtype_id,"in_subtype")." 地址:".$Finance->convertID($login_user_id,$address,"address")." 备注:".$notes;
 				/*  消息提醒  */
-				$_SESSION['__global_logid']= $YesNo ?  2:1;  
+				$_SESSION['__global_logid']= $YesNo ?  5013:1013;  
 
 			}
 		}
@@ -151,7 +152,7 @@
 			/*  记录日志   */
 			$text_log = $YesNo ? "删除收入-成功,金额:".$Did_data['0']['money']." 收入主类: ".$Finance->convertID($login_user_id,$Did_data['0']['mantype_id'],"in_mantype")." 收入子类: ".$Finance->convertID($login_user_id,$Did_data['0']['subtype_id'],"in_subtype")." 地址:".$Finance->convertID($login_user_id,$Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'] : "删除收入-失败,金额:".$Did_data['0']['money']." 收入主类: ".$Finance->convertID($login_user_id,$Did_data['0']['mantype_id'],"in_mantype")." 收入子类: ".$Finance->convertID($login_user_id,$Did_data['0']['subtype_id'],"in_subtype")." 地址:".$Finance->convertID($login_user_id,$Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'];
 			/*  消息提醒  */
-			$_SESSION['__global_logid'] = $YesNo ?  2 : 1;
+			$_SESSION['__global_logid'] = $YesNo ?  5015 : 1015;
 		}
 
 		echo "收入:&nbsp;";

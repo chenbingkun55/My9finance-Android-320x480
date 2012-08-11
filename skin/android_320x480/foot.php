@@ -1,3 +1,4 @@
+<?PHP  $Finance->PostMessage();?>
 <div class="Foot FootFont" align="right">
 	<INPUT class="LogoutButton" type="submit" onclick="logout();" value="<?PHP echo $_LOGOUT?>"><BR>
     <CENTER>
