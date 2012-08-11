@@ -41,7 +41,7 @@
 		}
 	?>
 </div>
-<div class="ChangeSkinPlane">
+<div class="ChangeSkinPlane" id="ChangeSkinPlane">
 	<span class="Skin1" id="Skin1" title="蓝色主题" onClick="ChangeSkinColor('Skin1')">1</span>
 	<span class="Skin2" id="Skin2" title="灰色主题" onClick="ChangeSkinColor('Skin2')">2</span>
 	<span class="Skin3" id="Skin3" title="绿色主题" onClick="ChangeSkinColor('Skin3')">3</span>

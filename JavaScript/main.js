@@ -117,6 +117,15 @@ function ChangeSkinColor(obj){
 		CurrentFunTitleColor = "#339900";
 		break;
 	}
+
+	var ChangeSkinPlane=document.getElementById("ChangeSkinPlane");
+	var NewDiv = document.createElement("div");
+	NewDiv.id = "ChangeSkinPlaneYes";
+	NewDiv.className = "ChangeSkinPlaneYes";
+	NewDiv.style.fontSize="11px";
+	NewDiv.style.textAlign = "center";
+	NewDiv.innerHTML="需要更新皮肤吗?<BR>确定|取消";
+	ChangeSkinPlane.parentNode.appendChild(NewDiv);  
 }
 
 /*

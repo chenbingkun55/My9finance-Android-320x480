@@ -107,6 +107,18 @@
 	background-color:transient
 }
 
+.ChangeSkinPlaneYes{
+	z-index:100;
+	position: absolute;
+	width:100px;
+	height:35px;
+	overflow:left;
+	left: 200px;
+	top: 20px;
+	color: #FFFFFF;
+	background-color: #000000;
+}
+
 .Skin1, .Skin2, .Skin3, .Skin4, .Skin5, {
     cursor: pointer;
 	text-align : center;
