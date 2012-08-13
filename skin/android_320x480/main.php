@@ -14,12 +14,20 @@
 	$login_group_alias = $_SESSION['__groupdata']['0']['group_alias'];
 	$login_groupadmin_id = $_SESSION['__groupdata']['0']['groupadmin_id'];
 	$login_group_id = $_SESSION['__groupdata']['0']['id'];
+	$login_skin_id = $_SESSION['__userdata']['0']['skin'];
+
+	if ( ! is_null($_GET['skin'])){
+		$Finance->UpdateSkin($login_user_id,$_GET['skin']);
+		$_SESSION['__userdata']['0']['skin'] = $_GET['skin'];
+		$login_skin_id = $_SESSION['__userdata']['0']["skin"];
+	}
+	
 ?>
 
 <html>
 <head>
 <title><?PHP echo $_TITLE?></title>
-<link href="<?PHP echo CSS_PATH."main.css"?>" rel="stylesheet" type="text/css" />
+<link href="<?PHP echo CSS_PATH."main.".$login_skin_id.".css"?>" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
 </head>
 

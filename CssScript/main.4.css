@@ -7,7 +7,7 @@
 	overflow:left;
 	left:0;
 	top:0;
-	background-color:#66CC00
+	background-color:#CCFF33;
 }
 
 .IndexICO{
@@ -289,7 +289,7 @@ span.click{
 .IndexTitle{
 	font-family: "微软雅黑";
 	font-size: 18px;
-	color: #3300CC;
+	color: #CCFF33;
 
 }
 
@@ -323,14 +323,14 @@ span.click{
 }
 
 .Content {
-	background-color: #C7EDCC;
+	background-color: #CCFF99;
 	overflow-x: auto;
 	overflow-y: auto;
 	white-space:nowrap;
 }
 
 .ContentTdColor {
-	background-color: #66CC00;
+	background-color: #9900FF;
 }
 
 .ContentTdColor1 {

@@ -3,6 +3,7 @@
 	require_once(INCLUDE_PATH.'finance.inc.php');	
 	header("Content-Type:text/html;charset=UTF-8"); 
 	date_default_timezone_set('PRC') or die('设置时区错误,请联系管理员.');
+	$skin = 0;
 	
 ?>
 

@@ -665,7 +665,16 @@
 		}
 	 }
 
-
+	 /* 更新用户Skin ID */
+	 public function UpdateSkin($user_id,$skin){
+		$skin_num = $this->update("update ".$this->_users." set skin = '".$skin."' where id = '".$user_id."'");
+		
+		if ($skin_num){
+			return true;
+		} else {
+			return false;
+		}
+	 }
 
 
 /*  以上内容为优化内容  ####################################################################################################*/
