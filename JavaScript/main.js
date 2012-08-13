@@ -1,4 +1,3 @@
-var CurrentFunTitleColor = "#c7edcc";
 var SubType=new Array();
 
 /*
@@ -91,35 +90,30 @@ function ChangeSkinColor(obj){
 	case "Skin1":
 		document.getElementById("BodyDiv").style.backgroundColor = "#66CC00";
 		document.getElementById("Content").style.backgroundColor = "#C7EDCC";
-		CurrentFunTitleColor = "#C7EDCC";
 		skin = 1;
 		break;
 
 	case "Skin2":
 		document.getElementById("BodyDiv").style.backgroundColor = "#9900FF";
 		document.getElementById("Content").style.backgroundColor = "#CC66FF";
-		CurrentFunTitleColor = "#CC66FF";
 		skin = 2;
 		break;
 
 	case "Skin3":
 		document.getElementById("BodyDiv").style.backgroundColor = "#FF6600";
 		document.getElementById("Content").style.backgroundColor = "#FF6666";
-		CurrentFunTitleColor = "#FF6666";
 		skin = 3;
 		break;
 
 	case "Skin4":
 		document.getElementById("BodyDiv").style.backgroundColor = "#CCFF33";
 		document.getElementById("Content").style.backgroundColor = "#CCFF99";
-		CurrentFunTitleColor = "#CCFF99";
 		skin = 4;
 		break;
 
 	case "Skin5":
 		document.getElementById("BodyDiv").style.backgroundColor = "#336633";
 		document.getElementById("Content").style.backgroundColor = "#339900";
-		CurrentFunTitleColor = "#339900";
 		skin = 5;
 		break;
 	}
@@ -339,5 +333,10 @@ function MoveDown(ID){
 }
 
 function SkinSelect(skin){
-	window.location.replace('main.php?skin='+skin);
+	if (skin == undefined )
+	{
+		window.location.replace('main.php');
+	} else {
+		window.location.replace('main.php?skin='+skin);
+	}
 }
