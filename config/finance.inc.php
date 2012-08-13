@@ -250,6 +250,7 @@
 
 					$sql = "INSERT INTO ".$this->_user_group." (id,user_id,group_id,create_date,disable)   VALUES  ('','".$user_id['0']['id']."','".$group_id['0']['id']."','".date("Y-m-d H:i:s")."','0')";
 				if ($this->insert($sql) != false){
+					$this->insertDefault($user_id['0']['id']);
 					$this->commit();
 					return true;
 				}else{
@@ -677,6 +678,80 @@
 	 }
 
 
+        /*  添加用户默认主类数据 */
+        public function insertDefault($user_id)
+        {
+            $sql = "INSERT INTO ".$this->_out_mantype." (id,user_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','1','1','衣服类','".date("Y-m-d H:i:s")."'),('','".$user_id."','2','1','饮食类','".date("Y-m-d H:i:s")."'),('','".$user_id."','3','1','住房类','".date("Y-m-d H:i:s")."'),('','".$user_id."','4','1','交通类','".date("Y-m-d H:i:s")."'),('','".$user_id."','5','1','个人消费类','".date("Y-m-d H:i:s")."'),('','".$user_id."','6','1','网络类','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            $sql = "INSERT INTO ".$this->_in_mantype." (id,user_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','1','1','固定收入','".date("Y-m-d H:i:s")."'),('','".$user_id."','2','1','第三方收入','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+			/*  添加用户默认地址 */
+            $sql = "INSERT INTO ".$this->_address." (id,user_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','1','1','住房处','".date("Y-m-d H:i:s")."'),('','".$user_id."','2','1','公司','".date("Y-m-d H:i:s")."'),('','".$user_id."','3','1','超市菜市场','".date("Y-m-d H:i:s")."'),('','".$user_id."','4','1','商场','".date("Y-m-d H:i:s")."'),('','".$user_id."','5','1','其他','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+			/* 添加收入子类与支出子类 */
+            /* 衣服类----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from out_mantype where name = '衣服类' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','服装','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','其他','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','鞋帽','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            /* 饮食类----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from out_mantype where name = '饮食类' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','早餐','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','午餐','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','晚餐','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','夜宵','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','5','1','其他','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            /* 住房类----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from out_mantype where name = '住房类' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','日常用品','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','家用电器','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','房租','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','其他','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            /* 交通类----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from out_mantype where name = '交通类' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','公交车','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','的士','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','地铁','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','火车','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','5','1','摩的','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','6','1','飞机','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','7','1','轮船','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','8','1','其他','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            /* 个人消费类----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from out_mantype where name = '个人消费类' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','零食','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','饮料','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','理发','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','其他','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            /* 网络类----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from out_mantype where name = '网络类' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','网络费','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','手机费','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','电话费','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','通信软硬件','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','5','1','其他','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            /* 固定收入----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from in_mantype where name = '固定收入' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_in_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','工资','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','奖金','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+
+            /* 第三方收入----------------------------------------------------------------------------- */
+            $sql_mantype = "SELECT id from in_mantype where name = '第三方收入' and user_id = '".$user_id."'";
+            $mantype_id = $this->select($sql_mantype);
+            
+            $sql = "INSERT INTO ".$this->_in_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','中奖','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','兼职','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','其他','".date("Y-m-d H:i:s")."')";
+            $this->insert($sql);
+        }
+
+
+
+
 /*  以上内容为优化内容  ####################################################################################################*/
 
 
@@ -721,82 +796,6 @@
 
 
 
-        /*  添加用户默认收支主类 */
-        public function insertManTypeDefault($user_id)
-        {
-            $sql = "INSERT INTO ".$this->_out_mantype." (id,user_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','1','1','衣','".date("Y-m-d H:i:s")."'),('','".$user_id."','2','1','食','".date("Y-m-d H:i:s")."'),('','".$user_id."','3','1','住','".date("Y-m-d H:i:s")."'),('','".$user_id."','4','1','行','".date("Y-m-d H:i:s")."'),('','".$user_id."','5','1','我','".date("Y-m-d H:i:s")."'),('','".$user_id."','6','1','信息费','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-            $sql = "INSERT INTO ".$this->_in_mantype." (id,user_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','1','1','固定收入','".date("Y-m-d H:i:s")."'),('','".$user_id."','2','1','其它收入','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-        }
-
-        /*  添加用户默认收支子类 */
-        public function insertSubTypeDefault($user_id)
-        {
-            /* 衣----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '衣' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','服装','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','鞋帽','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-            /* 食----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '食' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','早餐','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','午餐','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','晚餐','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','夜宵','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-
-            /* 住----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '住' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','日常用品','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','家用电器','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','房租','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-
-            /* 行----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '行' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','公交车','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','的士','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','地铁','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','火车','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','5','1','摩的','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','6','1','飞机','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','7','1','轮船','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-
-            /* 我----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '我' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','零食','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','饮料','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','理发','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-
-
-            /* 信息费----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '信息费' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_out_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','网络费','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','2','1','手机费','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','3','1','电话费','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','4','1','通信硬件','".date("Y-m-d H:i:s")."'),('','".$user_id."','".$mantype_id['0']['0']."','5','1','通信软件','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-
-            /* 固定收入----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from in_mantype where name = '固定收入' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_in_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','工资','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-
-            /* 其它收入----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from in_mantype where name = '其它收入' and user_id = '".$user_id."'";
-            $mantype_id = $this->select($sql_mantype);
-            
-            $sql = "INSERT INTO ".$this->_in_subtype." (id,user_id,man_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','".$mantype_id['0']['0']."','1','1','未知','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-        }
-
-
-        /*  添加用户默认地址 */
-        public function insertAddressDefault($user_id)
-        {
-            $sql = "INSERT INTO ".$this->_address." (id,user_id,store,is_display,name,create_date)   VALUES  ('','".$user_id."','1','1','公司','".date("Y-m-d H:i:s")."'),('','".$user_id."','2','1','公司附近','".date("Y-m-d H:i:s")."'),('','".$user_id."','3','1','家里','".date("Y-m-d H:i:s")."'),('','".$user_id."','4','1','综合大卖场','".date("Y-m-d H:i:s")."'),('','".$user_id."','5','1','超市菜市场','".date("Y-m-d H:i:s")."'),('','".$user_id."','6','1','电脑城','".date("Y-m-d H:i:s")."')";
-            $this->insert($sql);
-        }
 
 
         /*删除用户函数 */
