@@ -2,7 +2,7 @@
 session_start();
 define("UserName","recod");
 define("PassWord","chenbk55");
-define("ServerName","localhost");
+define("ServerName","127.0.0.1");
 define("DBName","my9finance");
 define("LOGDBName","logdb");
 define("LogUserName","recod_log");

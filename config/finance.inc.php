@@ -218,14 +218,18 @@
         /*  添加用户函数 */
         public function AddUser($is_disable=0,$user_name,$user_alias,$user_password,$notes,$group_id)
         {
+			$this->begintransaction();
+
             $sql = "INSERT INTO ".$this->_users." (id,is_disable,username,user_alias,password,notes,create_date)   VALUES  ('','".$is_disable."','".$user_name."','".$user_alias."',password('".$user_password."'),'".$notes."','".date("Y-m-d H:i:s")."')";
 			if ($this->insert($sql) != false){
 				$user_id = $this->select("SELECT * from ".$this->_users." where username = '".$user_name."'");
 				$sql = "INSERT INTO ".$this->_user_group." (id,user_id,group_id,create_date,disable)   VALUES  ('','".$user_id['0']['id']."','".$group_id."','".date("Y-m-d H:i:s")."','0')";
 				if ($this->insert($sql) != false){
+					$this->insertDefault($user_id['0']['id']);
+					$this->commit();
 					return true;
 				}else{
-					$this->select("DELETE from ".$this->_users." where id = '".$user_id['0']['id']."'");
+					$this->rollback();
 					return false;
 				}
 			} else {
