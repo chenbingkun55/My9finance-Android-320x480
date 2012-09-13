@@ -759,16 +759,16 @@
 		 public function getReportData($scorde, $stype, $sdate,$login_groupname) {
 				switch ( $sdate ) {
 					case "week":
-						$date_min = "2012-08-10";
-						$date_max =  "2012-08-16";
+						$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
+						$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
 
-						$date_filter = "create_date > '".$date_min."%' AND create_date < '".$date_max."%'"; 
+						$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
 						break;
 					case "month":
-						$date_filter = "create_date like '2012-08%'";
+						$date_filter = "create_date like '".date('Y-m',time())."%'";
 						break;
 					case "year":
-						$date_filter = " create_date like  '2012-%'";
+						$date_filter = " create_date like  '".date('Y',time())."%'";
 						break;
 				} 
 
