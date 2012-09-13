@@ -26,19 +26,7 @@
 
 <?PHP
 	if ( $_POST['report'] == 1 ) {
-		$report_data = $Finance->getReportData($_POST['scorde'],$_POST['stype'],$_POST['sdate'],$login_group_id);
-
-		switch( $_POST['sdate'] ) {
-			case  "week":
-				echo "上一周&nbsp;这周&nbsp;下一周";
-				break;
-			case  "month":
-				echo "上个月&nbsp;当月&nbsp;下个月";
-				break;
-			case  "year":
-				echo "上一年&nbsp;当年&nbsp;下一年";
-				break;
-		}	
+		$report_data = $Finance->getReportData($_POST['scorde'],$_POST['stype'],$_POST['sdate'],$login_group_id,$jump);
 
 		switch( $_POST['stype'] ) {
 			case  "users":
@@ -92,16 +80,17 @@
 		echo "<tr class='ContentTdColor'><td colspan=\"3\" align=\"right\">总计：</td><td colspan=\"2\">".$today_money."元</td></tr>";
 		echo "</table>";
 
-	} else {
-		echo "上一周&nbsp;这周&nbsp;下一周";
+	} else {		
+		$jump =  $_GET['jump'] ;
 
-		$report_data = $Finance->getReportData("out_corde","users","week",$login_group_id);
+		$report_data = $Finance->getReportData("out_corde","users","week",$login_group_id,$jump);
 		$table_title = array("序号","用户","家庭","金钱","占百分比");
 
 		if(DEBUG_YES){ 
 			echo "<br>DEBUG START*********************************************<br>";
 			print_r($report_data);
 			echo "<br>".$stype."<br>";
+			echo "<br>".$jump."<br>";
 			echo "<br>DEBUG END*********************************************<br>";	
 		}
 		

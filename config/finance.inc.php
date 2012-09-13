@@ -756,18 +756,51 @@
             $this->insert($sql);
         }
 
-		 public function getReportData($scorde, $stype, $sdate,$login_group_id) {
+		 public function getReportData($scorde, $stype, $sdate,$login_group_id,$jump) {
 				switch ( $sdate ) {
 					case "week":
-						$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
-						$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
+						echo "<a href=\"main.php?page=report.php&jump=1\"><span>上一周</span></a>&nbsp;&nbsp;";
+						echo "<a href=\"main.php?page=report.php&jump=0\"><span>这周</span></a>&nbsp;&nbsp;";
+						echo "<a href=\"main.php?page=report.php&jump=2\"><span>下一周</span></a>&nbsp;&nbsp;";
+						/* 上一周  1,这周 0 ,下一周 2 */
+						echo "<br>";
+						if ( $jump == 1 ) {
+								$_SESSION['week'] ++ ;
+
+								$time = time() - 87000 *7*$_SESSION['week'];
+								$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
+								$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
+						} else if ( $jump == 2) {
+								if ( $_SESSION['week'] != 1 ) $_SESSION['week'] -- ;
+
+								$time = time() - 87000 *7*$_SESSION['week'];
+								$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
+								$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
+						} else {
+							$_SESSION['week'] = 1;
+							$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
+							$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
+						}
 
 						$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
+						echo "时间: ".date('Y-m-d',$date_min)." 至 ".date('Y-m-d',$date_max)."<br>";
 						break;
 					case "month":
+						echo "<a href=\"main.php?page=report.php&jump=1\"><span>上个月</span></a>&nbsp;&nbsp;";
+						echo "<a href=\"main.php?page=report.php&jump=0\"><span>当月</span></a>&nbsp;&nbsp;";
+						echo "<a href=\"main.php?page=report.php&jump=2\"><span>下个月</span></a>&nbsp;&nbsp;";
+						/* 上个月  1,当月 0 ,下个月 2 */
+						echo "<br>";
+
 						$date_filter = "create_date like '".date('Y-m',time())."%'";
 						break;
 					case "year":
+						echo "<a href=\"main.php?page=report.php&jump=1\"><span>上一年</span></a>&nbsp;&nbsp;";
+						echo "<a href=\"main.php?page=report.php&jump=0\"><span>当年</span></a>&nbsp;&nbsp;";
+						echo "<a href=\"main.php?page=report.php&jump=2\"><span>下一年</span></a>&nbsp;&nbsp;";
+						/* 上一年  1,当年 0 ,下一年 2 */
+						echo "<br>";
+
 						$date_filter = " create_date like  '".date('Y',time())."%'";
 						break;
 				} 
