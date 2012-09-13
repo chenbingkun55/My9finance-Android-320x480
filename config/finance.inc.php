@@ -452,12 +452,15 @@
 			}
 
          /* 转换ID->名称函数*/
-        public function convertID($user_id,$id,$table)
+        public function convertID($id,$table)
         {
             
 			switch ($table){
 				case "users":
-					$sql = "SELECT user_alias FROM ".$this->_users." WHERE id = '".$user_id."'";
+					$sql = "SELECT user_alias FROM ".$this->_users." WHERE id = '".$id."'";
+					break;
+				case "groups":
+					$sql = "SELECT group_alias FROM ".$this->_groups." WHERE id = '".$id."'";
 					break;
 				case "out_mantype":
 					$sql = "SELECT name FROM ".$this->_out_mantype." WHERE id = '".$id."'";
@@ -753,7 +756,36 @@
             $this->insert($sql);
         }
 
+		 public function getReportData($scorde, $stype, $sdate,$login_groupname) {
+				switch ( $sdate ) {
+					case "week":
+						$date_min = "2012-08-10";
+						$date_max =  "2012-08-16";
 
+						$date_filter = "create_date > '".$date_min."%' AND create_date < '".$date_max."%'"; 
+						break;
+					case "month":
+						$date_filter = "create_date like '2012-08%'";
+						break;
+					case "year":
+						$date_filter = " create_date like  '2012-%'";
+						break;
+				} 
+
+				switch ($stype) {
+					case "mantype":
+						$sql = "SELECT sum(money),mantype_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  group by mantype_id";
+						break;
+					case "users":
+						$sql = "SELECT sum(money),user_id,group_id FROM ".$scorde." WHERE ".$date_filter."   group by user_id";
+						break;
+					case "address":
+						$sql = "SELECT sum(money),addr_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  group by addr_id";
+						break;
+				}
+				
+				return $this->select($sql);
+		 }
 
 
 /*  以上内容为优化内容  ####################################################################################################*/
