@@ -756,7 +756,7 @@
             $this->insert($sql);
         }
 
-		 public function getReportData($scorde, $stype, $sdate,$login_groupname) {
+		 public function getReportData($scorde, $stype, $sdate,$login_group_id) {
 				switch ( $sdate ) {
 					case "week":
 						$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
@@ -774,13 +774,13 @@
 
 				switch ($stype) {
 					case "mantype":
-						$sql = "SELECT sum(money),mantype_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  group by mantype_id";
+						$sql = "SELECT sum(money),mantype_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."' group by mantype_id order by sum(money) desc";
 						break;
 					case "users":
-						$sql = "SELECT sum(money),user_id,group_id FROM ".$scorde." WHERE ".$date_filter."   group by user_id";
+						$sql = "SELECT sum(money),user_id,group_id FROM ".$scorde." WHERE ".$date_filter."   AND group_id = '".$login_group_id."'  group by user_id order by sum(money) desc";
 						break;
 					case "address":
-						$sql = "SELECT sum(money),addr_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  group by addr_id";
+						$sql = "SELECT sum(money),addr_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."'  group by addr_id order by sum(money) desc";
 						break;
 				}
 				
