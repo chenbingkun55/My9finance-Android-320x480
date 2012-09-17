@@ -3,35 +3,36 @@
 
 
 
-<FORM action="main.php?page=report.php" method="post">
+<FORM action="main.php" method="get">
 	
 	<select name="scorde">
-		 <option  value="out_corde"<?PHP if ( $_GET['scorde'] == "out_corde" || $_POST['scorde'] == "out_corde" )  echo "selected=\"selected\"" ;  ?>>支出</option>
-		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde" || $_POST['scorde'] == "in_corde" )  echo "selected=\"selected\"" ;  ?>>收入</option>
+		 <option  value="out_corde"<?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
+		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>收入</option>
 	</select>
 
 	<select name="stype">
-		 <option  value="users" <?PHP if ( $_GET['stype'] == "users" || $_POST['stype'] == "users")  echo "selected=\"selected\"" ;  ?>>用户</option>
-		 <option  value="address"  <?PHP if ( $_GET['stype'] == "address" || $_POST['stype'] == "address" )  echo "selected=\"selected\"" ;  ?>>地址</option>
-		 <option  value="mantype"  <?PHP if ( $_GET['stype'] == "mantype" || $_POST['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>
+		 <option  value="users" <?PHP if ( $_GET['stype'] == "users")  echo "selected=\"selected\"" ;  ?>>用户</option>
+		 <option  value="address"  <?PHP if ( $_GET['stype'] == "address" )  echo "selected=\"selected\"" ;  ?>>地址</option>
+		 <option  value="mantype"  <?PHP if ( $_GET['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>
 	</select>
 
 	<select name="sdate">
-		 <option  value="week" <?PHP if ( $_GET['sdate'] == "week"  || $_POST['sdate'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>周</option>
-		 <option  value="month" <?PHP if ( $_GET['sdate'] == "month" || $_POST['sdate'] == "month" )  echo "selected=\"selected\"" ;  ?>>月</option>
-		 <option  value="year" <?PHP if ( $_GET['sdate'] == "year" || $_POST['sdate'] == "year")  echo "selected=\"selected\"" ;  ?>>年</option>
+		 <option  value="week" <?PHP if ( $_GET['sdate'] == "week" )  echo "selected=\"selected\"" ;  ?>>周</option>
+		 <option  value="month" <?PHP if ( $_GET['sdate'] == "month")  echo "selected=\"selected\"" ;  ?>>月</option>
+		 <option  value="year" <?PHP if ( $_GET['sdate'] == "year")  echo "selected=\"selected\"" ;  ?>>年</option>
 	</select>
 	<input type="hidden" name="report" value="1">
+	<input type="hidden" name="page" value="report.php">
 	<input type="submit" value="报表">
 
 </FORM>
 <hr>
 
 <?PHP
-	if ( $_POST['report'] == 1 ) {
-		$report_data = $Finance->getReportData($_POST['scorde'],$_POST['stype'],$_POST['sdate'],$login_group_id,$jump);
+	if ( $_GET['report'] == 1 ) {
+		$report_data = $Finance->getReportData($_GET['scorde'],$_GET['stype'],$_GET['sdate'],$login_group_id,$jump);
 
-		switch( $_POST['stype'] ) {
+		switch( $_GET['stype'] ) {
 			case  "users":
 				$table_title = array("序号","用户","家庭","金钱","占百分比");
 				$stype = "users";
@@ -42,10 +43,10 @@
 				break;
 			case  "mantype":
 				$table_title = array("序号","类别","家庭","金钱","占百分比");
-				if ( $_POST['scorde'] == "in_corde" ) {
+				if ( $_GET['scorde'] == "in_corde" ) {
 					$stype = "in_mantype";
 				}
-				if ( $_POST['scorde'] == "out_corde" ) {
+				if ( $_GET['scorde'] == "out_corde" ) {
 					$stype = "out_mantype";
 				}
 				break;
@@ -91,7 +92,26 @@
 		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
 		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_group_id,$jump);
-		$table_title = array("序号","用户","家庭","金钱","占百分比");
+		switch( $_GET['stype'] ) {
+			case  "users":
+				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$stype = "users";
+				break;
+			case  "address":
+				$table_title = array("序号","地址","家庭","金钱","占百分比");
+				$stype = "address";
+				break;
+			case  "mantype":
+				$table_title = array("序号","类别","家庭","金钱","占百分比");
+				if ( $_GET['scorde'] == "in_corde" ) {
+					$stype = "in_mantype";
+				}
+				if ( $_GET['scorde'] == "out_corde" ) {
+					$stype = "out_mantype";
+				}
+				break;
+		}	
+
 
 		if(DEBUG_YES){ 
 			echo "<br>DEBUG START*********************************************<br>";
@@ -116,7 +136,7 @@
 		for ($i=0;$i<count($report_data);$i++){
 			echo "<tr class='".$c."'>";
 			echo "<td>".($i+1)."</td>";
-			echo "<td>".$Finance->convertID($report_data[$i]['1'],"users")."</td>";
+			echo "<td>".$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
 			echo "<td>".$Finance->convertID($report_data[$i]['2'],"groups")."</td>";
 			echo "<td>".$report_data[$i]['sum(money)']."</td>";
 			echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
