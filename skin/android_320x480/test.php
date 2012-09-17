@@ -2,9 +2,6 @@
 	require_once("../../config/config.inc.php");
 	require_once(INCLUDE_PATH.'finance.inc.php');
 	header("Content-Type:text/html;charset=UTF-8"); 
-		$time = time() - 85000 *7;
-								$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
-								$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
-	var_dump(date('Y-m-d',$date_min),date('Y-m-d',$date_max));
-
+	$date_year = mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) -1 ); ;
+	echo date('Y',$date_year); 
 ?>

@@ -1,22 +1,25 @@
 <div class="ContentPlane Content" id="Content" align="center">
 <script>ChangFunTitle('FunTitle3')</script>
+
+
+
 <FORM action="main.php?page=report.php" method="post">
 	
 	<select name="scorde">
-		 <option  value="out_corde"<?PHP if ( $_POST['scorde'] == "out_corde" )  echo "selected=\"selected\"" ;  ?>>支出</option>
-		 <option  value="in_corde" <?PHP if ( $_POST['scorde'] == "in_corde" )  echo "selected=\"selected\"" ;  ?>>收入</option>
+		 <option  value="out_corde"<?PHP if ( $_GET['scorde'] == "out_corde" || $_POST['scorde'] == "out_corde" )  echo "selected=\"selected\"" ;  ?>>支出</option>
+		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde" || $_POST['scorde'] == "in_corde" )  echo "selected=\"selected\"" ;  ?>>收入</option>
 	</select>
 
 	<select name="stype">
-		 <option  value="users" <?PHP if ( $_POST['stype'] == "users" )  echo "selected=\"selected\"" ;  ?>>用户</option>
-		 <option  value="address"  <?PHP if ( $_POST['stype'] == "address" )  echo "selected=\"selected\"" ;  ?>>地址</option>
-		 <option  value="mantype"  <?PHP if ( $_POST['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>
+		 <option  value="users" <?PHP if ( $_GET['stype'] == "users" || $_POST['stype'] == "users")  echo "selected=\"selected\"" ;  ?>>用户</option>
+		 <option  value="address"  <?PHP if ( $_GET['stype'] == "address" || $_POST['stype'] == "address" )  echo "selected=\"selected\"" ;  ?>>地址</option>
+		 <option  value="mantype"  <?PHP if ( $_GET['stype'] == "mantype" || $_POST['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>
 	</select>
 
 	<select name="sdate">
-		 <option  value="week" <?PHP if ( $_POST['sdate'] == "week" )  echo "selected=\"selected\"" ;  ?>>周</option>
-		 <option  value="month" <?PHP if ( $_POST['sdate'] == "month" )  echo "selected=\"selected\"" ;  ?>>月</option>
-		 <option  value="year" <?PHP if ( $_POST['sdate'] == "year" )  echo "selected=\"selected\"" ;  ?>>年</option>
+		 <option  value="week" <?PHP if ( $_GET['sdate'] == "week"  || $_POST['sdate'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>周</option>
+		 <option  value="month" <?PHP if ( $_GET['sdate'] == "month" || $_POST['sdate'] == "month" )  echo "selected=\"selected\"" ;  ?>>月</option>
+		 <option  value="year" <?PHP if ( $_GET['sdate'] == "year" || $_POST['sdate'] == "year")  echo "selected=\"selected\"" ;  ?>>年</option>
 	</select>
 	<input type="hidden" name="report" value="1">
 	<input type="submit" value="报表">
@@ -52,7 +55,7 @@
 			echo "<br>DEBUG START*********************************************<br>";
 			print_r($report_data);
 			echo "<br>".$stype."<br>";
-			echo  $_SESSION['week']."<br>";
+			echo  $_SESSION['date_num']."<br>";
 			echo "<br>DEBUG END*********************************************<br>";	
 		}
 		
@@ -82,9 +85,12 @@
 		echo "</table>";
 
 	} else {		
-		$jump =  $_GET['jump'] ;
+		$jump =  isset($_GET['jump']) ? $_GET['jump'] : 0 ;
+		$scorde = isset($_GET['scorde']) ? $_GET['scorde'] : "out_corde";
+		$stype =  isset($_GET['stype']) ? $_GET['stype'] : "users";
+		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
-		$report_data = $Finance->getReportData("out_corde","users","week",$login_group_id,$jump);
+		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_group_id,$jump);
 		$table_title = array("序号","用户","家庭","金钱","占百分比");
 
 		if(DEBUG_YES){ 

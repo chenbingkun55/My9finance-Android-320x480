@@ -10,7 +10,7 @@
 	$login_groupadmin_id = $_SESSION['__groupdata']['0']['groupadmin_id'];
 	$login_group_id = $_SESSION['__groupdata']['0']['id'];
 	$login_skin_id = $_SESSION['__userdata']['0']["skin"];
-	if ( ! isset($_SESSION['week']))  $_SESSION['week'] = 0;
+	if ( ! isset($_SESSION['date_num']))  $_SESSION['date_num'] = 0;
 
 	if(DEBUG_YES){ 
 		$str = "DEBUG START*********************************************";
