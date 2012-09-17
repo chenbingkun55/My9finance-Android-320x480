@@ -765,19 +765,23 @@
 						/* 上一周  1,这周 0 ,下一周 2 */
 						echo "<br>";
 						if ( $jump == 1 ) {
-								$_SESSION['week'] ++ ;
-
+								$_SESSION['week']++;
 								$time = time() - 87000 *7*$_SESSION['week'];
 								$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
 								$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
 						} else if ( $jump == 2) {
-								if ( $_SESSION['week'] != 1 ) $_SESSION['week'] -- ;
-
-								$time = time() - 87000 *7*$_SESSION['week'];
-								$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
-								$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
+								if ( $_SESSION['week'] > 1 ) {
+									$_SESSION['week']--;
+									$time = time() - 87000 *7*$_SESSION['week'];
+									$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
+									$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
+								} else {
+									$_SESSION['week'] = 0;
+									$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
+									$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
+								}
 						} else {
-							$_SESSION['week'] = 1;
+							$_SESSION['week'] = 0;
 							$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
 							$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
 						}

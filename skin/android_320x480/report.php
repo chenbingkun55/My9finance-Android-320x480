@@ -52,6 +52,7 @@
 			echo "<br>DEBUG START*********************************************<br>";
 			print_r($report_data);
 			echo "<br>".$stype."<br>";
+			echo  $_SESSION['week']."<br>";
 			echo "<br>DEBUG END*********************************************<br>";	
 		}
 		
