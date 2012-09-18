@@ -757,22 +757,33 @@
         }
 
 		 public function getReportData($scorde="out_corde", $stype="users", $sdate="week",$login_group_id,$jump=0) {
-				
-				switch ( $sdate ) {
-					case "week":
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=1\"><span>上一周</span></a>&nbsp;&nbsp;";
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=0\"><span>这周</span></a>&nbsp;&nbsp;";
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=2\"><span>下一周</span></a>&nbsp;&nbsp;";
-						/* 上一周  1,这周 0 ,下一周 2 */
-						echo "<br>";
-						if ( $jump == 1 ) {
-								$_SESSION['date_num']++;
-								$time = time() - 87000 *7*$_SESSION['date_num'];
-								$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
-								$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
-						} else if ( $jump == 2) {
-								if ( $_SESSION['date_num'] > 1 ) {
-									$_SESSION['date_num']--;
+				if ( $_SESSION['date_num'] < 100 ) {
+					switch ( $sdate ) {
+						case "week":
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=1\"><span>上一周</span></a>&nbsp;&nbsp;";
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=0\"><span>这周</span></a>&nbsp;&nbsp;";
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=2\"><span>下一周</span></a>&nbsp;&nbsp;";
+							/* 上一周  1,这周 0 ,下一周 2 */
+							echo "<br>";
+							if ( $jump == 1 ) {
+									$_SESSION['date_num']++;
+									$time = time() - 87000 *7*$_SESSION['date_num'];
+									$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
+									$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
+							} else if ( $jump == 2) {
+									if ( $_SESSION['date_num'] > 1 ) {
+										$_SESSION['date_num']--;
+										$time = time() - 87000 *7*$_SESSION['date_num'];
+										$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
+										$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
+									} else {
+										$_SESSION['date_num'] = 0;
+										$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
+										$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
+									}
+							} else {
+								if ( is_numeric($_GET['d_num']) && $_GET['d_num'] != 0 ) { 
+									$_SESSION['date_num'] = $_GET['d_num'] ;
 									$time = time() - 87000 *7*$_SESSION['date_num'];
 									$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
 									$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
@@ -781,60 +792,81 @@
 									$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
 									$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
 								}
-						} else {
-							$_SESSION['date_num'] = 0;
-							$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
-							$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
-						}
+							}
 
-						$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
-						echo "时间: ".date('Y-m-d',$date_min)." 至 ".date('Y-m-d',$date_max)."<br>";
-						
-						echo $_SESSION['date_num'] ."<br>";
-						break;
-					case "month":
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=1\"><span>上个月</span></a>&nbsp;&nbsp;";
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=0\"><span>当月</span></a>&nbsp;&nbsp;";
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=2\"><span>下个月</span></a>&nbsp;&nbsp;";
-						/* 上个月  1,当月 0 ,下个月 2 */
-						echo "<br>";
-						if ( $jump == 1 ) {
-								$_SESSION['date_num']--;
-								$date_month =  mktime( 0,0, 0, date('m',time()) + $_SESSION['date_num'] ,1 ,date( 'Y',time()));
-						} else if ( $jump == 2) {
+							$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
+							echo "时间: ".date('Y-m-d',$date_min)." 至 ".date('Y-m-d',$date_max)."<br>";
+							
+							break;
+						case "month":
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=1\"><span>上个月</span></a>&nbsp;&nbsp;";
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=0\"><span>当月</span></a>&nbsp;&nbsp;";
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=2\"><span>下个月</span></a>&nbsp;&nbsp;";
+							/* 上个月  1,当月 0 ,下个月 2 */
+							echo "<br>";
+							if ( $jump == 1 ) {
 								$_SESSION['date_num']++;
-								$date_month =  mktime( 0,0, 0, date('m',time()) + $_SESSION['date_num'] ,1 ,date( 'Y',time()));
-						} else {
-							$_SESSION['date_num'] = 0;
-							$date_month = mktime( 0,0, 0, date('m',time()) ,1 ,date( 'Y',time()));
-						}
-						$date_filter = "create_date like '".date('Y-m',$date_month)."%'";
-						echo "月份: ".date('Y-m',$date_month)."<br>";
+								$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+							} else if ( $jump == 2) {
+								if ( $_SESSION['date_num'] > 1 ) {
+									$_SESSION['date_num']--;
+									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+								} else {
+									$_SESSION['date_num'] = 0;
+									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+								}
+							} else {
+								if ( is_numeric($_GET['d_num']) && $_GET['d_num'] != 0 ) { 
+									$_SESSION['date_num'] = $_GET['d_num'] ;
+									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+								} else {
+									$_SESSION['date_num'] = 0;
+									$date_month = mktime( 0,0, 0, date('m',time()) ,1 ,date( 'Y',time()));
+								}	
+							}
+							$date_filter = "create_date like '".date('Y-m',$date_month)."%'";
+							echo "月份: ".date('Y-m',$date_month)."<br>";
 
-						break;
-					case "year":
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=1\"><span>上一年</span></a>&nbsp;&nbsp;";
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=0\"><span>当年</span></a>&nbsp;&nbsp;";
-						echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=2\"><span>下一年</span></a>&nbsp;&nbsp;";
-						/* 上一年  1,当年 0 ,下一年 2 */
-						echo "<br>";
-						if ( $jump == 1 ) {
-								$_SESSION['date_num']--;
-								$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) + $_SESSION['date_num']);
-						} else if ( $jump == 2) {
-								$_SESSION['date_num']++;
-								$date_year =  mktime( 0,0, 0, 12,1 ,date( 'Y',time())+ $_SESSION['date_num'] );
-						} else {
-							$_SESSION['date_num'] = 0;
-							$date_year = mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()));
-						}
+							break;
+						case "year":
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=1\"><span>上一年</span></a>&nbsp;&nbsp;";
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=0\"><span>当年</span></a>&nbsp;&nbsp;";
+							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=2\"><span>下一年</span></a>&nbsp;&nbsp;";
+							/* 上一年  1,当年 0 ,下一年 2 */
+							echo "<br>";
+							if ( $jump == 1 ) {
+									$_SESSION['date_num']++;
+									$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) - $_SESSION['date_num']);
+							} else if ( $jump == 2) {
+								if( $_SESSION['date_num'] > 0 ) {
+									$_SESSION['date_num']-- ;
+									$date_year =  mktime( 0,0, 0, 12,1 ,date( 'Y',time()) - $_SESSION['date_num'] );
+								} else {
+									$_SESSION['date_num'] = 0;
+									$date_year = mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()));
+								}
+							} else {
+								if ( is_numeric($_GET['d_num']) && $_GET['d_num'] != 0 ) { 
+									$_SESSION['date_num'] = $_GET['d_num'] ;
+									$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) - $_SESSION['date_num']);
+								} else {
+									$_SESSION['date_num'] = 0;
+									$date_year = mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()));
+								}
+							}
 
-						$date_filter = "create_date like '".date('Y',$date_year)."%'";
-						echo "年份: ".date('Y',$date_year)."<br>";
+							$date_filter = "create_date like '".date('Y',$date_year)."%'";
+							echo "年份: ".date('Y',$date_year)."<br>";
 
-						break;
-				} 
-
+							break;
+					} 
+				} else {
+					$_SESSION['date_num'] = 0;
+					$date_min =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 1 ,date( 'Y',time()));
+					$date_max =  mktime( 0,0, 0, date('m',time()) ,date('d',time()) - date('N',time()) + 7 , date('Y',time()));
+					$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
+				}
+				
 				switch ($stype) {
 					case "mantype":
 						$sql = "SELECT sum(money),mantype_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."' group by mantype_id order by sum(money) desc";

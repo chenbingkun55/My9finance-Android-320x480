@@ -6,7 +6,7 @@
 <FORM action="main.php" method="get">
 	
 	<select name="scorde">
-		 <option  value="out_corde"<?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
+		 <option  value="out_corde" <?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
 		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>收入</option>
 	</select>
 
@@ -16,6 +16,7 @@
 		 <option  value="mantype"  <?PHP if ( $_GET['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>
 	</select>
 
+	后<input type="text" name="d_num" value="0" size="1"> 
 	<select name="sdate">
 		 <option  value="week" <?PHP if ( $_GET['sdate'] == "week" )  echo "selected=\"selected\"" ;  ?>>周</option>
 		 <option  value="month" <?PHP if ( $_GET['sdate'] == "month")  echo "selected=\"selected\"" ;  ?>>月</option>
@@ -33,10 +34,6 @@
 		$report_data = $Finance->getReportData($_GET['scorde'],$_GET['stype'],$_GET['sdate'],$login_group_id,$jump);
 
 		switch( $_GET['stype'] ) {
-			case  "users":
-				$table_title = array("序号","用户","家庭","金钱","占百分比");
-				$stype = "users";
-				break;
 			case  "address":
 				$table_title = array("序号","地址","家庭","金钱","占百分比");
 				$stype = "address";
@@ -50,13 +47,17 @@
 					$stype = "out_mantype";
 				}
 				break;
+			default:
+				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$stype = "users";
 		}	
 
 		if(DEBUG_YES){ 
 			echo "<br>DEBUG START*********************************************<br>";
 			print_r($report_data);
-			echo "<br>".$stype."<br>";
-			echo  $_SESSION['date_num']."<br>";
+			echo "<br>$stype = ".$stype."<br>";
+			echo  "\$_SESSION['date_num'] = ". $_SESSION['date_num']."<br>";
+			echo  "\$_GET['d_num'] = ".$_GET['d_num'] ."<br>";
 			echo "<br>DEBUG END*********************************************<br>";	
 		}
 		
@@ -93,10 +94,6 @@
 
 		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_group_id,$jump);
 		switch( $_GET['stype'] ) {
-			case  "users":
-				$table_title = array("序号","用户","家庭","金钱","占百分比");
-				$stype = "users";
-				break;
 			case  "address":
 				$table_title = array("序号","地址","家庭","金钱","占百分比");
 				$stype = "address";
@@ -110,6 +107,10 @@
 					$stype = "out_mantype";
 				}
 				break;
+			default:
+				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$stype = "users";
+
 		}	
 
 
