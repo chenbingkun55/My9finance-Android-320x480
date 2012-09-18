@@ -882,8 +882,8 @@
 				return $this->select($sql);
 		 }
 
-		  public function getSearchData() {
-			echo "";
+		  public function getSearchData($scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_group_id) {
+			echo $scorde."<BR>".$mantype_id."<BR>".$subtype_id. "<BR>".$address."<BR>".$money."<BR>".$notes."<BR>".$d_num."<BR>".$sdate."<BR>".$login_group_id;
 		  }
 
 

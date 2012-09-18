@@ -198,6 +198,11 @@ function check(){
 	return stats;
 }
 
+function SelectType(sid){
+	var in_out=document.getElementById("scorde").options[window.document.getElementById("scorde").selectedIndex].value;
+	window.location.replace('main.php?page=search.php&scorde='+in_out+'');
+}
+
 
 function sSubType(sid){
 	with(document.add_form.mantype_id) { var sub = options[selectedIndex].value; }
