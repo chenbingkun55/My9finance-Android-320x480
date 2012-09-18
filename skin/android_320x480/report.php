@@ -6,7 +6,7 @@
 <FORM action="main.php" method="get">
 	
 	<select name="scorde">
-		 <option  value="out_corde"<?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
+		 <option  value="out_corde" <?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
 		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>收入</option>
 	</select>
 
@@ -33,10 +33,6 @@
 		$report_data = $Finance->getReportData($_GET['scorde'],$_GET['stype'],$_GET['sdate'],$login_group_id,$jump);
 
 		switch( $_GET['stype'] ) {
-			case  "users":
-				$table_title = array("序号","用户","家庭","金钱","占百分比");
-				$stype = "users";
-				break;
 			case  "address":
 				$table_title = array("序号","地址","家庭","金钱","占百分比");
 				$stype = "address";
@@ -50,6 +46,9 @@
 					$stype = "out_mantype";
 				}
 				break;
+			default:
+				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$stype = "users";
 		}	
 
 		if(DEBUG_YES){ 
@@ -93,10 +92,6 @@
 
 		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_group_id,$jump);
 		switch( $_GET['stype'] ) {
-			case  "users":
-				$table_title = array("序号","用户","家庭","金钱","占百分比");
-				$stype = "users";
-				break;
 			case  "address":
 				$table_title = array("序号","地址","家庭","金钱","占百分比");
 				$stype = "address";
@@ -110,6 +105,10 @@
 					$stype = "out_mantype";
 				}
 				break;
+			default:
+				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$stype = "users";
+
 		}	
 
 
