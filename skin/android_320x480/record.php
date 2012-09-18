@@ -68,7 +68,9 @@
 		}else{
 			$Finance->select_type($login_user_id,$recordtype);
 		}
-		
+		$str =  $Aid ? "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\"><INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"修改\"></span>":"<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"添加\"></span>";
+		echo $str;
+
 		$today_corde = $Finance->getCordeData($login_group_id,$recordtype,date("Y-m-d"));
 		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注","操作");
 		
@@ -161,7 +163,9 @@
 		}else{
 			$Finance->select_type($login_user_id,$recordtype);
 		}
-		
+		$str =  $Aid ? "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\"><INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"修改\"></span>":"<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"添加\"></span>";
+		echo $str;
+
 		$today_corde = $Finance->getCordeData($login_group_id,$recordtype,date("Y-m-d"));
 		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注","操作");
 		
