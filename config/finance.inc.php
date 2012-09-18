@@ -421,9 +421,11 @@
 				echo "</script>";
 				echo "<span><select id=\"mantype_id\" name=\"mantype_id\" onChange=\"sSubType();\">";
 				echo "<option value=\"\">--选择主类--</option>";
-				for ($i=0;$i<count($ManType);$i++){
-					$str = $ManType[$i]['id'] == $alert_corde['0']['mantype_id'] ? "<option selected=\"selected\" value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>":"<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
-					echo $str;
+				if ( $ManType != 0 ) {
+					for ($i=0;$i<count($ManType);$i++){
+						$str = $ManType[$i]['id'] == $alert_corde['0']['mantype_id'] ? "<option selected=\"selected\" value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>":"<option value=\"".$ManType[$i]['id']."\">".$ManType[$i]['name']."</option>";
+						echo $str;
+					}
 				}
 				echo "</select>";
 				echo "<select id=\"subtype_id\" name=\"subtype_id\"><option value=\"\">--选择子类--</option></select></span>";
@@ -879,6 +881,10 @@
 				
 				return $this->select($sql);
 		 }
+
+		  public function getSearchData() {
+			echo "";
+		  }
 
 
 /*  以上内容为优化内容  ####################################################################################################*/
