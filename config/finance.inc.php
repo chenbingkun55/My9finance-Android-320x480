@@ -892,7 +892,7 @@
 				}
 
 				$where_sql = is_numeric($mantype_id)  ?  " AND mantype_id = '".$mantype_id."' " : "" ;
-				$where_sql .= is_numeric($subtype_id)  ?  " AND subtype_id = '".$mantype_id."' " : "" ;
+				$where_sql .= is_numeric($subtype_id)  ?  " AND subtype_id = '".$subtype_id."' " : "" ;
 				$where_sql .=  is_numeric($address)  ?  " AND addr_id = '".$address."' " : "" ;
 				$where_sql .= (is_numeric($money) && $money != 0)  ?  " AND money = '".$money."' " : "" ;
 				$where_sql .= $notes != ""  ?  " AND notes = '".$notes."' " : "" ;
@@ -917,7 +917,7 @@
 
 
 			$sql = "SELECT * FROM ".$in_out." WHERE  ".$date_filter." ".$where_sql."  AND group_id = '".$login_group_id."'";
-
+			echo $sql;
 			 return $this->select($sql);
 			/*return $subtype_id;*/
 		  }
