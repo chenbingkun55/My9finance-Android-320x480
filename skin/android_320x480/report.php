@@ -11,7 +11,7 @@
 		 <option  value="in_out" <?PHP if ( $_GET['scorde'] == "in_out")  echo "selected=\"selected\"" ;  ?>>收支</option>
 	</select>
 
-	<select id="stype" name="stype">
+	<select id="stype" name="stype" <?PHP if ( $_GET['scorde'] == "in_out")  echo "disabled=\"true\"" ;  ?>>
 		 <option  value="users" <?PHP if ( $_GET['stype'] == "users")  echo "selected=\"selected\"" ;  ?>>用户</option>
 		 <option  value="address"  <?PHP if ( $_GET['stype'] == "address" )  echo "selected=\"selected\"" ;  ?>>地址</option>
 		 <option  value="mantype"  <?PHP if ( $_GET['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>
@@ -61,30 +61,57 @@
 			echo  "\$_GET['d_num'] = ".$_GET['d_num'] ."<br>";
 			echo "<br>DEBUG END*********************************************<br>";	
 		}
-		
-		echo "<table>";		
-		echo "<tr class='ContentTdColor'>";
-		for ($i=0;$i<count($table_title);$i++){
-			echo "<th>".$table_title[$i]."</th>";
-		}
 
-		$today_money = 0;
-		for ($i=0;$i<count($report_data);$i++){
-			$today_money = ($today_money + $report_data[$i]['sum(money)']);
-		}
+		if ( $_GET['scorde'] == "in_out" ) {
+			echo "<table><tr class='ContentTdColor'>";
+			echo "<th>总收入</th>";
+			echo "<th>平均/每天</th>";
+			echo "</tr><tr>";
+			echo "<td>".$report_data['0']['0']."</td>";
+			echo "<td>".$report_data['0']['1']."</td>";
+			echo "</tr></table>";
 
-		$c="ContentTdColor1";
-		for ($i=0;$i<count($report_data);$i++){
-			echo "<tr class='".$c."'>";
-			echo "<td>".($i+1)."</td>";
-			echo "<td>".$Finance->convertID($report_data[$i]['1'],$stype)."</td>";
-			echo "<td>".$Finance->convertID($report_data[$i]['2'],groups)."</td>";
-			echo "<td>".$report_data[$i]['sum(money)']."</td>";
-			echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
-			echo "</tr>";
-			$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			echo "<table><tr class='ContentTdColor'>";
+			echo "<th>总支出</th>";
+			echo "<th>平均/每天</th>";
+			echo "</tr><tr>";
+			echo "<td>".$report_data['0']['2']."</td>";
+			echo "<td>".$report_data['0']['3']."</td>";
+			echo "</tr></table>";
+
+			echo "<table><tr class='ContentTdColor'>";
+			echo "<th>总收支差</th>";
+			echo "<th>总平均/每天差</th>";
+			echo "</tr><tr>";
+			echo "<td>".$report_data['0']['4']."</td>";
+			echo "<td>".$report_data['0']['5']."</td>";
+			echo "</tr></table>";
+		} else {
+			echo "<table>";		
+			echo "<tr class='ContentTdColor'>";
+			for ($i=0;$i<count($table_title);$i++){
+				echo "<th>".$table_title[$i]."</th>";
+			}
+
+			$today_money = 0;
+			for ($i=0;$i<count($report_data);$i++){
+				$today_money = ($today_money + $report_data[$i]['sum(money)']);
+			}
+
+			$c="ContentTdColor1";
+			for ($i=0;$i<count($report_data);$i++){
+				echo "<tr class='".$c."'>";
+				echo "<td>".($i+1)."</td>";
+				echo "<td>".$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
+				echo "<td>".$Finance->convertID($report_data[$i]['2'],"groups")."</td>";
+				echo "<td>".$report_data[$i]['sum(money)']."</td>";
+				echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
+				echo "</tr>";
+			
+				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			}
+			echo "<tr class='ContentTdColor'><td colspan=\"3\" align=\"right\">总计：</td><td colspan=\"2\">".$today_money."元</td></tr>";
 		}
-		echo "<tr class='ContentTdColor'><td colspan=\"3\" align=\"right\">总计：</td><td colspan=\"2\">".$today_money."元</td></tr>";
 		echo "</table>";
 
 	} else {		
@@ -94,59 +121,85 @@
 		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
 		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_group_id,$jump);
-		switch( $_GET['stype'] ) {
-			case  "address":
-				$table_title = array("序号","地址","家庭","金钱","占百分比");
-				$stype = "address";
-				break;
-			case  "mantype":
-				$table_title = array("序号","类别","家庭","金钱","占百分比");
-				if ( $_GET['scorde'] == "in_corde" ) {
-					$stype = "in_mantype";
-				}
-				if ( $_GET['scorde'] == "out_corde" ) {
-					$stype = "out_mantype";
-				}
-				break;
-			default:
-				$table_title = array("序号","用户","家庭","金钱","占百分比");
-				$stype = "users";
-
-		}	
-
-
-		if(DEBUG_YES){ 
-			echo "<br>DEBUG START*********************************************<br>";
-			print_r($report_data);
-			echo "<br>".$stype."<br>";
-			echo "<br>".$jump."<br>";
-			echo "<br>DEBUG END*********************************************<br>";	
-		}
 		
-		echo "<table>";		
-		echo "<tr class='ContentTdColor'>";
-		for ($i=0;$i<count($table_title);$i++){
-			echo "<th>".$table_title[$i]."</th>";
-		}
+		if ( $_GET['scorde'] == "in_out" ) {
+			echo "<table><tr class='ContentTdColor'>";
+			echo "<th>收入总数</th>";
+			echo "<th>收入平均</th>";
+			echo "</tr><tr>";
+			echo "<td>".$report_data['0']['0']."</td>";
+			echo "<td>".$report_data['0']['1']."</td>";
+			echo "</tr></table>";
 
-		$today_money = 0;
-		for ($i=0;$i<count($report_data);$i++){
-			$today_money = ($today_money + $report_data[$i]['sum(money)']);
-		}
+			echo "<table><tr class='ContentTdColor'>";
+			echo "<th>支出总数</th>";
+			echo "<th>支出平均</th>";
+			echo "</tr><tr>";
+			echo "<td>".$report_data['0']['2']."</td>";
+			echo "<td>".$report_data['0']['3']."</td>";
+			echo "</tr></table>";
 
-		$c="ContentTdColor1";
-		for ($i=0;$i<count($report_data);$i++){
-			echo "<tr class='".$c."'>";
-			echo "<td>".($i+1)."</td>";
-			echo "<td>".$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
-			echo "<td>".$Finance->convertID($report_data[$i]['2'],"groups")."</td>";
-			echo "<td>".$report_data[$i]['sum(money)']."</td>";
-			echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
-			echo "</tr>";
-			$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			echo "<table><tr class='ContentTdColor'>";
+			echo "<th>总收支差</th>";
+			echo "<th>总收支平均差</th>";
+			echo "</tr><tr>";
+			echo "<td>".$report_data['0']['4']."</td>";
+			echo "<td>".$report_data['0']['5']."</td>";
+			echo "</tr></table>";
+		} else {
+			switch( $_GET['stype'] ) {
+				case  "address":
+					$table_title = array("序号","地址","家庭","金钱","占百分比");
+					$stype = "address";
+					break;
+				case  "mantype":
+					$table_title = array("序号","类别","家庭","金钱","占百分比");
+					if ( $_GET['scorde'] == "in_corde" ) {
+						$stype = "in_mantype";
+					}
+					if ( $_GET['scorde'] == "out_corde" ) {
+						$stype = "out_mantype";
+					}
+					break;
+				default:
+					$table_title = array("序号","用户","家庭","金钱","占百分比");
+					$stype = "users";
+			}	
+
+
+			if(DEBUG_YES){ 
+				echo "<br>DEBUG START*********************************************<br>";
+				print_r($report_data);
+				echo "<br>".$stype."<br>";
+				echo "<br>".$jump."<br>";
+				echo "<br>DEBUG END*********************************************<br>";	
+			}
+			
+			echo "<table>";		
+			echo "<tr class='ContentTdColor'>";
+			for ($i=0;$i<count($table_title);$i++){
+				echo "<th>".$table_title[$i]."</th>";
+			}
+
+			$today_money = 0;
+			for ($i=0;$i<count($report_data);$i++){
+				$today_money = ($today_money + $report_data[$i]['sum(money)']);
+			}
+
+			$c="ContentTdColor1";
+			for ($i=0;$i<count($report_data);$i++){
+				echo "<tr class='".$c."'>";
+				echo "<td>".($i+1)."</td>";
+				echo "<td>".$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
+				echo "<td>".$Finance->convertID($report_data[$i]['2'],"groups")."</td>";
+				echo "<td>".$report_data[$i]['sum(money)']."</td>";
+				echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
+				echo "</tr>";
+				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			}
+			echo "<tr class='ContentTdColor'><td colspan=\"3\" align=\"right\">总计：</td><td colspan=\"2\">".$today_money."元</td></tr>";
+			echo "</table>";
 		}
-		echo "<tr class='ContentTdColor'><td colspan=\"3\" align=\"right\">总计：</td><td colspan=\"2\">".$today_money."元</td></tr>";
-		echo "</table>";
 	}
 ?>
 </div>
