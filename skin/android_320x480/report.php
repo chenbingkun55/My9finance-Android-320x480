@@ -3,14 +3,15 @@
 
 
 
-<FORM action="main.php" method="get">
+<FORM action="main.php" method="get" >
 	
-	<select name="scorde">
+	<select id="scorde" name="scorde" onChange="DisableStype()">
 		 <option  value="out_corde" <?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
 		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>收入</option>
+		 <option  value="in_out" <?PHP if ( $_GET['scorde'] == "in_out")  echo "selected=\"selected\"" ;  ?>>收支</option>
 	</select>
 
-	<select name="stype">
+	<select id="stype" name="stype">
 		 <option  value="users" <?PHP if ( $_GET['stype'] == "users")  echo "selected=\"selected\"" ;  ?>>用户</option>
 		 <option  value="address"  <?PHP if ( $_GET['stype'] == "address" )  echo "selected=\"selected\"" ;  ?>>地址</option>
 		 <option  value="mantype"  <?PHP if ( $_GET['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>

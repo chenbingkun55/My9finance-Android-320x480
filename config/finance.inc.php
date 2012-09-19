@@ -918,6 +918,7 @@
 
 			$sql = "SELECT * FROM ".$in_out." WHERE  ".$date_filter." ".$where_sql."  AND group_id = '".$login_group_id."'";
 			/* echo $sql; */
+			echo $sql;
 			 return $this->select($sql);
 			/*return $subtype_id;*/
 		  }
