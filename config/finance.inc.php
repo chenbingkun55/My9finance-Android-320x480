@@ -883,7 +883,43 @@
 		 }
 
 		  public function getSearchData($scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_group_id) {
-			echo $scorde."<BR>".$mantype_id."<BR>".$subtype_id. "<BR>".$address."<BR>".$money."<BR>".$notes."<BR>".$d_num."<BR>".$sdate."<BR>".$login_group_id;
+				if ( $scorde == "out_record" ){
+					$in_out = "out_corde" ;
+				} else if ( $scorde == "in_record" ) {
+					$in_out = "in_corde" ;
+				} else {
+					$in_out = NULL ;
+				}
+
+				$where_sql = is_numeric($mantype_id)  ?  " AND mantype_id = '".$mantype_id."' " : "" ;
+				$where_sql .= is_numeric($subtype_id)  ?  " AND subtype_id = '".$mantype_id."' " : "" ;
+				$where_sql .=  is_numeric($address)  ?  " AND addr_id = '".$address."' " : "" ;
+				$where_sql .= (is_numeric($money) && $money != 0)  ?  " AND money = '".$money."' " : "" ;
+				$where_sql .= $notes != ""  ?  " AND notes = '".$notes."' " : "" ;
+
+				switch ( $sdate ) {
+					case "week":
+						$time = time() - 87000 *7*$d_num;
+						$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
+						$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
+
+						$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
+						break;
+					case "month":
+						$date_month =  mktime( 0,0, 0, date('m',time()) - $d_num ,1 ,date( 'Y',time()));
+						$date_filter = "create_date like '".date('Y-m',$date_month)."%'";
+						break;
+					case "year":	
+						$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) - $d_num);
+						$date_filter = "create_date like '".date('Y',$date_year)."%'";
+						break;
+					} 
+
+
+			$sql = "SELECT * FROM ".$in_out." WHERE  ".$date_filter." ".$where_sql."  AND group_id = '".$login_group_id."'";
+
+			 return $this->select($sql);
+			/*return $subtype_id;*/
 		  }
 
 
