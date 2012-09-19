@@ -764,6 +764,7 @@
 							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=0\"><span>这周</span></a>&nbsp;&nbsp;";
 							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=2\"><span>下一周</span></a>&nbsp;&nbsp;";
 							/* 上一周  1,这周 0 ,下一周 2 */
+							$sdate_num = 7 ;
 							echo "<br>";
 							if ( $jump == 1 ) {
 									$_SESSION['date_num']++;
@@ -807,25 +808,30 @@
 							if ( $jump == 1 ) {
 								$_SESSION['date_num']++;
 								$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+								$sdate_num = date('t',mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time())));
 							} else if ( $jump == 2) {
 								if ( $_SESSION['date_num'] > 1 ) {
 									$_SESSION['date_num']--;
 									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+									$sdate_num = date('t',mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time())));
 								} else {
 									$_SESSION['date_num'] = 0;
 									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+									$sdate_num = date('d',time());
 								}
 							} else {
 								if ( is_numeric($_GET['d_num']) && $_GET['d_num'] != 0 ) { 
 									$_SESSION['date_num'] = $_GET['d_num'] ;
 									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
+									$sdate_num = date('t',mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,0));
 								} else {
 									$_SESSION['date_num'] = 0;
 									$date_month = mktime( 0,0, 0, date('m',time()) ,1 ,date( 'Y',time()));
+									$sdate_num = date('d',time());
 								}	
 							}
 							$date_filter = "create_date like '".date('Y-m',$date_month)."%'";
-							echo "月份: ".date('Y-m',$date_month)."<br>";
+							echo "月份: ".date('Y-m',$date_month)." [共:".$sdate_num."天]<br>";
 
 							break;
 						case "year":
@@ -837,26 +843,31 @@
 							if ( $jump == 1 ) {
 									$_SESSION['date_num']++;
 									$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) - $_SESSION['date_num']);
+									$sdate_num = date('z',mktime( 0,0, 0, 12 ,31,date( 'Y',time()) - $_SESSION['date_num']));
 							} else if ( $jump == 2) {
 								if( $_SESSION['date_num'] > 0 ) {
 									$_SESSION['date_num']-- ;
 									$date_year =  mktime( 0,0, 0, 12,1 ,date( 'Y',time()) - $_SESSION['date_num'] );
+									$sdate_num = date('z',mktime( 0,0, 0, 12,31 ,date( 'Y',time()) - $_SESSION['date_num'] ));
 								} else {
 									$_SESSION['date_num'] = 0;
 									$date_year = mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()));
+									$sdate_num = date('z',mktime( 0,0, 0, 12 ,31 ,date( 'Y',time())));
 								}
 							} else {
 								if ( is_numeric($_GET['d_num']) && $_GET['d_num'] != 0 ) { 
 									$_SESSION['date_num'] = $_GET['d_num'] ;
 									$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) - $_SESSION['date_num']);
+									$sdate_num = date('z',mktime( 0,0, 0, date("m"),date("d") ,date( 'Y',time())));
 								} else {
 									$_SESSION['date_num'] = 0;
 									$date_year = mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()));
+									$sdate_num = date('z',mktime( 0,0, 0, date("m"),date("d") ,date( 'Y',time())));
 								}
 							}
 
 							$date_filter = "create_date like '".date('Y',$date_year)."%'";
-							echo "年份: ".date('Y',$date_year)."<br>";
+							echo "年份: ".date('Y',$date_year)." [共: ".$sdate_num."天]<br>";
 
 							break;
 					} 
@@ -867,19 +878,37 @@
 					$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
 				}
 				
-				switch ($stype) {
-					case "mantype":
-						$sql = "SELECT sum(money),mantype_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."' group by mantype_id order by sum(money) desc";
-						break;
-					case "users":
-						$sql = "SELECT sum(money),user_id,group_id FROM ".$scorde." WHERE ".$date_filter."   AND group_id = '".$login_group_id."'  group by user_id order by sum(money) desc";
-						break;
-					case "address":
-						$sql = "SELECT sum(money),addr_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."'  group by addr_id order by sum(money) desc";
-						break;
-				}
-				
+				if ( $scorde == "in_out" ) {
+					$sql = "SELECT sum(money) FROM ".$this->_out_corde." WHERE ".$date_filter." AND group_id = '".$login_group_id."'";
+					$out_data = $this->select($sql);
+
+					$sql = "SELECT sum(money) FROM ".$this->_in_corde." WHERE ".$date_filter." AND group_id = '".$login_group_id."'";
+					$in_data = $this->select($sql);
+
+
+					$report_in_out['0']['0'] = $in_data['0']['0'] ;
+					$report_in_out['0']['1'] = number_format( $in_data['0']['0'] / $sdate_num,2);
+					$report_in_out['0']['2'] = $out_data['0']['0'] ;
+					$report_in_out['0']['3'] = number_format( $out_data['0']['0'] /$sdate_num,2) ;
+					$report_in_out['0']['4'] = number_format( $in_data['0']['0'] - $out_data['0']['0'],2) ;
+					$report_in_out['0']['5'] = number_format( $in_data['0']['0'] / $sdate_num,2) - number_format( $out_data['0']['0'] /$sdate_num,2) ;
+
+
+					return $report_in_out; 
+				} else {
+					switch ($stype) {
+						case "mantype":
+							$sql = "SELECT sum(money),mantype_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."' group by mantype_id order by sum(money) desc";
+							break;
+						case "users":
+							$sql = "SELECT sum(money),user_id,group_id FROM ".$scorde." WHERE ".$date_filter."   AND group_id = '".$login_group_id."'  group by user_id order by sum(money) desc";
+							break;
+						case "address":
+							$sql = "SELECT sum(money),addr_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."'  group by addr_id order by sum(money) desc";
+							break;
+					}
 				return $this->select($sql);
+			}
 		 }
 
 		  public function getSearchData($scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_group_id) {
@@ -918,7 +947,6 @@
 
 			$sql = "SELECT * FROM ".$in_out." WHERE  ".$date_filter." ".$where_sql."  AND group_id = '".$login_group_id."'";
 			/* echo $sql; */
-			echo $sql;
 			 return $this->select($sql);
 			/*return $subtype_id;*/
 		  }
