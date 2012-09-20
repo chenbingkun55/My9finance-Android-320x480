@@ -24,60 +24,57 @@
 		$str .= "用户组管理员ID: ".$login_groupadmin_id;
 		$str .= "用户组ID: ".$login_group_id;
 		$str .= "DEBUG END*********************************************";
-		echo "<script>alert('".$str."')</script>";
+		echo "<br>".$str."<br>";
 	}
 ?>
+		<tr ><td class="ALLpadding">
+		<table class="HeadTable">
+			<tr><td class="Ltd">
+				<?PHP
+					if ( $login_user_alias ) {
+						echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_alias."</a>&nbsp;&nbsp;".$_HELLO;
+					} else {
+						echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_name."&</a>nbsp;&nbsp;".$_HELLO;
+					}
 
-<div class="UserInfo">
-	<?PHP
-		if ( $login_user_alias ) {
-			echo "<div><a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_alias."</a>&nbsp;&nbsp;".$_HELLO;
-		} else {
-			echo "<div><a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_name."&</a>nbsp;&nbsp;".$_HELLO;
-		}
+					if ( $login_group_alias ) {
+						echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$_RESIDE_GROUP.":&nbsp;".$login_group_alias."";
+					} else {
+						echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$_RESIDE_GROUP.":&nbsp;".$login_groupname."";
+					}
+				?>
+			</td><td>
+				<span class="Skin1" id="Skin1" title="蓝色主题" onClick="ChangeSkinColor('Skin1')">1</span>
+				<span class="Skin2" id="Skin2" title="灰色主题" onClick="ChangeSkinColor('Skin2')">2</span>
+				<span class="Skin3" id="Skin3" title="绿色主题" onClick="ChangeSkinColor('Skin3')">3</span>
+				<span class="Skin4" id="Skin4" title="粉色主题" onClick="ChangeSkinColor('Skin4')">4</span>
+				<span class="Skin5" id="Skin5" title="黄色主题" onClick="ChangeSkinColor('Skin5')">5</span>
+			</td></tr>
+		</table>
+	</td></tr>
+	<tr><td>
+		<table width="100%">
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>
+						<a href="<?PHP echo IMG_PATH."logo_max_color.gif"?>" ><IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="">
+					</td>
+					<td>
+						<?PHP echo "<span class=\"styleFont1\"><STRONG>". $_TITLE ."</STRONG></span>";?> 
+					</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table>
+	</td></tr>
+	<tr class="RLpadding"><td class="RLpadding">
+		<li><a class="Funa" href="main.php?page=record.php">主页</a></li>
+		<li><a class="Funa" href="main.php?page=fun_manager.php">功能管理</a></li>
+		<li><a class="Funa" href="main.php?page=report.php">报表</a></li>
+		<li><a class="Funa" href="main.php?page=search.php">搜索</a></li>
+		<li><a class="Funa" href="main.php?page=about.php">关于</a></li>
+	</td></tr>
 
-		if ( $login_group_alias ) {
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$_RESIDE_GROUP.":&nbsp;".$login_group_alias."</div>";
-		} else {
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$_RESIDE_GROUP.":&nbsp;".$login_groupname."</div>";
-		}
-	?>
-</div>
-<div class="ChangeSkinPlane" id="ChangeSkinPlane">
-	<span class="Skin1" id="Skin1" title="蓝色主题" onClick="ChangeSkinColor('Skin1')">1</span>
-	<span class="Skin2" id="Skin2" title="灰色主题" onClick="ChangeSkinColor('Skin2')">2</span>
-	<span class="Skin3" id="Skin3" title="绿色主题" onClick="ChangeSkinColor('Skin3')">3</span>
-	<span class="Skin4" id="Skin4" title="粉色主题" onClick="ChangeSkinColor('Skin4')">4</span>
-	<span class="Skin5" id="Skin5" title="黄色主题" onClick="ChangeSkinColor('Skin5')">5</span>
-</div>
-
-<div class="DateTimePlane DateTimePlaneFont" align="right" id="DateTimePlane">
-	<script>PrintDate();setInterval("PrintDate()",60000)</script>
-</div>
-
-<div class="MainICO">
-	<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
-</div>
-
-<div class="MainMessage MainMessageFont" id="MainMessage" onLoad=PostMessage()>
-</div>
-  
-<div class="FunTitle1 FunTitleFont" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
-		<a href="main.php?page=record.php"><span>主页</span></a>   
-</div>
-
-<div class="FunTitle2 FunTitleFont" id="FunTitle2" onMouseOver="OverFunTitleColor('FunTitle2')" onMouseOut="OutFunTitleColor('FunTitle2')" onclick="ChangFunTitle('FunTitle2')"> 
-	<a href="main.php?page=fun_manager.php"><span>功能管理</span></a>   
-</div>
-
-<div class="FunTitle3 FunTitleFont" id="FunTitle3" onMouseOver="OverFunTitleColor('FunTitle3')" onMouseOut="OutFunTitleColor('FunTitle3')" onclick="ChangFunTitle('FunTitle3')"> 
-	<a href="main.php?page=report.php"><span>报表</span></a>   
-</div>
-
-<div class="FunTitle4 FunTitleFont" id="FunTitle4" onMouseOver="OverFunTitleColor('FunTitle4')" onMouseOut="OutFunTitleColor('FunTitle4')" onclick="ChangFunTitle('FunTitle4')"> 
-	<a href="main.php?page=search.php"><span>搜索</span></a>   
-</div>
-		
-<div class="FunTitle5 FunTitleFont" id="FunTitle5" onMouseOver="OverFunTitleColor('FunTitle5')" onMouseOut="OutFunTitleColor('FunTitle5')" onclick="ChangFunTitle('FunTitle5')"> 
-	<a href="main.php?page=about.php"><span>关于</span></a>   
-</div>

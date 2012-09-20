@@ -1,10 +1,9 @@
-<div class="ContentPlane Content" id="Content" align="center">
+<tr><td class="RLpadding">
+<table class="ContentTable">
+	<tr>
+	<td class="Ltd ALLpadding ">
 <script>ChangFunTitle('FunTitle3')</script>
-
-
-
 <FORM action="main.php" method="get" >
-	
 	<select id="scorde" name="scorde" onChange="DisableStype()">
 		 <option  value="out_corde" <?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
 		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>收入</option>
@@ -202,5 +201,8 @@
 		}
 	}
 ?>
-</div>
+	</td>
+	</tr>
+</table>
+</td></tr>
 

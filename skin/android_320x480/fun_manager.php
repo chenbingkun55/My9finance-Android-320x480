@@ -1,4 +1,7 @@
-<div class="ContentPlane Content" id="Content">
+<tr><td class="RLpadding">
+<table class="ContentTable">
+	<tr>
+	<td class="Ltd ALLpadding ">
 <script>ChangFunTitle('FunTitle2')</script>
 <form class="add_form" name="add_form" action="main.php<?PHP echo "?page=fun_manager.php&add_type=".$_GET['add_type']."&Lid=".$_GET['Lid'];?>" method="post">
 
@@ -736,5 +739,8 @@
 	}
 ?>
 </form>
-</div>
+	</td>
+	</tr>
+</table>
+</td></tr>
 

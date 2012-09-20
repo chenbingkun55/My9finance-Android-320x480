@@ -1,4 +1,7 @@
-<div class="ContentPlane Content" id="Content">
+<tr><td class="RLpadding">
+<table class="ContentTable">
+	<tr>
+	<td class="Ltd ALLpadding ">
 <script>ChangFunTitle('FunTitle4')</script>
 <FORM action="main.php?page=search.php"  name="add_form" method="POST">
 	<select id="scorde" name="scorde" onChange="SelectType()">
@@ -73,4 +76,7 @@
 			echo "</table>";
 	}
 ?>
-</div>
+	</td>
+	</tr>
+</table>
+</td></tr>

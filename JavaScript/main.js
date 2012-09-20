@@ -281,8 +281,8 @@ function PrintDate(){
 	}
 
 	text = date.getFullYear()+'.'+(date.getMonth() + 1)+'.'+date.getDate();
-	text += '<br>'+week;
-	text += '<br>'+Hours+':'+Minutes;
+	text += week;
+	text += Hours+':'+Minutes;
 
 	DateTimePlane.innerHTML=text;
 }

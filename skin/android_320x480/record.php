@@ -1,4 +1,7 @@
-<div class="ContentPlane Content" id="Content">
+<tr><td class="RLpadding">
+<table class="ContentTable">
+	<tr>
+	<td class="Ltd ALLpadding ">
 <script>ChangFunTitle('FunTitle1')</script>
 <form class="add_form" name="add_form" action="main.php<?PHP echo "?page=record.php&add_type=".$_GET['add_type'];?>" method="post">
 
@@ -74,7 +77,7 @@
 		$today_corde = $Finance->getCordeData($login_group_id,$recordtype,date("Y-m-d"));
 		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注","操作");
 		
-		echo "<table>";		
+		echo "<table class=\"ContentTable2\">";		
 		echo "<tr class='ContentTdColor'>";
 		for ($i=0;$i<count($table_title);$i++){
 			echo "<th>".$table_title[$i]."</th>";
@@ -169,7 +172,7 @@
 		$today_corde = $Finance->getCordeData($login_group_id,$recordtype,date("Y-m-d"));
 		$table_title = array("序号","时间","用户","家庭","主类","子类","金额","地址","备注","操作");
 		
-		echo "<table>";		
+		echo "<table class=\"ContentTable2\">";		
 		echo "<tr class='ContentTdColor'>";
 		for ($i=0;$i<count($table_title);$i++){
 			echo "<th>".$table_title[$i]."</th>";
@@ -217,5 +220,8 @@
 	}
 ?>
 </form>
-</div>
+	</td>
+	</tr>
+</table>
+</td></tr>
 
