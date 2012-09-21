@@ -4,7 +4,7 @@
 	height: 480px;
 	border: 1px solid blue;
 	background-color: #66CC00;
-	font-size: 10px;
+	font-size: 12px;
 }
 
 
@@ -58,6 +58,10 @@ td{
 	white-space:nowrap;
 }
 
+span{
+	cursor: pointer;
+}
+
 .RLpadding{
 	padding: 0px 10px 0px 10px;
 }
@@ -73,50 +77,57 @@ select{
 	display:inline-block;
 }
 
+.Skin1, .Skin2, .Skin3, .Skin4, .Skin5, {
+    cursor: pointer;
+	text-align : center;
+	overflow: hidden;
+	FONT-SIZE: 6px;
+}
 
 .Skin1 {
-	cursor: pointer;
 	outline-style: double;
 	background-color:#66CC00
 }
 
 .Skin2 {
-	cursor: pointer;
 	outline-style: double;
 	background-color:#9900FF
 }
 
 .Skin3 {
-	cursor: pointer;
 	outline-style: double;
 	background-color:#FF6600
 }
 
 .Skin4 {
-	cursor: pointer;
 	outline-style: double;
 	background-color:#FFFF33
 }
 
 .Skin5 {
-	cursor: pointer;
 	outline-style: double;
 	background-color:#333300
 }
 
-.Funa
-{
-	float:left;
-	width:3em;
-	text-decoration:none;
-	padding:0.2em 0.6em;
+
+.ChangeSkinPlane{
+    cursor: pointer;
+	border-style: ridge;
+	border-width : 1px;
+    float: left;
+    overflow: hidden;
 }
-.Funa:hover {background-color: #C7EDCC}
 
-
-li {
-	display:inline;
-	font-size: 14px;
+.ChangeSkinPlaneYes{
+	z-index:100;
+	position: absolute;
+	width:100px;
+	height:35px;
+	overflow:left;
+	left: 200px;
+	top: 42px;
+	color: #FFFFFF;
+	background-color: #000000;
 }
 
 .ContentTdColor {
@@ -129,4 +140,72 @@ li {
 
 .ContentTdColor2 {
 	background-color: #00CC00;
+}
+
+.DateTimePlane{
+	position: absolute;
+	font-family: "微软雅黑";
+	font-size: 9px;
+	z-index:20;
+	height: 8px;
+	width: 50px;
+	left: 258px;
+	top: 42px;
+}
+
+.FunTitleFont{
+	position: absolute;
+	font-family: "微软雅黑";
+	font-size: 14px;
+	text-align : center;
+	z-index:20;
+	height: 20px;
+	top: 76px;
+}
+
+
+.FunTitle1 {
+	width: 56;
+	left: 10px;
+}
+
+.FunTitle2 {
+	width: 56;
+	left: 66px;
+}
+.FunTitle3 {
+	width: 56;
+	left: 142px;
+}
+.FunTitle4 {
+	width: 56;
+	left: 198px;
+}
+
+.FunTitle5 {
+	width: 56;
+	left: 254px;
+}
+
+.MainICO{
+	z-index: 100; 
+	position: absolute;
+	width:auto;
+	height:auto;
+	overflow:left;
+	left: 30px;
+	top: 46px;
+	background-color:transient
+}
+
+.MainMessage {
+	position: absolute;
+	font-family: "微软雅黑";
+	font-size: 16px;
+	text-decoration:blink;
+	color: #3333FF;
+	z-index:30;
+	height: 20px;
+	left: 70px;
+	top: 50px;
 }

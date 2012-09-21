@@ -1,5 +1,5 @@
 <tr><td class="RLpadding">
-<table class="ContentTable">
+<table id="ContentTable" class="ContentTable">
 	<tr>
 	<td class="Ltd ALLpadding ">
 <script>ChangFunTitle('FunTitle1')</script>

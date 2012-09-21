@@ -36,7 +36,7 @@
 </head>
 
 <body>
-	<table  class="BackTable">
+	<table  id="BackTable" class="BackTable">
 			<?PHP 
 				$page = $_GET['page'];
 				 require_once("head.php"); 

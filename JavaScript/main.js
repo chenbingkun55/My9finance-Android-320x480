@@ -54,7 +54,7 @@ function GetCurrentStyle (obj, prop) {
 
 function ChangFunTitle(obj){
 	var FunTitle = document.getElementById(obj);
-	var Content = document.getElementById('Content');
+	var Content = document.getElementById('ContentTable');
 
 	document.getElementById('FunTitle1').style.backgroundColor = "";
 	document.getElementById('FunTitle2').style.backgroundColor = "";
@@ -62,7 +62,7 @@ function ChangFunTitle(obj){
 	document.getElementById('FunTitle4').style.backgroundColor = "";
 	document.getElementById('FunTitle5').style.backgroundColor = "";
 
-	FunTitle.style.backgroundColor=GetCurrentStyle(Content,"backgroundColor");
+	FunTitle.style.backgroundColor=GetCurrentStyle(ContentTable,"backgroundColor");
 }
 
 /*
@@ -88,32 +88,32 @@ function ChangeSkinColor(obj){
 	switch (obj)
 	{
 	case "Skin1":
-		document.getElementById("BodyDiv").style.backgroundColor = "#66CC00";
-		document.getElementById("Content").style.backgroundColor = "#C7EDCC";
+		document.getElementById("BackTable").style.backgroundColor = "#66CC00";
+		document.getElementById("ContentTable").style.backgroundColor = "#C7EDCC";
 		skin = 1;
 		break;
 
 	case "Skin2":
-		document.getElementById("BodyDiv").style.backgroundColor = "#9900FF";
-		document.getElementById("Content").style.backgroundColor = "#CC66FF";
+		document.getElementById("BackTable").style.backgroundColor = "#9900FF";
+		document.getElementById("ContentTable").style.backgroundColor = "#CC66FF";
 		skin = 2;
 		break;
 
 	case "Skin3":
-		document.getElementById("BodyDiv").style.backgroundColor = "#FF6600";
-		document.getElementById("Content").style.backgroundColor = "#FF6666";
+		document.getElementById("BackTable").style.backgroundColor = "#FF6600";
+		document.getElementById("ContentTable").style.backgroundColor = "#FF6666";
 		skin = 3;
 		break;
 
 	case "Skin4":
-		document.getElementById("BodyDiv").style.backgroundColor = "#CCFF33";
-		document.getElementById("Content").style.backgroundColor = "#CCFF99";
+		document.getElementById("BackTable").style.backgroundColor = "#CCFF33";
+		document.getElementById("ContentTable").style.backgroundColor = "#CCFF99";
 		skin = 4;
 		break;
 
 	case "Skin5":
-		document.getElementById("BodyDiv").style.backgroundColor = "#336633";
-		document.getElementById("Content").style.backgroundColor = "#339900";
+		document.getElementById("BackTable").style.backgroundColor = "#336633";
+		document.getElementById("ContentTable").style.backgroundColor = "#339900";
 		skin = 5;
 		break;
 	}
@@ -124,7 +124,7 @@ function ChangeSkinColor(obj){
 	NewDiv.className = "ChangeSkinPlaneYes";
 	NewDiv.style.fontSize="11px";
 	NewDiv.style.textAlign = "center";
-	NewDiv.innerHTML="需要更新皮肤吗?<BR><span style=\"cursor: pointer;\" OnClick=\"SkinSelect("+skin+")\">确定</span>&nbsp;&nbsp;&nbsp;<span style=\"cursor: pointer;\" OnClick=\"SkinSelect()\">取消</span>";
+	NewDiv.innerHTML="需要更新皮肤吗?<BR><span OnClick=\"SkinSelect("+skin+")\">确定</span>&nbsp;&nbsp;&nbsp;<span OnClick=\"SkinSelect()\">取消</span>";
 	ChangeSkinPlane.parentNode.appendChild(NewDiv);  
 }
 
@@ -161,10 +161,10 @@ function HandleStateChange(){
 function PostMessage(TXT){
 	var MainMessage = document.getElementById('MainMessage');
 	if (TXT){
-		MainMessage.innerHTML="<BLINK>"+TXT+"</BLINK>";
+		MainMessage.innerHTML=TXT;
 		setInterval("PostMessage()",15000);
 	} else {
-		MainMessage.innerHTML="<BLINK style=\"font-size: 16px;\">彩贝壳之家 -- 欢迎您!!!</BLINK>";
+		MainMessage.innerHTML="彩贝壳之家 -- 欢迎您!!!";
 	}
 	
 }
@@ -281,8 +281,8 @@ function PrintDate(){
 	}
 
 	text = date.getFullYear()+'.'+(date.getMonth() + 1)+'.'+date.getDate();
-	text += week;
-	text += Hours+':'+Minutes;
+	text += '<br>'+week;
+	text += '<br>'+Hours+':'+Minutes;
 
 	DateTimePlane.innerHTML=text;
 }
