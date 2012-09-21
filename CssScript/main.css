@@ -10,17 +10,6 @@
 	background-color:#66CC00
 }
 
-.IndexICO{
-	z-index: 100; 
-	position: absolute;
-	width:auto;
-	height:auto;
-	overflow:left;
-	left: 20px;
-	top: 100px;
-	background-color:transient
-}
-
 .MainICO{
 	z-index: 100; 
 	position: absolute;
@@ -32,31 +21,6 @@
 	background-color:transient
 }
 
-.IndexTitle{
-	z-index: 20; 
-	position: absolute;
-	width:auto;
-	height:auto;
-	overflow:left;
-	left: 60px;
-	top: 100px;
-	background-color:transient
-}
-
-.IndexLogin{
-	z-index: 20; 
-	position: absolute;
-	width:auto;
-	height:auto;
-	overflow:left;
-	left: 20px;
-	top: 140px;
-	padding-top: 10;
-	padding-left: 0;
-	padding-right: 0;
-	padding-bottom: 10;
-	background-color:transient
-}
 
 
 /* ====================================================== */
@@ -238,14 +202,6 @@
 }
 
 
-.IndexLoginInfo {
-	z-index:20;
-	position: absolute;
-	height: 20px;
-	width: 280;
-	left: 20px;
-	top: 300px;
-} 
 
 /*  重新定义 标签样式 */
 Body{
@@ -341,49 +297,5 @@ span.click{
 	background-color: #00CC00;
 }
 
-.IndexLoginInfo{
-	background-color: #333300;
-	color: #FF6666;
-	font-family: "微软雅黑";
-	font-size: 14px;
-}
 
-/*  按钮和其它定义 */
-
-.LoginInput{
-	margin-left:   20px;
-	color:   #0033FF;
-	width:   160px;
-	font-size:   12px;
-	font-family:   Arial;
-	margin-top:   0px;
-	border:   0px   none;
-	height:   18px;
-} 
-
-.LoginButton {
-	BORDER-RIGHT: #002D96 1px solid; 
-	PADDING-RIGHT: 2px; 
-	BORDER-TOP: #002D96 1px solid; 
-	PADDING-LEFT: 2px; 
-	FONT-SIZE: 12px; 
-	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#66CC00, EndColorStr=#9DBCEA); 
-	BORDER-LEFT: #002D96 1px solid; 
-	CURSOR: hand; COLOR: black; 
-	PADDING-TOP: 2px; 
-	BORDER-BOTTOM: #002D96 1px solid
-}
-
-.LogoutButton {
-	BORDER-RIGHT: #002D96 1px solid; 
-	PADDING-RIGHT: 2px; 
-	BORDER-TOP: #002D96 1px solid; 
-	PADDING-LEFT: 2px; 
-	FONT-SIZE: 12px; 
-	FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#66CC00, EndColorStr=#9DBCEA); 
-	BORDER-LEFT: #002D96 1px solid; 
-	CURSOR: hand; COLOR: black; 
-	PADDING-TOP: 2px; 
-	BORDER-BOTTOM: #002D96 1px solid
-}
 
