@@ -66,7 +66,7 @@
 			echo "<table><tr class='ContentTdColor'>";
 			echo "<th>总收入</th>";
 			echo "<th>平均/每天</th>";
-			echo "</tr><tr>";
+			echo "</tr><tr class='ContentTdColor1'>";
 			echo "<td>".$report_data['0']['0']."</td>";
 			echo "<td>".$report_data['0']['1']."</td>";
 			echo "</tr></table>";
@@ -74,7 +74,7 @@
 			echo "<table><tr class='ContentTdColor'>";
 			echo "<th>总支出</th>";
 			echo "<th>平均/每天</th>";
-			echo "</tr><tr>";
+			echo "</tr><tr class='ContentTdColor1'>";
 			echo "<td>".$report_data['0']['2']."</td>";
 			echo "<td>".$report_data['0']['3']."</td>";
 			echo "</tr></table>";
@@ -82,7 +82,7 @@
 			echo "<table><tr class='ContentTdColor'>";
 			echo "<th>总收支差</th>";
 			echo "<th>总平均/每天差</th>";
-			echo "</tr><tr>";
+			echo "</tr><tr class='ContentTdColor1'>";
 			echo "<td>".$report_data['0']['4']."</td>";
 			echo "<td>".$report_data['0']['5']."</td>";
 			echo "</tr></table>";

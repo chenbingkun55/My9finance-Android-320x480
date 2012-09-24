@@ -1,0 +1,44 @@
+/* 背景颜色 */
+.BackPlane{
+	
+}
+
+.MainMessageFont {
+	
+}
+
+Body{
+	
+}
+
+a:link {color: #3333FF}     /* 未访问的链接 */
+a:visited {color: #3333FF}  /* 已访问的链接 */
+a:hover {color: #C7EDCC}    /* 当有鼠标悬停在链接上 */
+a:active {color: #C0C0C0}   /* 被选择的链接 */
+
+
+/* 内容主体颜色 */
+.Content {
+	
+	
+}
+
+
+/* 表格标题栏颜色 */
+.ContentTdColor {
+	
+	
+}
+
+/* 表格第单数栏颜色 */
+.ContentTdColor1 {
+	
+	
+}
+
+/* 表格第双数栏颜色 */
+.ContentTdColor2 {
+	
+	
+}
+

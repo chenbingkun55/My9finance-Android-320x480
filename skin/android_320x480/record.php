@@ -1,5 +1,5 @@
 <div class="ContentPlane Content" id="Content">
-<script>ChangFunTitle('FunTitle1')</script>
+<script> ChangFunTitle('FunTitle1'); </script>
 <form class="add_form" name="add_form" action="main.php<?PHP echo "?page=record.php&add_type=".$_GET['add_type'];?>" method="post">
 
 <?PHP 	
@@ -203,12 +203,12 @@
 			echo "<br>DEBUG END*********************************************<br>";	
 		}
 	}else{
-		echo "<a href=\"main.php?page=record.php&add_type=out_record\">支出记录</a><br><br>";
-		echo "<a href=\"main.php?page=record.php&add_type=in_record\">收入记录</a><br><br>";
-		echo "<a href=\"main.php?page=fun_manager.php\"><span>功能管理</span></a><br><br>";
-		echo "<a href=\"main.php?page=report.php\">报表</a><br><br>";
-		echo "<a href=\"main.php?page=search.php\">搜索</a><br><br>";
-		echo "<a href=\"main.php?page=about.php\">关于</a>";
+		echo "<a class=\"content\" href=\"main.php?page=record.php&add_type=out_record\">支出记录</a><br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=record.php&add_type=in_record\">收入记录</a><br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php\"><span>功能管理</span></a><br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=report.php\">报表</a><br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=search.php\">搜索</a><br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=about.php\">关于</a>";
 	}
 
 	/*  记录Log  */
