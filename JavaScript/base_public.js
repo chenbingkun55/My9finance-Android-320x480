@@ -1,4 +1,18 @@
 var SubType=new Array();
+/*
+  鼠标经过标题图片时启用,放大缩小功能.
+	OverTitleIMG()	鼠标进入显示大图.
+	OutTitleIMG()	鼠标移出显示小图.
+*/
+
+function OverTitleIMG(){
+	document.getElementById('TitleIMG').src ="../../images/logo_max_color.gif"
+}
+
+
+function OutTitleIMG(){
+	document.getElementById('TitleIMG').src ="../../images/logo_color.gif"
+}
 
 /*
   JavaScript 更改鼠标经过标题栏时,动态变化.
@@ -6,19 +20,17 @@ var SubType=new Array();
 	OutFunTitleColor()	 鼠标移出标题栏.
 	ChangFunTitle()		 鼠标点击标题栏.
 */
-
-function OverFunTitleColor(obj) { 
-	var FunTitleColor = document.getElementById(obj);
-	/* 字体动态 */
-	FunTitleColor.style.Color="#FFFF99";
-	FunTitleColor.style.fontSize="12pt";
-	
-	/* 背景动态
-	if (FunTitleColor.style.backgroundColor != "#c7edcc")
-	{
-		FunTitleColor.style.backgroundColor = "#c7edcd";
-	}*/
-}
+function GetCurrentStyle (obj, prop) {      
+    if (obj.currentStyle) {         
+        return obj.currentStyle[prop];      
+    }       
+    else if (window.getComputedStyle) {         
+        propprop = prop.replace (/([A-Z])/g, "-$1");            
+        propprop = prop.toLowerCase ();         
+        return document.defaultView.getComputedStyle (obj,null)[prop];      
+    }       
+    return null;    
+}    
 
 function OutFunTitleColor(obj) { 
 	var FunTitleColor = document.getElementById(obj);
@@ -35,21 +47,25 @@ function OutFunTitleColor(obj) {
 	}*/
 }
 
+
+function OverFunTitleColor(obj) { 
+	var FunTitleColor = document.getElementById(obj);
+	/* 字体动态 */
+	FunTitleColor.style.Color=GetCurrentStyle(Content,"backgroundColor");
+	FunTitleColor.style.fontSize="8pt";
+	
+	/* 背景动态
+	if (FunTitleColor.style.backgroundColor != "#c7edcc")
+	{
+		FunTitleColor.style.backgroundColor = "#c7edcd";
+	}*/
+}
+
 /*
 	定义各功能内容数组.
 */
 
-function GetCurrentStyle (obj, prop) {      
-    if (obj.currentStyle) {         
-        return obj.currentStyle[prop];      
-    }       
-    else if (window.getComputedStyle) {         
-        propprop = prop.replace (/([A-Z])/g, "-$1");            
-        propprop = prop.toLowerCase ();         
-        return document.defaultView.getComputedStyle (obj,null)[prop];      
-    }       
-    return null;    
-}    
+
 
 
 function ChangFunTitle(obj){
@@ -65,23 +81,6 @@ function ChangFunTitle(obj){
 	FunTitle.style.backgroundColor=GetCurrentStyle(Content,"backgroundColor");
 }
 
-/*
-  鼠标经过标题图片时启用,放大缩小功能.
-	OverTitleIMG()	鼠标进入显示大图.
-	OutTitleIMG()	鼠标移出显示小图.
-*/
-
-function OverTitleIMG(){
-	var TitleIMG=document.getElementById("TitleIMG");
-	TitleIMG.src="../../images/logo_max_color.gif";
-}
-
-
-function OutTitleIMG(){
-	var TitleIMG=document.getElementById("TitleIMG");
-	TitleIMG.src="../../images/logo_color.gif";
-}
-
 
 function ChangeSkinColor(obj){
 	var skin;
@@ -94,26 +93,26 @@ function ChangeSkinColor(obj){
 		break;
 
 	case "Skin2":
-		document.getElementById("BodyDiv").style.backgroundColor = "#9900FF";
-		document.getElementById("Content").style.backgroundColor = "#CC66FF";
+		document.getElementById("BodyDiv").style.backgroundColor = "#6633CC";
+		document.getElementById("Content").style.backgroundColor = "#00CCCC";
 		skin = 2;
 		break;
 
 	case "Skin3":
-		document.getElementById("BodyDiv").style.backgroundColor = "#FF6600";
-		document.getElementById("Content").style.backgroundColor = "#FF6666";
+		document.getElementById("BodyDiv").style.backgroundColor = "#FF9900";
+		document.getElementById("Content").style.backgroundColor = "#FFCCCC";
 		skin = 3;
 		break;
 
 	case "Skin4":
-		document.getElementById("BodyDiv").style.backgroundColor = "#CCFF33";
-		document.getElementById("Content").style.backgroundColor = "#CCFF99";
+		document.getElementById("BodyDiv").style.backgroundColor = "#FFFF66";
+		document.getElementById("Content").style.backgroundColor = "#33FFFF";
 		skin = 4;
 		break;
 
 	case "Skin5":
-		document.getElementById("BodyDiv").style.backgroundColor = "#336633";
-		document.getElementById("Content").style.backgroundColor = "#339900";
+		document.getElementById("BodyDiv").style.backgroundColor = "#000000";
+		document.getElementById("Content").style.backgroundColor = "#C0C0C0";
 		skin = 5;
 		break;
 	}
@@ -172,30 +171,6 @@ function PostMessage(TXT){
 
 function logout(){
 	top.location='logout.php';
-}
-
-function check(){
-	var loginform = document.getElementById('login-form');
-	var info="";
-	var stats=true;
-
-	/* match  以非空字符开始,中间不允许有空格,至少有个字符. */
-	if(!loginform.username.value.match(/^\S+$/)){
-		info+="用户名不能使用空格或为空!\n";
-		stats = false;
-	} else if ( loginform.username.value.length >= 15){
-		info+="用户名不能超过15个字符!\n";
-		stats = false;
-	}
-
-	if (loginform.password.value == ""){
-		info+="用户密码不能为空!\n";
-		stats = false;
-	}
-	if(!stats){
-		alert(info);
-	}
-	return stats;
 }
 
 function SelectType(sid){
@@ -294,11 +269,6 @@ function PrintMessage(str){
 }
 
 
-function PrintCreateDateShort(str){
-	ss = str.split(" ");
-	document.write(ss[1]);
-}
-
 /* 获取路径变量,来自网络第三方: http://www.cnblogs.com/sohighthesky/archive/2010/01/21/script-querystring.html */
 var queryStrings=function() {//get url querystring
     var params=document.location.search,reg=/(?:^\?|&)(.*?)=(.*?)(?=&|$)/g,temp,args={};
@@ -315,6 +285,7 @@ function Del(ID){
 	var args=queryStrings();
 	window.location.replace('main.php?page='+args.page+'&add_type='+args.add_type+'&Did='+ID+'&Lid='+args.Lid);
 }
+
 
 function ListSubtype(ID){
 	var args=queryStrings();

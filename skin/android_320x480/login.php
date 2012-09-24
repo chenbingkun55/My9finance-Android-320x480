@@ -8,8 +8,9 @@
 <html>
 <head>
 <title><?PHP echo $_TITLE?></title>
-<link href="<?PHP echo CSS_PATH."main.css"?>" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
+<link href="<?PHP echo CSS_PATH."base_public.css"?>" rel="stylesheet" type="text/css" />
+<link href="<?PHP echo CSS_PATH."user_skin.".$login_skin_id.".css"?>" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?PHP echo JS_PATH."base_public.js"?>"></script>
 </head>
 
 <body>

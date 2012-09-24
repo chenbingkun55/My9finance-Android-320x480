@@ -21,27 +21,27 @@
 		$_SESSION['__userdata']['0']['skin'] = $_GET['skin'];
 		$login_skin_id = $_SESSION['__userdata']['0']["skin"];
 	}
-	
 ?>
 
 <html>
 <head>
 <title><?PHP echo $_TITLE?></title>
-<link href="<?PHP echo CSS_PATH."main.".$login_skin_id.".css"?>" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<?PHP echo JS_PATH."main.js"?>"></script>
+<link href="<?PHP echo CSS_PATH."base_public.css"?>" rel="stylesheet" type="text/css" />
+<link href="<?PHP echo CSS_PATH."user_skin.".$login_skin_id.".css"?>" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?PHP echo JS_PATH."base_public.js"?>"></script>
 </head>
 
 <body>
 	<div class="Backplane" id="BodyDiv">
 		<?PHP 
 			$page = $_GET['page'];
-			 require_once("head.php"); 
+			 require("head.php"); 
 			 if (!$page){
-				require_once("record.php");
+				require("record.php");
 			 }else{
-				require_once("$page");
+				require("$page");
 			 }
-			 require_once("foot.php"); 
+			 require("foot.php"); 
 		?>
 	</div>
 </body>

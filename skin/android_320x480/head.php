@@ -44,11 +44,11 @@
 	?>
 </div>
 <div class="ChangeSkinPlane" id="ChangeSkinPlane">
-	<span class="Skin1" id="Skin1" title="蓝色主题" onClick="ChangeSkinColor('Skin1')">1</span>
-	<span class="Skin2" id="Skin2" title="灰色主题" onClick="ChangeSkinColor('Skin2')">2</span>
-	<span class="Skin3" id="Skin3" title="绿色主题" onClick="ChangeSkinColor('Skin3')">3</span>
-	<span class="Skin4" id="Skin4" title="粉色主题" onClick="ChangeSkinColor('Skin4')">4</span>
-	<span class="Skin5" id="Skin5" title="黄色主题" onClick="ChangeSkinColor('Skin5')">5</span>
+	<span class="Skin1" id="Skin1" title="绿色主题" onClick="ChangeSkinColor('Skin1')">1</span>
+	<span class="Skin2" id="Skin2" title="蓝色主题" onClick="ChangeSkinColor('Skin2')">2</span>
+	<span class="Skin3" id="Skin3" title="红色主题" onClick="ChangeSkinColor('Skin3')">3</span>
+	<span class="Skin4" id="Skin4" title="黄色主题" onClick="ChangeSkinColor('Skin4')">4</span>
+	<span class="Skin5" id="Skin5" title="黑色主题" onClick="ChangeSkinColor('Skin5')">5</span>
 </div>
 
 <div class="DateTimePlane DateTimePlaneFont" align="right" id="DateTimePlane">

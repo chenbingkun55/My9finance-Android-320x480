@@ -157,7 +157,7 @@
 					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ? true:false;
 					
 					/*  记录日志  */
-					$man_name=$Finance->convertID($login_user_id,$man_id,"out_mantype");
+					$man_name=$Finance->convertID($man_id,"out_mantype");
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "添加支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display : "添加支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display;
 					/*  消息提醒  */
@@ -185,7 +185,7 @@
 				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
 
 				/*  记录日志  */
-				$man_name=$Finance->convertID($login_user_id,$Lid,"out_mantype");
+				$man_name=$Finance->convertID($Lid,"out_mantype");
 				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 				$text_log = $YesNo ? "删除支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
 					/*  消息提醒  */
@@ -202,7 +202,7 @@
 
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Aid);
-				$man_name=$Finance->convertID($login_user_id,$Lid,"out_mantype");
+				$man_name=$Finance->convertID($Lid,"out_mantype");
 				echo "修改-".$man_name."-的,子支出类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"subtype\" size=\"10\" value=\"".$alter_corde['0']['name']."\"></span>";
 				echo "是否显示";
@@ -216,7 +216,7 @@
 				echo "<INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\">";
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ALTER."\">";
 			}else{
-				$man_name=$Finance->convertID($login_user_id,$Lid,"out_mantype");
+				$man_name=$Finance->convertID($Lid,"out_mantype");
 				echo "添加-".$man_name."-的,子支出类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"subtype\" size=\"10\" value=\"\"></span>";
 				echo "是否显示";
@@ -384,7 +384,7 @@
 					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ?  true:false;
 
 					/*  记录日志  */
-					$man_name=$Finance->convertID($login_user_id,$man_id,"out_mantype");
+					$man_name=$Finance->convertID($man_id,"out_mantype");
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "添加收入子类-成功,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display : "添加收入子类-失败,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display;
 					/*  消息提醒  */
@@ -398,7 +398,7 @@
 					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
 					
 					/*  记录日志  */
-					$man_name=$Finance->convertID($login_user_id,$man_id,"in_mantype");
+					$man_name=$Finance->convertID($man_id,"in_mantype");
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "修改收入子类-成功,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display : "修改收入子类-失败,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display;
@@ -412,7 +412,7 @@
 				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
 				
 				/*  记录日志  */
-				$man_name=$Finance->convertID($login_user_id,$Lid,"in_mantype");
+				$man_name=$Finance->convertID($Lid,"in_mantype");
 				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 				$text_log = $YesNo ? "删除支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2;
 					/*  消息提醒  */
@@ -427,7 +427,7 @@
 				}
 			}
 
-			$man_name=$Finance->convertID($login_user_id,$Lid,"in_mantype");
+			$man_name=$Finance->convertID($Lid,"in_mantype");
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Aid);
 				echo "修改-".$man_name."-的,子支出类别 名称:&nbsp;<br>";
@@ -724,12 +724,12 @@
 			}
 			break;
 	default:
-		echo "<a href=\"main.php?page=fun_manager.php&add_type=out_mantype\"><span>支出类别管理</span></a>";
+		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=out_mantype\"><span>支出类别管理</span></a>";
 		echo "<br><br>";
-		echo "<a href=\"main.php?page=fun_manager.php&add_type=in_mantype\"><span>收入类别管理</span></a>";
+		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=in_mantype\"><span>收入类别管理</span></a>";
 		echo "<br><br>";
-		echo "<a href=\"main.php?page=fun_manager.php&add_type=address\"><span>地址管理</span></a><br><br>";
-		echo "<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>家庭管理</span></a>";
+		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=address\"><span>地址管理</span></a><br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=family\"><span>家庭管理</span></a>";
 	}
 	if (! empty($text_log)) {
 		$Finance->CrodeLog($text_log);
