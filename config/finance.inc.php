@@ -924,7 +924,7 @@
 				$where_sql .= is_numeric($subtype_id)  ?  " AND subtype_id = '".$subtype_id."' " : "" ;
 				$where_sql .=  is_numeric($address)  ?  " AND addr_id = '".$address."' " : "" ;
 				$where_sql .= (is_numeric($money) && $money != 0)  ?  " AND money = '".$money."' " : "" ;
-				$where_sql .= $notes != ""  ?  " AND notes = '".$notes."' " : "" ;
+				$where_sql .= $notes != ""  ?  " AND notes like '%".$notes."%' " : "" ;
 
 				switch ( $sdate ) {
 					case "week":
