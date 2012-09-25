@@ -10,7 +10,7 @@
 	$login_user_id = $_SESSION['__userdata']['0']["id"];
 	$login_user_session = $_SESSION['__userdata']['0']["session"];
 	$login_last_date = $_SESSION['__userdata']['0']["last_date"];
-	$login_groupname = $_SESSION['__groupdata']['0']['groupname'];
+	$login_family_num = $_SESSION['__groupdata']['0']['groupname'];
 	$login_group_alias = $_SESSION['__groupdata']['0']['group_alias'];
 	$login_groupadmin_id = $_SESSION['__groupdata']['0']['groupadmin_id'];
 	$login_group_id = $_SESSION['__groupdata']['0']['id'];

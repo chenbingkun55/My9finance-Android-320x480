@@ -107,7 +107,7 @@ table {
 				</td></tr>
 				<tr><td>&nbsp;</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_USERNAME ?>&nbsp;-></span>
+					<span><?PHP echo $_FAMILY_NUM.".".$_USERNAME ?>&nbsp;-></span>
 				</td><td>
 					<span> <input class="LoginInput" type="text" name="username"></span>
 				</td></tr>

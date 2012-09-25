@@ -23,6 +23,7 @@
 
 	$username = $_POST['username'];
 	$password = $_POST['password'];
+	$logindata=explode(".",$username);
 
 	/* 判断登录用户 */
 	$_SESSION['__userdata'] = $Finance->login($username,  $password);
@@ -41,8 +42,7 @@
 	} else if ( $_SESSION['__userdata'] == '2' ) {
 		$_SESSION['__global_logid']=2 ;
 		$text_log = "用户: [".$username."] 登录失败,密码错误.";
-	} else if( $_SESSION['__userdata']['0']["username"] == $username ){
-		$_SESSION['__groupdata'] = $Finance->getUserGroupData($_SESSION['__userdata']['0']["id"]);
+	} else if( $_SESSION['__userdata']['0']["username"] == $logindata[1] ){
 		$Finance->refurbishUserSession($_SESSION['__userdata']['0']["id"]);
 
 		if(DEBUG_YES){ 

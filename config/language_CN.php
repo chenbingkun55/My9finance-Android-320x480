@@ -4,6 +4,9 @@
     $_USERNAME = "用户名";
 	$_USERALIAS = "显示名";
 	$_FAMILY = "家庭名";
+	$_FAMILY_NUM = "家庭号";
+	$_MAIL = "邮箱";
+	$_QQ = "QQ号";
     $_PASSWORD = "密码";
     $_YES_PASSWORD = "确认密码";
     $_IN = "收入";

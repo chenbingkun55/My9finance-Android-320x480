@@ -4,15 +4,7 @@
 	header("Content-Type:text/html;charset=UTF-8"); 
 
 
-
+	echo date('Y-m-d H:i:s',time());
 ?>
-<div id="one">WWWWWW</div>
-
-<script>
-var one=document.getElementById("one");
-one.onclick=function(){
-	this.style.backgroundColor="#6600FF";
-}
-</script>
 
 

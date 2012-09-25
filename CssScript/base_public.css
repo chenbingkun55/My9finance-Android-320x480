@@ -34,8 +34,9 @@
 
 .UserInfo {
 	position: absolute;
+	overflow: hidden;
 	z-index:20;
-	height: 10px;
+	height: 20px;
 	width: 240px;
 	left: 20px;
 	top: 10px;

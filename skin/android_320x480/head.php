@@ -5,10 +5,8 @@
 	$login_user_id = $_SESSION['__userdata']['0']["id"];
 	$login_user_session = $_SESSION['__userdata']['0']["session"];
 	$login_last_date = $_SESSION['__userdata']['0']["last_date"];
-	$login_groupname = $_SESSION['__groupdata']['0']['groupname'];
-	$login_group_alias = $_SESSION['__groupdata']['0']['group_alias'];
-	$login_groupadmin_id = $_SESSION['__groupdata']['0']['groupadmin_id'];
-	$login_group_id = $_SESSION['__groupdata']['0']['id'];
+	$login_family_num = $_SESSION['__userdata']['0']['family_num'];
+	$login_family_adm = $_SESSION['__userdata']['0']['family_adm'];
 	$login_skin_id = $_SESSION['__userdata']['0']["skin"];
 	if ( ! isset($_SESSION['date_num']))  $_SESSION['date_num'] = 0;
 
@@ -19,10 +17,8 @@
 		$str .= "用户ID: ".$login_user_id;
 		$str .= "用户Session: ".$login_user_session;
 		$str .= "用户最后登录: ".$login_last_date;
-		$str .= "用户组名: ".$login_groupname;
-		$str .= "用户组别名: ".$login_group_alias;
-		$str .= "用户组管理员ID: ".$login_groupadmin_id;
-		$str .= "用户组ID: ".$login_group_id;
+		$str .= "用户组号: ".$login_family_num;
+		$str .= "用户组管理员: ".$login_family_adm;
 		$str .= "DEBUG END*********************************************";
 		echo "<script>alert('".$str."')</script>";
 	}
@@ -30,16 +26,12 @@
 
 <div class="UserInfo">
 	<?PHP
-		if ( $login_user_alias ) {
-			echo "<div><a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_alias."</a>&nbsp;&nbsp;".$_HELLO;
-		} else {
-			echo "<div><a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_name."&</a>nbsp;&nbsp;".$_HELLO;
-		}
+			echo "<div>[ ".$login_family_num." ]->";
 
-		if ( $login_group_alias ) {
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$_RESIDE_GROUP.":&nbsp;".$login_group_alias."</div>";
+		if ( $login_user_alias ) {
+			echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_alias."</a>&nbsp;&nbsp;".$_HELLO."</div>";
 		} else {
-			echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$_RESIDE_GROUP.":&nbsp;".$login_groupname."</div>";
+			echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_name."&</a>nbsp;&nbsp;".$_HELLO."</div>";
 		}
 	?>
 </div>

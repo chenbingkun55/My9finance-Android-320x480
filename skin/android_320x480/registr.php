@@ -80,11 +80,13 @@
 		$registr = $_POST['registr'];
 		$username = $_POST['username'];
 		$useralias = $_POST['useralias'];
-		$family = $_POST['family'];
+		$family_num = $_POST['family_num'];
+		$email = $_POST['email'];
+		$qq = $_POST['qq'];
 		$password = $_POST['password'];
 
 		if ( $registr == 1 ){
-			if ($Finance->RegistrUser($username,$useralias,$password,$family)!=false){
+			if ($Finance->RegistrUser($username,$useralias,$password,$family_num,$email,$qq)!=false){
 				/* 判断注册用户 */
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
@@ -127,9 +129,19 @@
 					<span> <input class="LoginInput" type="text" name="useralias"></span>
 				</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_FAMILY ?>&nbsp;-></span>
+					<span><?PHP echo $_FAMILY_NUM."[3-10]位" ?><BR>[结合用户名登录]&nbsp;-></span>
 				</td><td>
-					<span> <input class="LoginInput" type="text" name="family"></span>
+					<span> <input class="LoginInput" type="text" name="family_num"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_MAIL ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="email"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_QQ ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="qq"></span>
 				</td></tr>
 				<tr><td class="Rtd">
 					<span><?PHP echo $_PASSWORD ?>&nbsp;-></span>

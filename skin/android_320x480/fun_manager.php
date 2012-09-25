@@ -43,7 +43,7 @@
 				$mantype = $_POST['mantype'];
 				$is_display = $_POST['is_display'] == "on" ?  1 : 0;
 				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$mantype,$is_display,0))==true ? true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_num,$mantype,$is_display,0))==true ? true:false;
 
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
@@ -54,8 +54,8 @@
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$alter_id);
-					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? true:false;
+					$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$alter_id);
+					$YesNo =($Finance->updateTypeData($recordtype,$login_family_num,$alter_id,$mantype,$is_display))==true ? true:false;
 
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
@@ -67,8 +67,8 @@
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$Did);
-				$str =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? "成功<br>":"失败<br>";
+				$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$Did);
+				$str =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? "成功<br>":"失败<br>";
 					
 				/*  记录日志  */
 				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
@@ -79,14 +79,14 @@
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
 				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid,$UP);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid,$UP);
 				}else{
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid);
 				}
 			}
 
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$Aid);
+				$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$Aid);
 
 				echo "修改主支出类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"mantype\" size=\"10\" value=\"".$alter_corde['0']['name']."\"></span>";
@@ -154,7 +154,7 @@
 				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 				$man_id = $_POST['man_id'];
 				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ? true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_num,$subtype,$is_display,$Lid))==true ? true:false;
 					
 					/*  记录日志  */
 					$man_name=$Finance->convertID($man_id,"out_mantype");
@@ -166,12 +166,12 @@
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$man_id,$alter_id);
+					$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$man_id,$alter_id);
 
-					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
+					$YesNo =($Finance->updateTypeData($recordtype,$login_family_num,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
 
 					/*  记录日志  */
-					$man_name=$Finance->convertID($login_user_id,$man_id,"out_mantype");
+					$man_name=$Finance->convertID($login_family_num,$man_id,"out_mantype");
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
 					$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
 					$text_log = $YesNo ? "修改支出子类-成功,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display : "修改支出子类-失败,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display;
@@ -181,8 +181,8 @@
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+				$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$Lid,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
 
 				/*  记录日志  */
 				$man_name=$Finance->convertID($Lid,"out_mantype");
@@ -194,14 +194,14 @@
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
 				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_user_id,$Lid,$Mid,$UP);
+					$Finance->down_up($recordtype,$login_family_num,$Lid,$Mid,$UP);
 				}else{
-					$Finance->down_up($recordtype,$login_user_id,$Lid,$Mid);
+					$Finance->down_up($recordtype,$login_family_num,$Lid,$Mid);
 				}
 			}
 
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Aid);
+				$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$Lid,$Aid);
 				$man_name=$Finance->convertID($Lid,"out_mantype");
 				echo "修改-".$man_name."-的,子支出类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"subtype\" size=\"10\" value=\"".$alter_corde['0']['name']."\"></span>";
@@ -270,7 +270,7 @@
 				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 				if($add_submit == 1){
 
-					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$mantype,$is_display,0))==true ? true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_num,$mantype,$is_display,0))==true ? true:false;
 
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
@@ -281,8 +281,8 @@
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$alter_id);
-					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$mantype,$is_display))==true ? true:false;
+					$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$alter_id);
+					$YesNo =($Finance->updateTypeData($recordtype,$login_family_num,$alter_id,$mantype,$is_display))==true ? true:false;
 					
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
@@ -294,8 +294,8 @@
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+				$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
 				
 				/*  记录日志  */
 				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
@@ -306,14 +306,14 @@
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
 				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid,$UP);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid,$UP);
 				}else{
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid);
 				}
 			}
 
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getManType($login_user_id,$recordtype,1,$Aid);
+				$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$Aid);
 
 				echo "修改主收入类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"mantype\" size=\"10\" value=\"".$alter_corde['0']['name']."\"></span>";
@@ -335,7 +335,7 @@
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
 			}
 
-			$type_corde = $Finance->getManType($login_user_id,$recordtype,1,0);
+			$type_corde = $Finance->getManType($login_family_num,$recordtype,1,0);
 
 			$table_title = array("序号","状态","名称","排序","主类操作","子类操作");
 			
@@ -381,7 +381,7 @@
 				$subtype = $_POST['subtype'];
 				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$subtype,$is_display,$Lid))==true ?  true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_num,$subtype,$is_display,$Lid))==true ?  true:false;
 
 					/*  记录日志  */
 					$man_name=$Finance->convertID($man_id,"out_mantype");
@@ -393,9 +393,9 @@
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$man_id,$alter_id);
+					$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$man_id,$alter_id);
 
-					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
+					$YesNo =($Finance->updateTypeData($recordtype,$login_family_num,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
 					
 					/*  记录日志  */
 					$man_name=$Finance->convertID($man_id,"in_mantype");
@@ -408,8 +408,8 @@
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+				$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$Lid,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
 				
 				/*  记录日志  */
 				$man_name=$Finance->convertID($Lid,"in_mantype");
@@ -421,15 +421,15 @@
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
 				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_user_id,$Lid,$Mid,$UP);
+					$Finance->down_up($recordtype,$login_family_num,$Lid,$Mid,$UP);
 				}else{
-					$Finance->down_up($recordtype,$login_user_id,$Lid,$Mid);
+					$Finance->down_up($recordtype,$login_family_num,$Lid,$Mid);
 				}
 			}
 
 			$man_name=$Finance->convertID($Lid,"in_mantype");
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getSubType($login_user_id,$recordtype,1,$Lid,$Aid);
+				$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$Lid,$Aid);
 				echo "修改-".$man_name."-的,子支出类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"subtype\" size=\"10\" value=\"".$alter_corde['0']['name']."\"></span>";
 				echo "是否显示";
@@ -451,7 +451,7 @@
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
 			}
 
-			$type_corde = $Finance->getSubType($login_user_id,$recordtype,1,$Lid,0);
+			$type_corde = $Finance->getSubType($login_family_num,$recordtype,1,$Lid,0);
 
 			$table_title = array("序号","状态","名称","排序","子类操作","返回主类");
 			
@@ -494,7 +494,7 @@
 				$address = $_POST['address'];
 				$_POST['is_display'] == "on" ? $is_display = "1" : $is_display = "0" ;
 				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_user_id,$address,1,0))==true ? true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_num,$address,1,0))==true ? true:false;
 
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
@@ -505,9 +505,9 @@
 
 				if($alter_submit == 1){
 					$alter_id = $_POST['alter_id'];
-					$alter_corde=$Finance->getAddress($login_user_id,1,$alter_id);
+					$alter_corde=$Finance->getAddress($login_family_num,1,$alter_id);
 					
-					$YesNo =($Finance->updateTypeData($recordtype,$login_user_id,$alter_id,$address,$is_display))==true ? true:false;
+					$YesNo =($Finance->updateTypeData($recordtype,$login_family_num,$alter_id,$address,$is_display))==true ? true:false;
 
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "显示" : "不显示";
@@ -519,8 +519,8 @@
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getAddress($login_user_id,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+				$alter_corde=$Finance->getAddress($login_family_num,1,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
 					
 				/*  记录日志  */
 				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
@@ -531,14 +531,14 @@
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
 				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid,$UP);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid,$UP);
 				}else{
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid);
 				}
 			}
 
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getAddress($login_user_id,1,$Aid);
+				$alter_corde=$Finance->getAddress($login_family_num,1,$Aid);
 
 				echo "修改地址名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"address\" size=\"10\" value=\"".$alter_corde['0']['name']."\"></span>";
@@ -560,7 +560,7 @@
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
 			}
 	
-			$address_corde = $Finance->getAddress($login_user_id,1);
+			$address_corde = $Finance->getAddress($login_family_num,1);
 
 			$table_title = array("序号","状态","名称","排序","操作");
 			
@@ -609,17 +609,17 @@
 				$alter_id = $_POST['alter_id'];
 
 				if($add_submit == 1){
-					$YesNo = ($Finance->AddUser($is_disable,$user_name,$user_alias,$user_password,$notes,$login_group_id))==true ? true:false;
+					$YesNo = ($Finance->AddUser($is_disable,$user_name,$user_alias,$user_password,$notes,$login_family_numd))==true ? true:false;
 
 					/*  记录日志  */
 					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
-					$text_log = $YesNo ? "添加用户-成功,状态:".$is_disable."用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_groupname.",备注:".$notes : "添加用户-失败,用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_groupname.",备注:".$notes;
+					$text_log = $YesNo ? "添加用户-成功,状态:".$is_disable."用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_family_num.",备注:".$notes : "添加用户-失败,用户名: ".$user_name.",用户别名: ".$user_alias.",用户密码:".$user_password.",用户属组:".$login_family_num.",备注:".$notes;
 					/*  消息提醒  */
 					$_SESSION['__global_logid'] = $YesNo ?  5030 : 1030;
 				}
 
 				if($alter_submit == 1){
-					$alter_corde=$Finance->getUsers($login_user_id,1,$alter_id);
+					$alter_corde=$Finance->getUsers($login_family_num,1,$alter_id);
 
 					$YesNo =($Finance->updateUser($is_disable,$user_name,$user_alias,$user_password,$notes,$alter_id))==true ? true:false;
 					
@@ -627,33 +627,33 @@
 					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
 					$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";
 
-					$text_log = $YesNo ? "修改用户-成功,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes : "修改用户-失败,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_groupname.",原备注:".$alter_corde['0']['notes']."改为:".$notes;
+					$text_log = $YesNo ? "修改用户-成功,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_family_num.",原备注:".$alter_corde['0']['notes']."改为:".$notes : "修改用户-失败,原状态:".$is_disable2.",改为:".$is_disable.",原用户名: ".$alter_corde['0']['username'].",改为:".$user_name.",原用户别名:".$alter_corde['0']['user_alias'].",改为:".$user_alias.",原用户密码:".$alter_corde['0']['password'].",改为:".$user_password.",用户属组:".$login_family_num.",原备注:".$alter_corde['0']['notes']."改为:".$notes;
 					/*  消息提醒  */
 					$_SESSION['__global_logid'] = $YesNo ?  5031 : 1031;
 				}
 			}
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getUsers($login_user_id,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_user_id,$Did))==true ? true:false;
+				$alter_corde=$Finance->getUsers($login_family_num,1,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
 					
 				/*  记录日志  */
 				$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";
-				$text_log = $YesNo ? "删除用户-成功,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'] : "删除用户-失败,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_groupname.",备注:".$alter_corde['0']['notes'];
+				$text_log = $YesNo ? "删除用户-成功,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_family_num.",备注:".$alter_corde['0']['notes'] : "删除用户-失败,状态:".$is_disable2."用户名: ".$alter_corde['0']['username'].",用户别名: ".$alter_corde['0']['user_alias'].",用户密码:".$alter_corde['0']['password'].",用户属组:".$login_family_num.",备注:".$alter_corde['0']['notes'];
 				/*  消息提醒  */
 				$_SESSION['__global_logid'] = $YesNo ?  5032 : 1032;
 			}
 
 			if (!(is_null($Mid)) && !(is_null($login_user_id))){
 				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid,$UP);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid,$UP);
 				}else{
-					$Finance->down_up($recordtype,$login_user_id,0,$Mid);
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid);
 				}
 			}
 
 			if (!(is_null($Aid)) && !(is_null($login_user_id))){
-				$alter_corde=$Finance->getUsers($login_user_id,1,$Aid);
+				$alter_corde=$Finance->getUsers($login_family_num,1,$Aid);
 
 				echo "状态:";
 				if ($alter_corde['0']['is_disable']=="0"){
@@ -690,7 +690,7 @@
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
 			}
 
-			$users_corde = $Finance->getUserData($login_group_id);
+			$users_corde = $Finance->getUserData($login_family_num);
 			
 			$table_title = array("序号","状态","用户名","别名","家庭","备注","最后登录","操作");
 			
@@ -707,7 +707,7 @@
 				echo "<td>".$YesNo=$users_corde[$i]['is_disable']? "禁用":"启用"."</td>";
 				echo "<td>".$users_corde[$i]['username']."</td>";
 				echo "<td>".$users_corde[$i]['user_alias']."</td>";
-				echo "<td>".$login_groupname."</td>";
+				echo "<td>".$login_family_num."</td>";
 				echo "<td>".$users_corde[$i]['notes']."</td>";
 				echo "<td>".$users_corde[$i]['last_date']."</td>";
 				echo "<td><span class=\"click\" onClick=\"Alter('".$users_corde[$i]['id']."')\">修改</span>|<span class=\"click\" onClick=\"Del('".$users_corde[$i]['id']."')\">删除</span></td>";
