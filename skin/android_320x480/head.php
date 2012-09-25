@@ -61,23 +61,28 @@
 
 <div class="MainMessage MainMessageFont" id="MainMessage" onLoad=PostMessage()>
 </div>
-  
+
+<a href="main.php?page=record.php">  
 <div class="FunTitle1 FunTitleFont" id="FunTitle1"  onMouseOver="OverFunTitleColor('FunTitle1')" onMouseOut="OutFunTitleColor('FunTitle1')" onclick="ChangFunTitle('FunTitle1')"> 
-		<a href="main.php?page=record.php"><span>主页</span></a>   
-</div>
+		<span>主页</span>   
+</div></a>
 
+<a href="main.php?page=fun_manager.php">
 <div class="FunTitle2 FunTitleFont" id="FunTitle2" onMouseOver="OverFunTitleColor('FunTitle2')" onMouseOut="OutFunTitleColor('FunTitle2')" onclick="ChangFunTitle('FunTitle2')"> 
-	<a href="main.php?page=fun_manager.php"><span>功能管理</span></a>   
-</div>
+	<span>功能管理</span>   
+</div></a>
 
+<a href="main.php?page=report.php">
 <div class="FunTitle3 FunTitleFont" id="FunTitle3" onMouseOver="OverFunTitleColor('FunTitle3')" onMouseOut="OutFunTitleColor('FunTitle3')" onclick="ChangFunTitle('FunTitle3')"> 
-	<a href="main.php?page=report.php"><span>报表</span></a>   
-</div>
+	<span>报表</span>   
+</div></a>
 
+<a href="main.php?page=search.php">
 <div class="FunTitle4 FunTitleFont" id="FunTitle4" onMouseOver="OverFunTitleColor('FunTitle4')" onMouseOut="OutFunTitleColor('FunTitle4')" onclick="ChangFunTitle('FunTitle4')"> 
-	<a href="main.php?page=search.php"><span>搜索</span></a>   
-</div>
-		
+	<span>搜索</span>   
+</div></a>
+
+<a href="main.php?page=about.php">		
 <div class="FunTitle5 FunTitleFont" id="FunTitle5" onMouseOver="OverFunTitleColor('FunTitle5')" onMouseOut="OutFunTitleColor('FunTitle5')" onclick="ChangFunTitle('FunTitle5')"> 
-	<a href="main.php?page=about.php"><span>关于</span></a>   
-</div>
+	<span>关于</span>   
+</div></a>

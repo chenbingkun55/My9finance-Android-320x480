@@ -133,7 +133,7 @@
 	position: absolute;
 	z-index:20;
 	height: 20px;
-	width: 56;
+	width: 46;
 	left: 20px;
 	top: 65px;
 }
@@ -142,16 +142,16 @@
 	position: absolute;
 	z-index:20;
 	height: 20px;
-	width: 56;
-	left: 76px;
+	width: 68;
+	left: 66px;
 	top: 65px;
 }
 .FunTitle3 {
 	position: absolute;
 	z-index:20;
 	height: 20px;
-	width: 56;
-	left: 132px;
+	width: 50;
+	left: 134px;
 	top: 65px;
 }
 .FunTitle4 {
