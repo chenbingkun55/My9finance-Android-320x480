@@ -1,23 +1,86 @@
-	function check(){
-		var loginform = document.getElementById('login-form');
-		var info="";
-		var stats=true;
-
-		/* match  ÒÔ·Ç¿Õ×Ö·û¿ªÊ¼,ÖĞ¼ä²»ÔÊĞíÓĞ¿Õ¸ñ,ÖÁÉÙÓĞ¸ö×Ö·û. */
-		if(!loginform.username.value.match(/^\S+$/)){
-			info+="ÓÃ»§Ãû²»ÄÜÊ¹ÓÃ¿Õ¸ñ»òÎª¿Õ!\n";
-			stats = false;
-		} else if ( loginform.username.value.length >= 15){
-			info+="ÓÃ»§Ãû²»ÄÜ³¬¹ı15¸ö×Ö·û!\n";
-			stats = false;
-		}
-
-		if (loginform.password.value == ""){
-			info+="ÓÃ»§ÃÜÂë²»ÄÜÎª¿Õ!\n";
-			stats = false;
-		}
-		if(!stats){
-			alert(info);
-		}
-		return stats;
+function validate_email(field,alerttxt)
+{
+	with (field)
+	{
+		apos=value.indexOf("@")
+		dotpos=value.lastIndexOf(".")
+		if (apos<1||dotpos-apos<2) 
+			{alert(alerttxt);return false}
+		else {return true}
 	}
+}
+
+function validate_username(field,alerttxt)
+{
+	with (field)
+	{
+		if ( value.length >= 15 || ! value.match(/^\S+$/) || ! value.match(/^\S+$/)) 
+			{alert(alerttxt);return false}
+		else {return true}
+	}
+}
+
+function validate_password(field,alerttxt)
+{
+	with (field)
+	{
+		if ( value.length < 6 || ! value.match(/^\S+$/) ) 
+			{alert(alerttxt);return false}
+		else {return true}
+	}
+}
+
+function validate_yes_password(field,field2,alerttxt)
+{
+	with (field)
+	{
+		if ( value != field2.value ) 
+			{alert(alerttxt);return false}
+		else {return true}
+	}
+}
+
+function validate_qq(field,alerttxt)
+{
+	
+	with (field)
+	{
+		if ( isNaN(value) || ! value.match(/^\S+$/) || value.length >= 20 ) 
+			{alert(alerttxt);return false}
+		else {return true}
+	}
+}
+
+function validate_family_num(field,alerttxt)
+{
+	with (field)
+	{
+		if ( value.match(/^0/) ||  value.length != 3 ) 
+			{alert(alerttxt);return false}
+		else {return true}
+	}
+}
+
+function check(thisform)
+{
+	with (thisform)
+	{
+		if (validate_username(username,"ç”¨æˆ·åä¸èƒ½ä¸ºç©ºæˆ–å¤§äº15ä¸ªå­—ç¬¦!")==false)
+		  {username.focus();return false}
+
+		if (validate_family_num(family_num,"å®¶åº­å·æ˜¯3ä½æ•°å­—å¹¶ä»¥é0å¼€å¤´!")==false)
+		  {family_num.focus();return false}
+
+		if (validate_email(email,"é‚®ç®±åœ°å€æ ¼å¼é”™è¯¯!")==false)
+			{email.focus();return false}
+
+		if (validate_qq(qq,"QQå·è¾“å…¥æœ‰è¯¯!")==false)
+			{qq.focus();return false}
+
+		if (validate_password(password,"å¯†ç ä¸èƒ½ä¸ºç©ºæˆ–å°äº6ä½!")==false)
+		  {password.focus();return false}
+
+		if (validate_yes_password(password,yes_password,"ä¸¤æ¬¡å¯†ç ä¸åŒ¹é…!")==false)
+		  {yes_password.focus();return false}
+	}
+}

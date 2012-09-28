@@ -42,16 +42,19 @@
 	} else if ( $_SESSION['__userdata'] == '2' ) {
 		$_SESSION['__global_logid']=2 ;
 		$text_log = "用户: [".$username."] 登录失败,密码错误.";
+	} else if ( $_SESSION['__userdata'] == '4' ) {
+		$_SESSION['__global_logid']=4 ;
+		$text_log = "用户: [".$username."] 登录失败,账号被禁用.";
 	} else if( $_SESSION['__userdata']['0']["username"] == $logindata[1] ){
-		$Finance->refurbishUserSession($_SESSION['__userdata']['0']["id"]);
+		$temp = $Finance->refurbishUserSession($_SESSION['__userdata']['0']["id"]);
+		$_SESSION['__userdata']['0']["session"] = $temp['0']["session"] ;
 
 		if(DEBUG_YES){ 
 			echo "<br>DEBUG START*********************************************<br>";
 			printf("登录成功。");
 			echo "用户数据包：";
 			print_r($_SESSION['__userdata']);
-			echo "<br>用户组数据包：";
-			print_r($_SESSION['__groupdata']);
+			echo "<BR>";
 			echo "<br>DEBUG END*********************************************<br>";
 		} else {
 			$_SESSION['__global_logid']=NULL;

@@ -2,7 +2,7 @@
 	require_once("../../config/config.inc.php");
 	require_once(INCLUDE_PATH.'finance.inc.php');	
 	header("Content-Type:text/html;charset=UTF-8"); 
-	date_default_timezone_set('PRC') or die('ÉèÖÃÊ±Çø´íÎó,ÇëÁªÏµ¹ÜÀíÔ±.');
+	date_default_timezone_set('PRC') or die('è®¾ç½®æ—¶åŒºé”™è¯¯,è¯·è”ç³»ç®¡ç†å‘˜.');
 	$skin = 0;
 ?>
 
@@ -34,7 +34,7 @@
 	.IndexLoginInfo{
 		background-color: #333300;
 		color: #FF6666;
-		font-family: "Î¢ÈíÑÅºÚ";
+		font-family: "å¾®è½¯é›…é»‘";
 		font-size: 14px;
 		z-index:20;
 		position: absolute;
@@ -86,8 +86,8 @@ table {
 		<?PHP echo $_TITLE ;?> 
 	</div>
 	  <?PHP 
-			if ( !is_null($_SESSION['__global_logid'])) {
-				$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
+			if ( !is_null($_SESSION['__global_logid']) || $_GET['logid'] ) {
+				$error_info	= $_GET['logid']  ? $Finance->convertLogIdToContent($_GET['logid']) : $Finance->convertLogIdToContent($_SESSION['__global_logid']);
 				echo "<div class=\"IndexLoginInfo\" align=\"center\">";
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
@@ -100,7 +100,7 @@ table {
 		  }
 	  ?>
   <div class="IndexLogin">
-			<form action="login.php" onsubmit="return check()" id="login-form" method="post">
+			<form action="login.php" onsubmit="return check(this)" id="login-form" method="post">
 			<table width="240">
 				<tr><td colspan="2" class="Ctd">
 					<?PHP echo "<b>".$_LOGIN."</b>"?>	
@@ -111,6 +111,7 @@ table {
 				</td><td>
 					<span> <input class="LoginInput" type="text" name="username"></span>
 				</td></tr>
+				
 				<tr><td class="Rtd">
 					<span><?PHP echo $_PASSWORD ?>&nbsp;-></span>
 				</td><td>

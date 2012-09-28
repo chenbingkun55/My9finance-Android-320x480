@@ -44,7 +44,8 @@
     $_LIST_ADDRESS = "列出地址";
     $_ADDR_NAME = "地址名称";
     $_ADD_ADDR = "添加地址";
-
+	
+	$_ENABLE = "启用";
     $_LIST_USER = "列出用户";
     $_USER_NAME = "用户名";
     $_USER_ALIAS = "个性名称";
@@ -93,4 +94,10 @@
     $_RECIPHONE = "接收手机号";
     $_MESSAGE = "信息";
     $_SEND = "发送";
+
+	$_COM_BUG = "提交缺陷";
+	$_COM_BUG_PAGE = "缺陷 提交页面";
+	$_BUG_LEVEL = "级别";
+	$_BUG_TITLE = "标题";
+	$_BUG_CENTENT = "内容";
 ?>

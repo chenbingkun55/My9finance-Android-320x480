@@ -10,11 +10,19 @@
 	$login_user_id = $_SESSION['__userdata']['0']["id"];
 	$login_user_session = $_SESSION['__userdata']['0']["session"];
 	$login_last_date = $_SESSION['__userdata']['0']["last_date"];
-	$login_family_num = $_SESSION['__groupdata']['0']['groupname'];
-	$login_group_alias = $_SESSION['__groupdata']['0']['group_alias'];
-	$login_groupadmin_id = $_SESSION['__groupdata']['0']['groupadmin_id'];
-	$login_group_id = $_SESSION['__groupdata']['0']['id'];
-	$login_skin_id = $_SESSION['__userdata']['0']['skin'];
+	$login_family_num = $_SESSION['__userdata']['0']['family_num'];
+	$login_family_adm = $_SESSION['__userdata']['0']['family_adm'];
+	$login_skin_id = $_SESSION['__userdata']['0']["skin"];
+	if ( ! isset($_SESSION['date_num']))  $_SESSION['date_num'] = 0;
+
+	/* 判断用户名为空时退出, 不是当前 Session 时退出 */
+	$temp_session = $Finance->getUserSession($login_user_id) ;
+	if ( empty($login_username) || $login_user_session != $temp_session['0']["session"])
+	{
+		$_SESSION['__global_logid'] = "3";
+		echo "<script>window.location.replace('index.php?logid=3');</script>";
+	}
+
 
 	if ( ! is_null($_GET['skin'])){
 		$Finance->UpdateSkin($login_user_id,$_GET['skin']);

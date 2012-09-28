@@ -13,8 +13,8 @@ Body{
 
 a:link {color: #808080}     /* 未访问的链接 */
 a:visited {color: #808080}  /* 已访问的链接 */
-a:hover {color: #C7EDCC}    /* 当有鼠标悬停在链接上 */
-a:active {color: #C0C0C0}   /* 被选择的链接 */
+a:hover {color: #808080}    /* 当有鼠标悬停在链接上 */
+a:active {color: #808080}   /* 被选择的链接 */
 
 
 /* 内容主体颜色 */

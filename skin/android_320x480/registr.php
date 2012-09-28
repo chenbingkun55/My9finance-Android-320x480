@@ -112,7 +112,7 @@
 			}
 		}
 	?>
-	     <FORM action="registr.php" onsubmit="return check()" id="registr" method="post">
+	     <FORM action="registr.php" onsubmit="return check(this)" id="registr" method="post">
 			<table width="240">
 				<tr><td colspan="2" class="Ctd">
 					<?PHP echo "<b>".$_REGISTR."</b>"?>	

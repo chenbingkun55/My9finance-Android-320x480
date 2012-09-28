@@ -1,15 +1,4 @@
 <?PHP
-	/* 初始化用户环境变量 */
-	$login_username = $_SESSION['__userdata']['0']["username"];
-	$login_user_alias = $_SESSION['__userdata']['0']["user_alias"];
-	$login_user_id = $_SESSION['__userdata']['0']["id"];
-	$login_user_session = $_SESSION['__userdata']['0']["session"];
-	$login_last_date = $_SESSION['__userdata']['0']["last_date"];
-	$login_family_num = $_SESSION['__userdata']['0']['family_num'];
-	$login_family_adm = $_SESSION['__userdata']['0']['family_adm'];
-	$login_skin_id = $_SESSION['__userdata']['0']["skin"];
-	if ( ! isset($_SESSION['date_num']))  $_SESSION['date_num'] = 0;
-
 	if(DEBUG_YES){ 
 		$str = "DEBUG START*********************************************";
 		$str .= "用户名: ".$login_username;

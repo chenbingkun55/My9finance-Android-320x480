@@ -7,7 +7,7 @@
 	</select>
 
 	<?PHP 
-		$Finance->select_type($login_user_id,isset($_GET['scorde']) ? $_GET['scorde'] : "out_record");
+		$Finance->select_type($login_family_num,isset($_GET['scorde']) ? $_GET['scorde'] : "out_record");
 	?>
 
 	后<input type="text" name="d_num" value="0" size="1"> 
@@ -34,9 +34,9 @@
 			$d_num = $_POST['d_num'];
 			$sdate = $_POST['sdate'];
 
-			$search_data = $Finance->getSearchData( $scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_group_id); 
+			$search_data = $Finance->getSearchData( $scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_family_num); 
 
-			$table_title = array("序号","用户","家庭","主类","子类","地址","金钱","备注","时间");
+			$table_title = array("序号","用户","家庭号","主类","子类","地址","金钱","备注","时间");
 			echo "<table>";		
 			echo "<tr class='ContentTdColor'>";
 
@@ -58,14 +58,14 @@
 				$today_money = ($today_money + $search_data[$i]['money']);
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
-				echo "<td>".$Finance->convertID($search_data[$i]['user_id'],"users")."</td>";
-				echo "<td>".$Finance->convertID($search_data[$i]['group_id'],"groups")."</td>";
-				echo "<td>".$Finance->convertID($search_data[$i]['mantype_id'],$mantype)."</td>";
-				echo "<td>".$Finance->convertID($search_data[$i]['subtype_id'],$subtype)."</td>";
-				echo "<td>".$Finance->convertID($search_data[$i]['addr_id'],"address")."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['user_id'],"users")."</td>";
+				echo "<td>".$search_data[$i]['family_num']."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['mantype_id'],$mantype)."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['subtype_id'],$subtype)."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['addr_id'],"address")."</td>";
 				echo "<td>".$search_data[$i]['money']."</td>";
 				echo "<td>".$search_data[$i]['notes']."</td>";
-				echo "<td>".$search_data[$i]['create_date']."</td>";
+				echo "<td>".date('Y-m-d H:i:s',$search_data[$i]['create_date'])."</td>";
 				echo "</tr>";
 				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 			}

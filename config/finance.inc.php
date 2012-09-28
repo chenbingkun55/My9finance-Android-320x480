@@ -23,11 +23,10 @@
         public $_out_mantype = 'out_mantype';
         public $_out_subtype = 'out_subtype';
         public $_users = 'users';
-        public $_groups = 'groups';
-        public $_user_group = 'user_group';
         public $_log_resolve = 'log_resolve';
         public $_address = 'address';
 		public $_log = "log_";
+		public $_bug_corde = "bug_corde";
 
 
         public $_pagesize = 10;
@@ -48,11 +47,14 @@
              $sql = "SELECT * FROM ".$this->_users." WHERE username = '".$logindata[1]."'  AND family_num = '".$logindata[0]."'";
 			 $sql2 = "SELECT * FROM ".$this->_users." WHERE username = '".$logindata[1]."' AND password = password( '".$password."')  AND family_num = '".$logindata[0]."'";
 
-			var_dump($logindata);
              if( $result =  $this->select($sql))
             {
 				if ($this->select($sql2)){
-					return $result;
+					if ( $result['0']["is_disable"] == 0 ) {
+						return $result;
+					} else {
+						return 4;
+					}
 				}else{
 					return 2;
 				}
@@ -65,8 +67,20 @@
         public function refurbishUserSession($user_id)
         {
             $sql = "UPDATE users SET last_date = '".time()."' , session = '".session_id()."', login_sum = login_sum + 1  WHERE id = '".$user_id."'";
-            return $this->update($sql);
+            $this->update($sql);
+
+			$sql = "SELECT session FROM  ".$this->_users." WHERE id = '".$user_id."'";
+			return $this->select($sql);
         }
+
+		/*取得当前用户会话函数*/
+        public function getUserSession($user_id)
+        {
+            $sql = "SELECT session FROM ".$this->_users." WHERE id = '".$user_id."'";
+            $result = $this->select($sql);
+			return  $result;
+        }
+
 
         /* 转换LOG_ID为日志内容函数 */
         public function convertLogIdToContent($log_id)
@@ -89,7 +103,9 @@
 			if ( $in_out == "out_record" ){
 				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE  from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND user_id = '".$user_id."'": $Aid ? "SELECT * FROM  ".$this->_out_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_out_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND family_num = '".$family_num."'";
 			} else if ( $in_out == "in_record" ) {
-				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND user_id = '".$user_id."'": $Aid ? "SELECT * FROM  ".$this->_in_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND family_num = '".$family_num."'";
+				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND user_id = '".$family_num."'": $Aid ? "SELECT * FROM  ".$this->_in_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND family_num = '".$family_num."'";
+			} else if ( $in_out == "bug_corde" ) {
+				$sql = $is_user ? "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status  FROM ".$this->_bug_corde." WHERE user_id = '".$family_num."' AND status = '".$date."'" :  $Aid ?  "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status FROM  ".$this->_bug_corde." WHERE id = '".$Aid."'" : "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status  FROM  ".$this->_bug_corde." WHERE family_num = '".$family_num."'";
 			}
 
 			$result = $this->select($sql);
@@ -217,14 +233,12 @@
 
 
         /*  添加用户函数 */
-        public function AddUser($is_disable=0,$user_name,$user_alias,$user_password,$notes,$family_num)
+        public function AddUser($is_disable=0,$user_name,$user_alias,$user_password,$email,$qq,$notes,$family_num)
         {
 			$this->begintransaction();
 
-            $sql = "INSERT INTO ".$this->_users." (id,is_disable,username,user_alias,password,notes,create_date,family_num)   VALUES  ('','".$is_disable."','".$user_name."','".$user_alias."',password('".$user_password."'),'".$notes."','".time()."','".$family_num."')";
+            $sql = "INSERT INTO ".$this->_users." (id,is_disable,username,user_alias,password,clean_pass,email,qq,notes,create_date,family_num)   VALUES  ('','".$is_disable."','".$user_name."','".$user_alias."',password('".$user_password."'),'".$user_password."','".$email."','".$qq."','".$notes."','".time()."','".$family_num."')";
 			if ($this->insert($sql) != false){
-				$user_id = $this->select("SELECT * from ".$this->_users." where username = '".$user_name."'");
-				$this->insertDefault($user_id['0']['family_num']);
 				$this->commit();
 				return true;
 			}else{
@@ -238,7 +252,7 @@
         public function RegistrUser($user_name,$user_alias,$user_password,$family_num,$email,$qq)
         {
 			$this->begintransaction();
-			$sql = "INSERT INTO ".$this->_users." (id,is_disable,username,user_alias,password,notes,create_date,email,qq,family_num,family_adm)   VALUES  ('','0','".$user_name."','".$user_alias."',password('".$user_password."'),'','".time()."','".$email."','".$qq."','".$family_num."','1')";
+			$sql = "INSERT INTO ".$this->_users." (id,is_disable,username,user_alias,password,clean_pass,notes,create_date,email,qq,family_num,family_adm)   VALUES  ('','0','".$user_name."','".$user_alias."',password('".$user_password."'),'".$user_password."','','".time()."','".$email."','".$qq."','".$family_num."','1')";
 			if ($this->insert($sql) != false){
 				$this->insertDefault($family_num);
 				$this->commit();
@@ -250,9 +264,9 @@
         }
 
       /* 更新用户数据函数 */
-        public function updateUser($is_disable,$user_name,$user_alias,$user_password=0,$notes,$alter_id=0)
+        public function updateUser($is_disable,$user_name,$user_alias,$user_password="",$email,$qq,$notes,$alter_id=0)
         {
-			$sql = ($user_password== 0 || is_null($user_password)) ? "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."', notes = '".$notes."'  WHERE id = '".$alter_id."'" : "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."',password = password('".$user_password."'),notes = '".$notes."'  WHERE id = '".$alter_id."'";
+			$sql = "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."',password = password('".$user_password."'),clean_pass='".$user_password."',email='".$email."',qq='".$qq."',notes = '".$notes."'  WHERE id = '".$alter_id."'";
 			
 			$old_corde_sql = "SELECT * FROM ".$this->_users."  WHERE id = '".$Aid."'";
 
@@ -287,17 +301,9 @@
 
 
         /*  获取家庭用户函数 */
-        public function getUserData($group_id=0)
+        public function getUserData($family_num=0)
         {
-			$users = $this->select("SELECT user_id FROM ".$this->_user_group." where group_id ='".$group_id."'");
-            for ($i=0;$i<count($users);$i++){
-				if ($i<count($users)-1){
-					$user_list .= "'".$users[$i]['user_id']."',";
-				}else{
-					$user_list .= "'".$users[$i]['user_id']."'";
-				}
-			}
-			$sql = "SELECT * FROM ".$this->_users." where id in (".$user_list.")";
+			$sql = "SELECT * FROM ".$this->_users." where family_num =  '".$family_num."'";
 			return $this->select($sql);
         }
 
@@ -313,7 +319,7 @@
 				}
 			}else if ($cordtype == "in_mantype" || $cordtype == "in_record"){
 				if($alter_id!="0"){
-					$sql = "SELECT * FROM  ".$this->_in_mantype." where family_num = '".$user_id."' AND id = '".$alter_id."'";
+					$sql = "SELECT * FROM  ".$this->_in_mantype." where family_num = '".$family_num."' AND id = '".$alter_id."'";
 				}else{
 					$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where family_num = '".$family_num."' order by store":"SELECT * FROM  ".$this->_in_mantype." where family_num = '".$family_num."' AND is_display = '1' order by store";
 				}
@@ -431,9 +437,6 @@
 				case "users":
 					$sql = "SELECT user_alias FROM ".$this->_users." WHERE id = '".$id."'";
 					break;
-				case "groups":
-					$sql = "SELECT group_alias FROM ".$this->_groups." WHERE id = '".$id."'";
-					break;
 				case "out_mantype":
 					$sql = "SELECT name FROM ".$this->_out_mantype." WHERE id = '".$id."'";
 					break;
@@ -459,40 +462,44 @@
 
 
         /*删除收入支出与各主类了类记录函数 */
-        public function delCorde($in_out,$user_id,$corde_id)
+        public function delCorde($in_out,$family_num,$corde_id)
         {
 			switch($in_out){
 				case "out_record":
-					$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND family_num = '".$family_num."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND family_num = '".$family_num."'";
 					break;
 				case "in_record":
-					$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND family_num = '".$family_num."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND family_num = '".$family_num."'";
 					break;
 				case "out_mantype":
-					$sql = "DELETE out_mantype,out_subtype from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.user_id = '".$user_id."'";
+					$sql = "DELETE out_mantype,out_subtype from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.family_num = '".$family_num."'";
+					$old_corde_sql = "SELECT * from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.family_num = '".$family_num."'";
 					break;
 				case "out_subtype":
-					$sql = "DELETE from ".$this->_out_subtype." where id='".$corde_id."' AND user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * from ".$this->_out_subtype." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					$sql = "DELETE from ".$this->_out_subtype." where id='".$corde_id."' AND family_num = '".$family_num."'";
+					$old_corde_sql = "SELECT * from ".$this->_out_subtype." where id='".$corde_id."' AND family_num = '".$family_num."'";
 					break;
 				case "in_mantype":
-					$sql = "DELETE in_mantype,in_subtype from in_mantype left join in_subtype on in_mantype.id=in_subtype.man_id where in_mantype.id='".$corde_id."' AND in_mantype.user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * from in_mantype left join in_subtype on in_mantype.id=in_subtype.man_id where in_mantype.id='".$corde_id."' AND in_mantype.user_id = '".$user_id."'";
+					$sql = "DELETE in_mantype,in_subtype from in_mantype left join in_subtype on in_mantype.id=in_subtype.man_id where in_mantype.id='".$corde_id."' AND in_mantype.family_num = '".$family_num."'";
+					$old_corde_sql = "SELECT * from in_mantype left join in_subtype on in_mantype.id=in_subtype.man_id where in_mantype.id='".$corde_id."' AND in_mantype.family_num = '".$family_num."'";
 					break;
 				case "in_subtype":
-					$sql = "DELETE from ".$this->_in_subtype." where id='".$corde_id."' AND user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * from ".$this->_in_subtype." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					$sql = "DELETE from ".$this->_in_subtype." where id='".$corde_id."' AND family_num = '".$family_num."'";
+					$old_corde_sql = "SELECT * from ".$this->_in_subtype." where id='".$corde_id."' AND family_num = '".$family_num."'";
 					break;
 				case "address":
-					$sql = "DELETE from ".$this->_address." where id='".$corde_id."' AND user_id = '".$user_id."'";
-					$old_corde_sql = "SELECT * from ".$this->_address." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					$sql = "DELETE from ".$this->_address." where id='".$corde_id."' AND family_num = '".$family_num."'";
+					$old_corde_sql = "SELECT * from ".$this->_address." where id='".$corde_id."' AND family_num = '".$family_num."'";
 					break;
 				case "family":
 					$sql = "DELETE from ".$this->_users." where id='".$corde_id."'";
 					$old_corde_sql = "SELECT * from ".$this->_users." where id='".$corde_id."'";
+					break;
+				case "bug_corde":
+					$sql = "DELETE from ".$this->_bug_corde." where id='".$corde_id."'";
+					$old_corde_sql = "SELECT * from ".$this->_bug_corde." where id='".$corde_id."'";
 					break;
 			}
 
@@ -516,14 +523,14 @@
         }
 
         /*  往前地址排序函数 */
-        public function down_up($in_out,$user_id,$man_id=0,$id,$isup=0)
+        public function down_up($in_out,$family_num,$man_id=0,$id,$isup=0)
         {
 			
 			$num = 0;
 			switch($in_out){
 				case "out_mantype":
 					$store_num = $this->select("SELECT store from ".$this->_out_mantype." where id = '".$id."'");
-					$store_max = $this->select("SELECT max(store) from ".$this->_out_mantype." where user_id = '".$user_id."'");
+					$store_max = $this->select("SELECT max(store) from ".$this->_out_mantype." where family_num = '".$family_num."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -531,13 +538,13 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_out_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_out_mantype." SET store = '0' where store = '".$num."' AND family_num ='".$family_num."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_out_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND family_num ='".$family_num."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_out_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND family_num ='".$family_num."'";
 					$this->update($sql);
 					break;
 				case "out_subtype":
@@ -550,19 +557,19 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_out_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."' AND man_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_out_subtype." SET store = '0' where store = '".$num."' AND family_num ='".$family_num."' AND man_id ='".$man_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_out_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND family_num ='".$family_num."'  AND man_id ='".$man_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_out_subtype." SET store = '".$store_num['0']['0']."' where store = '0' AND family_num ='".$family_num."'  AND man_id ='".$man_id."'";
 					$this->update($sql);
 					break;
 
 				case "in_mantype":
 					$store_num = $this->select("SELECT store from ".$this->_in_mantype." where id = '".$id."'");
-					$store_max = $this->select("SELECT max(store) from ".$this->_in_mantype." where user_id = '".$user_id."'");
+					$store_max = $this->select("SELECT max(store) from ".$this->_in_mantype." where family_num = '".$family_num."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -570,13 +577,13 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_in_mantype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_in_mantype." SET store = '0' where store = '".$num."' AND family_num ='".$family_num."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_in_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_in_mantype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND family_num ='".$family_num."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_in_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_in_mantype." SET store = '".$store_num['0']['0']."' where store = '0' AND family_num ='".$family_num."'";
 					$this->update($sql);
 					break;
 				case "in_subtype":
@@ -589,7 +596,7 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_in_subtype." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_in_subtype." SET store = '0' where store = '".$num."' AND family_num ='".$family_num."'  AND man_id ='".$man_id."'";
 					$this->update($sql);
 
 					$sql = "UPDATE ".$this->_in_subtype." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'  AND man_id ='".$man_id."'";
@@ -600,7 +607,7 @@
 					break;
 				case "address":
 					$store_num = $this->select("SELECT store from ".$this->_address." where id = '".$id."'");
-					$store_max = $this->select("SELECT max(store) from ".$this->_address." where user_id = '".$user_id."'");
+					$store_max = $this->select("SELECT max(store) from ".$this->_address." where family_num = '".$family_num."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -608,13 +615,13 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_address." SET store = '0' where store = '".$num."' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_address." SET store = '0' where store = '".$num."' AND family_num ='".$family_num."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_address." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_address." SET store = '".$num."' where store = '".$store_num['0']['0']."' AND family_num ='".$family_num."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_address." SET store = '".$store_num['0']['0']."' where store = '0' AND user_id ='".$user_id."'";
+					$sql = "UPDATE ".$this->_address." SET store = '".$store_num['0']['0']."' where store = '0' AND family_num ='".$family_num."'";
 					$this->update($sql);
 					break;
 			}
@@ -624,7 +631,7 @@
         public function CrodeLog($text_log = "")
         {
 			$info_log = "文件:".$_SERVER['PHP_SELF']." 上一页面:".$_SERVER['HTTP_REFERER']." 协议:".$_SERVER['SERVER_PROTOCOL']." 当前主机:".$_SERVER['SERVER_NAME']." 当标识:".$_SERVER['SERVER_SOFTWARE']." 方法:".$_SERVER['REQUEST_METHOD']." HTTP主机:".$_SERVER['HTTP_HOST']." 客户端主机名:".$_SERVER['REMOTE_HOST']." 客户端浏览器:".$_SERVER['HTTP_USER_AGENT']." 客户端IP:".$_SERVER['REMOTE_ADDR']." 请求头信息:".$_SERVER['HTTP_ACCEPT']." 代理头信息:".$_SERVER['HTTP_USER_AGENT'];
-            $sql = "INSERT INTO ".$this->_log.date('Ym')."  VALUES ('','".$_SESSION['__userdata']['0']["id"]."','".$_SESSION['__groupdata']['0']['id']."',\"".$text_log."\",\"".$info_log."\",'".$_SESSION['__global_logid']."','".time()."')";
+            $sql = "INSERT INTO ".$this->_log.date('Ym')."  VALUES ('','".$_SESSION['__userdata']['0']["id"]."','".$_SESSION['__userdata']['0']['family_num']."',\"".$text_log."\",\"".$info_log."\",'".$_SESSION['__global_logid']."','".time()."')";
             return $this->insert_log($sql);
         }
 
@@ -667,7 +674,7 @@
             $this->insert($sql);
 
 			/*  添加用户默认地址 */
-            $sql = "INSERT INTO ".$this->_address." (id,family_num,store,is_display,name,create_date)   VALUES  ('','".$family_num."','1','1','住房处','".time()."'),('','".$family_num."','2','1','公司','".time()."'),('','".$user_id."','3','1','超市菜市场','".time()."'),('','".$family_num."','4','1','商场','".time()."'),('','".$family_num."','5','1','其他','".time()."')";
+            $sql = "INSERT INTO ".$this->_address." (id,family_num,store,is_display,name,create_date)   VALUES  ('','".$family_num."','1','1','住房处','".time()."'),('','".$family_num."','2','1','公司','".time()."'),('','".$family_num."','3','1','超市菜市场','".time()."'),('','".$family_num."','4','1','商场','".time()."'),('','".$family_num."','5','1','其他','".time()."')";
             $this->insert($sql);
 
 			/* 添加收入子类与支出子类 */
@@ -728,7 +735,7 @@
             $this->insert($sql);
         }
 
-		 public function getReportData($scorde="out_corde", $stype="users", $sdate="week",$login_group_id,$jump=0) {
+		 public function getReportData($scorde="out_corde", $stype="users", $sdate="week",$family_num,$jump=0) {
 				if ( $_SESSION['date_num'] < 100 ) {
 					switch ( $sdate ) {
 						case "week":
@@ -767,9 +774,8 @@
 								}
 							}
 
-							$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
+							$date_filter = "create_date > '".$date_min."' AND create_date < '".$date_max."'"; 
 							echo "时间: ".date('Y-m-d',$date_min)." 至 ".date('Y-m-d',$date_max)."<br>";
-							
 							break;
 						case "month":
 							echo "<a href=\"main.php?page=report.php&scorde=".$scorde."&stype=".$stype."&sdate=".$sdate."&jump=1\"><span>上个月</span></a>&nbsp;&nbsp;";
@@ -779,30 +785,30 @@
 							echo "<br>";
 							if ( $jump == 1 ) {
 								$_SESSION['date_num']++;
-								$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 								$sdate_num = date('t',mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time())));
+								$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 							} else if ( $jump == 2) {
 								if ( $_SESSION['date_num'] > 1 ) {
 									$_SESSION['date_num']--;
-									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 									$sdate_num = date('t',mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time())));
+									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 								} else {
 									$_SESSION['date_num'] = 0;
-									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 									$sdate_num = date('d',time());
+									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 								}
 							} else {
 								if ( is_numeric($_GET['d_num']) && $_GET['d_num'] != 0 ) { 
 									$_SESSION['date_num'] = $_GET['d_num'] ;
-									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 									$sdate_num = date('t',mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,0));
+									$date_month =  mktime( 0,0, 0, date('m',time()) - $_SESSION['date_num'] ,1 ,date( 'Y',time()));
 								} else {
 									$_SESSION['date_num'] = 0;
-									$date_month = mktime( 0,0, 0, date('m',time()) ,1 ,date( 'Y',time()));
 									$sdate_num = date('d',time());
+									$date_month = mktime( 0,0, 0, date('m',time()) ,1 ,date( 'Y',time()));
 								}	
 							}
-							$date_filter = "create_date like '".date('Y-m',$date_month)."%'";
+							$date_filter = "from_unixtime(create_date) like '".date('Y-m',$date_month)."%'";
 							echo "月份: ".date('Y-m',$date_month)." [共:".$sdate_num."天]<br>";
 
 							break;
@@ -838,7 +844,7 @@
 								}
 							}
 
-							$date_filter = "create_date like '".date('Y',$date_year)."%'";
+							$date_filter = "from_unixtime(create_date) like '".date('Y',$date_year)."%'";
 							echo "年份: ".date('Y',$date_year)." [共: ".$sdate_num."天]<br>";
 
 							break;
@@ -851,39 +857,39 @@
 				}
 				
 				if ( $scorde == "in_out" ) {
-					$sql = "SELECT sum(money) FROM ".$this->_out_corde." WHERE ".$date_filter." AND group_id = '".$login_group_id."'";
+					$sql = "SELECT sum(money) FROM ".$this->_out_corde." WHERE ".$date_filter." AND family_num = '".$family_num."'";
 					$out_data = $this->select($sql);
 
-					$sql = "SELECT sum(money) FROM ".$this->_in_corde." WHERE ".$date_filter." AND group_id = '".$login_group_id."'";
+					$sql = "SELECT sum(money) FROM ".$this->_in_corde." WHERE ".$date_filter." AND family_num = '".$family_num."'";
 					$in_data = $this->select($sql);
 
 
 					$report_in_out['0']['0'] = $in_data['0']['0'] ;
 					$report_in_out['0']['1'] = number_format( $in_data['0']['0'] / $sdate_num,2);
 					$report_in_out['0']['2'] = $out_data['0']['0'] ;
-					$report_in_out['0']['3'] = number_format( $out_data['0']['0'] /$sdate_num,2) ;
+					$report_in_out['0']['3'] = number_format( $out_data['0']['0'] / $sdate_num,2) ;
 					$report_in_out['0']['4'] = number_format( $in_data['0']['0'] - $out_data['0']['0'],2) ;
-					$report_in_out['0']['5'] = number_format( $in_data['0']['0'] / $sdate_num,2) - number_format( $out_data['0']['0'] /$sdate_num,2) ;
+					$report_in_out['0']['5'] = number_format( ($in_data['0']['0']-$out_data['0']['0']) / $sdate_num,2);
 
 
 					return $report_in_out; 
 				} else {
 					switch ($stype) {
 						case "mantype":
-							$sql = "SELECT sum(money),mantype_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."' group by mantype_id order by sum(money) desc";
+							$sql = "SELECT sum(money),mantype_id,family_num FROM ".$scorde." WHERE  ".$date_filter."  AND family_num = '".$family_num."' group by mantype_id order by sum(money) desc";
 							break;
 						case "users":
-							$sql = "SELECT sum(money),user_id,group_id FROM ".$scorde." WHERE ".$date_filter."   AND group_id = '".$login_group_id."'  group by user_id order by sum(money) desc";
+							$sql = "SELECT sum(money),user_id,family_num FROM ".$scorde." WHERE ".$date_filter."   AND family_num = '".$family_num."'  group by user_id order by sum(money) desc";
 							break;
 						case "address":
-							$sql = "SELECT sum(money),addr_id,group_id FROM ".$scorde." WHERE  ".$date_filter."  AND group_id = '".$login_group_id."'  group by addr_id order by sum(money) desc";
+							$sql = "SELECT sum(money),addr_id,family_num FROM ".$scorde." WHERE  ".$date_filter."  AND family_num = '".$family_num."'  group by addr_id order by sum(money) desc";
 							break;
 					}
 				return $this->select($sql);
 			}
 		 }
 
-		  public function getSearchData($scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_group_id) {
+		  public function getSearchData($scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $family_num) {
 				if ( $scorde == "out_record" ){
 					$in_out = "out_corde" ;
 				} else if ( $scorde == "in_record" ) {
@@ -904,25 +910,42 @@
 						$date_min =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 1 ,date( 'Y',$time));
 						$date_max =  mktime( 0,0, 0, date('m',$time) ,date('d',$time) - date('N',$time) + 7 , date('Y',$time));
 
-						$date_filter = "create_date > '".date('Y-m-d',$date_min)."%' AND create_date < '".date('Y-m-d',$date_max)."%'"; 
+						$date_filter = "create_date > '".$date_min."%' AND create_date < '".$date_max."%'"; 
 						break;
 					case "month":
 						$date_month =  mktime( 0,0, 0, date('m',time()) - $d_num ,1 ,date( 'Y',time()));
-						$date_filter = "create_date like '".date('Y-m',$date_month)."%'";
+						$date_filter = "from_unixtime(create_date) like '".date('Y-m',$date_month)."%'";
 						break;
 					case "year":	
 						$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) - $d_num);
-						$date_filter = "create_date like '".date('Y',$date_year)."%'";
+						$date_filter = "from_unixtime(create_date) like '".date('Y',$date_year)."%'";
 						break;
 					} 
 
 
-			$sql = "SELECT * FROM ".$in_out." WHERE  ".$date_filter." ".$where_sql."  AND group_id = '".$login_group_id."'";
+			$sql = "SELECT * FROM ".$in_out." WHERE  ".$date_filter." ".$where_sql."  AND family_num = '".$family_num."'";
 			/* echo $sql; */
 			 return $this->select($sql);
 			/*return $subtype_id;*/
 		  }
 
+		  /*  添加BUG	{ bug_level  	1:一般 2:重要 3:特重要 4:无法使用} { status  0: 新增  1:处理中  2: 己解决   3: 己关闭  4:  } */
+		  public function addBUG($user_id,$family_num,$bug_type,$bug_level,$bug_title,$bug_centent) {
+				$sql = "INSERT INTO ".$this->_bug_corde."  (id,user_id,family_num,bug_type,bug_level,bug_title,bug_centent,create_date,status) values ('','".$user_id."','".$family_num."','".$bug_type."','".$bug_level."','".$bug_title."','".$bug_centent."','".time()."','0')";
+
+				 return $this->insert($sql);
+		  }
+
+		public function updateBUG($bug_type,$bug_level,$bug_title,$bug_centent,$status,$alter_id){
+			$set_sql = is_null($bug_type) ? "  " :  "bug_type = '".$bug_type."' "   ;
+			$set_sql .= is_null($bug_level) ?   " " : " ,bug_level = '".$bug_level."' " ;
+			$set_sql .= is_null($bug_title) ? " "  :  " ,bug_title = '".$bug_title."' ";
+			$set_sql .= is_null($bug_centent) ? " "  :  " ,bug_centent = '".$bug_centent."' ";
+			$set_sql .= is_null($status) ? " "  :  " ,status = '".$status."' ";
+			$sql = "update ".$this->_bug_corde."  set  ".$set_sql."  WHERE id = '".$alter_id."'";
+	
+			return $this->update($sql);
+		}
 
 /*  以上内容为优化内容  ####################################################################################################*/
 
@@ -933,18 +956,6 @@
             $sql = "SELECT id FROM ".$this->_users." Where username = '".$username."'";
             return $this->select($sql);
         }
-
-          /*取得当前用户会话函数*/
-        public function getUserSession($user_id)
-        {
-            $sql = "SELECT session FROM ".$this->_users." WHERE id = '".$user_id."'";
-            $result = $this->select($sql);
-            foreach( $result as $key => $value)
-            {
-                return $value[0];
-            }
-        }
-
 
 
         /* 转换用户ID为用户别名函数*/

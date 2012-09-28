@@ -32,15 +32,15 @@
 
 <?PHP
 	if ( $_GET['report'] == 1 ) {
-		$report_data = $Finance->getReportData($_GET['scorde'],$_GET['stype'],$_GET['sdate'],$login_group_id,$jump);
+		$report_data = $Finance->getReportData($_GET['scorde'],$_GET['stype'],$_GET['sdate'],$login_family_num,$jump);
 
 		switch( $_GET['stype'] ) {
 			case  "address":
-				$table_title = array("序号","地址","家庭","金钱","占百分比");
+				$table_title = array("序号","地址","家庭号","金钱","占百分比");
 				$stype = "address";
 				break;
 			case  "mantype":
-				$table_title = array("序号","类别","家庭","金钱","占百分比");
+				$table_title = array("序号","类别","家庭号","金钱","占百分比");
 				if ( $_GET['scorde'] == "in_corde" ) {
 					$stype = "in_mantype";
 				}
@@ -49,7 +49,7 @@
 				}
 				break;
 			default:
-				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$table_title = array("序号","用户","家庭号","金钱","占百分比");
 				$stype = "users";
 		}	
 
@@ -102,8 +102,8 @@
 			for ($i=0;$i<count($report_data);$i++){
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
-				echo "<td>".$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
-				echo "<td>".$Finance->convertID($report_data[$i]['2'],"groups")."</td>";
+				echo "<td>".@$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
+				echo "<td>".$report_data[$i]['2']."</td>";
 				echo "<td>".$report_data[$i]['sum(money)']."</td>";
 				echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
 				echo "</tr>";
@@ -120,7 +120,7 @@
 		$stype =  isset($_GET['stype']) ? $_GET['stype'] : "users";
 		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
-		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_group_id,$jump);
+		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_family_num,$jump);
 		
 		if ( $_GET['scorde'] == "in_out" ) {
 			echo "<table><tr class='ContentTdColor'>";
@@ -149,11 +149,11 @@
 		} else {
 			switch( $_GET['stype'] ) {
 				case  "address":
-					$table_title = array("序号","地址","家庭","金钱","占百分比");
+					$table_title = array("序号","地址","家庭号","金钱","占百分比");
 					$stype = "address";
 					break;
 				case  "mantype":
-					$table_title = array("序号","类别","家庭","金钱","占百分比");
+					$table_title = array("序号","类别","家庭号","金钱","占百分比");
 					if ( $_GET['scorde'] == "in_corde" ) {
 						$stype = "in_mantype";
 					}
@@ -162,7 +162,7 @@
 					}
 					break;
 				default:
-					$table_title = array("序号","用户","家庭","金钱","占百分比");
+					$table_title = array("序号","用户","家庭号","金钱","占百分比");
 					$stype = "users";
 			}	
 
@@ -190,8 +190,8 @@
 			for ($i=0;$i<count($report_data);$i++){
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
-				echo "<td>".$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
-				echo "<td>".$Finance->convertID($report_data[$i]['2'],"groups")."</td>";
+				echo "<td>".@$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
+				echo "<td>".$report_data[$i]['2']."</td>";
 				echo "<td>".$report_data[$i]['sum(money)']."</td>";
 				echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
 				echo "</tr>";
