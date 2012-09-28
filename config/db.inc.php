@@ -157,10 +157,10 @@ class DBSQL{
 	{
 		if(empty($this->CONN_LOG)) return false;
 		try{		
-			$create_sql = "CREATE TABLE IF NOT EXISTS `log_sql_".date('Ym')."` (`id` smallint(4) NOT NULL AUTO_INCREMENT,`user_id` smallint(4) NOT NULL,`group_id` smallint(4) NOT NULL,`log` text NOT NULL,`create_date` datetime NOT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+			$create_sql = "CREATE TABLE IF NOT EXISTS `log_sql_".date('Ym')."` (`id` smallint(4) NOT NULL AUTO_INCREMENT,`user_id` smallint(4) NOT NULL,`family_num` smallint(4) NOT NULL,`log` text NOT NULL,`create_date` char(12) NOT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 			$results = mysql_query($create_sql,$this->CONN_LOG);
 
-			$create_sql = "CREATE TABLE IF NOT EXISTS `log_".date('Ym')."` (`id` smallint(4) NOT NULL AUTO_INCREMENT,`user_id` smallint(4) DEFAULT NULL,`group_id` smallint(4) DEFAULT NULL,`log` text,`info` text,`global_logid` int(8) DEFAULT NULL,`create_date` datetime DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+			$create_sql = "CREATE TABLE IF NOT EXISTS `log_".date('Ym')."` (`id` smallint(4) NOT NULL AUTO_INCREMENT,`user_id` smallint(4) DEFAULT NULL,`family_num` smallint(4) DEFAULT NULL,`log` text,`info` text,`global_logid` int(8) DEFAULT NULL,`create_date` char(12) DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 			$results = mysql_query($create_sql,$this->CONN_LOG);
 		}catch(Exception $e){
 			$msg = $e;
@@ -204,7 +204,7 @@ class DBSQL{
 		if(empty($sql)) return false;
 		if(empty($this->CONN_LOG)) return false;
 		try{		
-			$corde_sql_log = "INSERT INTO  log_sql_".date('Ym')." (id,user_id,group_id,log,create_date) VALUES ('','".$_SESSION['__userdata']['0']["id"]."','".$_SESSION['__groupdata']['0']['id']."',\"".$sql."\",'".date("Y-m-d H:i:s")."')";
+			$corde_sql_log = "INSERT INTO  log_sql_".date('Ym')." (id,user_id,family_num,log,create_date) VALUES ('','".$_SESSION['__userdata']['0']["id"]."','".$_SESSION['__userdata']['0']["family_num"]."',\"".$sql."\",'".time()."')";
 			$results = mysql_query($corde_sql_log,$this->CONN_LOG);
 		}catch(Exception $e){
 			$msg = $e;
