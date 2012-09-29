@@ -839,7 +839,7 @@
 				$alter_id = $_POST['alter_id'];
 
 				if($add_submit == 1){
-					$YesNo = ($Finance->insertCurrentMoney($login_user_id,$login_family_num,$cmoney))==true ? true:false;
+					$YesNo = ($Finance->insertCurrentMoney($login_user_id,$login_family_num,$cmoney,""))==true ? true:false;
 
 					/*  记录日志  */
 					$text_log = $YesNo ? "添加现金-成功,用户:".$login_user_id.", 现金:".$cmoney  : "添加现金-失败,用户:".$login_user_id.", 现金:".$cmoney;

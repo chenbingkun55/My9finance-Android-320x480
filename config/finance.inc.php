@@ -108,7 +108,11 @@
 			} else if ( $in_out == "bug_corde" ) {
 				$sql = $is_user ? "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status  FROM ".$this->_bug_corde." WHERE user_id = '".$family_num."' AND status = '".$date."'" :  $Aid ?  "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status FROM  ".$this->_bug_corde." WHERE id = '".$Aid."'" : "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status  FROM  ".$this->_bug_corde." WHERE family_num = '".$family_num."'";
 			} else if ( $in_out == "bank_card") {
-				$sql = $is_user ? "SELECT * FROM  ".$this->_bank_card." WHERE  user_id = '".$family_num."'" : $Aid ? "SELECT * FROM  ".$this->_bank_card." WHERE  id = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  family_num = '".$family_num."'" ;
+				if ( $is_user == 1 ) {
+					$sql = "SELECT * FROM  ".$this->_bank_card." WHERE  user_id = '".$family_num."'" ;
+				} else {
+					$sql = $Aid ? "SELECT * FROM  ".$this->_bank_card." WHERE  id = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  family_num = '".$family_num."'" ;
+				}
 			} else if ( $in_out == "current_money") {
 				$sql = $is_user ? "SELECT * FROM  ".$this->_current_money." WHERE  user_id = '".$family_num."'" : $Aid ? "SELECT * FROM  ".$this->_current_money." WHERE  id = '".$Aid."'" : "SELECT * FROM  ".$this->_current_money." WHERE  family_num = '".$family_num."'" ;
 			}
@@ -118,18 +122,24 @@
             return $result;
         }
 
-       /* 添加收入\支出数据函数 "out",$user_id,$group_id,$mantype_id,$subtype_id,$address,$menoy,$notes */
-        public function addCordeData($in_out,$user_id,$family_num,$mantype_id,$subtype_id,$address,$money,$notes)
+       /* 添加收入\支出数据函数 $fromtype,$in_out,$user_id,$family_num,$mantype_id,$subtype_id,$address,$menoy,$notes */
+        public function addCordeData($fromtype,$in_out,$user_id,$family_num,$mantype_id,$subtype_id,$address,$money,$notes)
         {
             
 			switch($in_out){
 				case "out_record":
 					$sql = "INSERT INTO ".$this->_out_corde."  VALUES ('','".$money."','".$user_id."','".$family_num."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".time()."')";
+					if ( $fromtype == 0 ){
+						$cmoney = $money - ( $money *2 ); 
+					}
 					break;
 				case "in_record":
 					$sql = "INSERT INTO ".$this->_in_corde."  VALUES ('','".$money."','".$user_id."','".$family_num."','".$mantype_id."','".$subtype_id."','".$address."','".$notes."','".time()."')";
+					$cmoney = $money;
 					break;
 			}
+			
+			$this->insertCurrentMoney($user_id,$family_num,$cmoney) ;
 
             return $this->insert($sql);
         }
@@ -986,9 +996,19 @@
 
 	/* 新增加用户现金 */
 	public function insertCurrentMoney($user_id,$family_num,$cmoney){
-		$sql = "INSERT INTO ".$this->_current_money."  (id,user_id,family_num,money,create_date,last_date) values ('','".$user_id."','".$family_num."','".$cmoney."','".time()."','".time()."')";
+		$sql = "SELECT user_id FROM ".$this->_current_money." WHERE  user_id = '".$user_id."'";
+		$YesNo = $this->select($sql);
+		if ( $YesNo ) {
+			$set_sql = is_null($cmoney) ? "  " :  "money = money + '".$cmoney."' "   ;
+			$set_sql .= " ,last_date = '".time()."'  WHERE user_id = '".$user_id."' " ;
+			$sql = "UPDATE ".$this->_current_money." set ".$set_sql ;
 
-		return $this->insert($sql);		
+			return $this->update($sql);	
+		} else {
+			$sql = "INSERT INTO ".$this->_current_money."  (id,user_id,family_num,money,create_date,last_date) values ('','".$user_id."','".$family_num."','".$cmoney."','".time()."','".time()."')";
+
+			return $this->insert($sql);		
+		}
 	}
 
 	/* 判断是否己存在 */
