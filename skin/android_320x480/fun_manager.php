@@ -594,6 +594,356 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			break;
+		case 'bank_card':
+			if ( $add_submit == 1 || $alter_submit == 1 ){
+				if(DEBUG_YES){ 
+					echo "<br>DEBUG START*********************************************<br>";
+					echo "cardname值为：".$_POST['cardname']."<br>";
+					echo "cardnum值为：".$_POST['cardnum']."<br>";
+					echo "cardtype值为：".$_POST['cardtype']."<br>";
+					echo "cardaddr值为：".$_POST['cardaddr']."<br>";
+					echo "cardmoney值为：".$_POST['cardmoney']."<br>";
+					echo "cardyearout值为：".$_POST['cardyearout']."<br>";
+					echo "cardyearin值为：".$_POST['cardyearin']."<br>";
+					echo "notes值为：".$_POST['notes']."<br>";
+					echo "is_disable值为：".$_POST['is_disable']."<br>";
+					echo "alter_id值为：".$_POST['alter_id']."<br>";
+					echo "<br>DEBUG END*********************************************<br>";	
+				}
+				$_POST['is_disable'] == "on" ? $is_disable = "0" : $is_disable = "1" ;
+				$cardname = $_POST['cardname'];
+				$cardnum = $_POST['cardnum'];
+				$cardtype = $_POST['cardtype'];
+				$cardaddr = $_POST['cardaddr'];
+				$cardmoney = $_POST['cardmoney'];
+				$cardyearout = $_POST['cardyearout'];
+				$cardyearin = $_POST['cardyearin'];
+				$notes = $_POST['notes'];
+				$alter_id = $_POST['alter_id'];
+
+				if($add_submit == 1){
+					$YesNo = ($Finance->insertBankCard($login_user_id,$login_family_num,$cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$cardyearout,$cardyearin,$notes,$alter_id,$is_disable))==true ? true:false;
+
+					/*  记录日志  */
+					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
+					$text_log = $YesNo ? "添加银行卡-成功,状态:".$is_disable.",开户行: ".$cardname.",卡号: ".$cardnum.",卡类型:".$cardtype.",归属地:".$cardaddr.",金钱:".$cardmoney.",年费:".$cardyearout.",利息:".$cardyearin.",备注:".$notes : "添加银行卡-失败,状态:".$is_disable.",开户行: ".$cardname.",卡号: ".$cardnum.",卡类型:".$cardtype.",归属地:".$cardaddr.",金钱:".$cardmoney.",年费:".$cardyearout.",利息:".$cardyearin.",备注:".$notes;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  5037 : 1037;
+				}
+
+				if($alter_submit == 1){
+					$alter_corde = $Finance->getCordeData($login_family_num,$recordtype,"",0,$alter_id);
+
+					$YesNo =($Finance->updateBankCard($cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$cardyearout,$cardyearin,$notes,$alter_id,$is_disable))==true ? true:false;
+					
+					/*  记录日志  */
+					$is_disable = $_POST['is_disable'] == "on" ?  "启用" : "禁用";
+					$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";
+
+					$text_log = $YesNo ? "修改银行卡-成功,原状态:".$is_disable2."改为:".$is_disable.",原开户行: ".$alter_corde['0']['card_name']."改为: ".$cardname.",原卡号: ".$alter_corde['0']['card_num'].",改为".$cardnum.",原卡类型:".$alter_corde['0']['card_type']."改为".$cardtype.",原归属地:".$alter_corde['0']['card_addr']."改为".$cardaddr.",原金钱:".$alter_corde['0']['money']."改为".$cardmoney.",原年费:".$alter_corde['0']['year_out']."改为".$cardyearout.",原利息:".$alter_corde['0']['year_in']."改为".$cardyearin.",原备注:".$alter_corde['0']['notes']."改为".$notes : "修改银行卡-失败,原状态:".$is_disable2."改为:".$is_disable.",原开户行: ".$alter_corde['0']['card_name']."改为: ".$cardname.",原卡号: ".$alter_corde['0']['card_num'].",改为".$cardnum.",原卡类型:".$alter_corde['0']['card_type']."改为".$cardtype.",原归属地:".$alter_corde['0']['card_addr']."改为".$cardaddr.",原金钱:".$alter_corde['0']['money']."改为".$cardmoney.",原年费:".$alter_corde['0']['year_out']."改为".$cardyearout.",原利息:".$alter_corde['0']['year_in']."改为".$cardyearin.",原备注:".$alter_corde['0']['notes']."改为".$notes;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  5038 : 1038;
+				}
+			}
+
+			if (!(is_null($Did)) && !(is_null($login_user_id))){
+				$alter_corde = $Finance->getCordeData($login_family_num,$recordtype,"",0,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
+					
+				/*  记录日志  */
+				$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";
+				$text_log = $YesNo ? "删除银行卡-成功,状态:".$is_disable2.",开户行: ".$alter_corde['0']['card_name'].",卡号: ".$alter_corde['0']['card_num'].",卡类型:".$alter_corde['0']['card_type'].",归属地:".$alter_corde['0']['card_addr'].",金钱:".$alter_corde['0']['money'].",年费:".$alter_corde['0']['year_out'].",利息:".$alter_corde['0']['year_in'].",备注:".$alter_corde['0']['notes'] : "删除银行卡-失败,状态:".$is_disable2.",开户行: ".$alter_corde['0']['card_name'].",卡号: ".$alter_corde['0']['card_num'].",卡类型:".$alter_corde['0']['card_type'].",归属地:".$alter_corde['0']['card_addr'].",金钱:".$alter_corde['0']['money'].",年费:".$alter_corde['0']['year_out'].",利息:".$alter_corde['0']['year_in'].",备注:".$alter_corde['0']['notes'];
+				/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  5039 : 1039;
+			}
+
+			if (!(is_null($Mid)) && !(is_null($login_user_id))){
+				if ($UP == 1){
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid,$UP);
+				}else{
+					$Finance->down_up($recordtype,$login_family_num,0,$Mid);
+				}
+			}
+
+			if (!(is_null($Aid)) && !(is_null($login_user_id))){
+				$alter_corde = $Finance->getCordeData($login_family_num,$recordtype,"",0,$Aid);
+?>
+			<table width="240">
+				<tr><td colspan="2" class="Ctd">
+					<?PHP echo "<b>".$_ALTER_BANKCARD."</b>"?>	
+				</td></tr>
+				<tr><td class="Rtd">
+					<?PHP echo $_ENABLE." :"; ?>
+				</td><td>
+					<INPUT TYPE="checkbox" <?PHP if ($alter_corde['0']['is_disable']=="0") echo "checked=\"checked\"" ?> name="is_disable" >
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_NAME ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardname" value="<?PHP echo $alter_corde['0']['card_name'] ?>"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_NUM ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardnum" value="<?PHP echo $alter_corde['0']['card_num'] ?>"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_TYPE."" ?>&nbsp;-></span>
+				</td><td>
+					<span> 
+						<select  name="cardtype">
+							<option value="储蓄卡" <?PHP if ( $alter_corde['0']['card_type'] == "储蓄卡" ) echo "selected=\"selected\""; ?> >储蓄卡</option>
+							<option value="支付宝卡" <?PHP if ( $alter_corde['0']['card_type'] == "支付宝卡" ) echo "selected=\"selected\""; ?> >支付宝卡</option>
+							<option value="信用卡" <?PHP if ( $alter_corde['0']['card_type'] == "信用卡" ) echo "selected=\"selected\""; ?> >信用卡</option>
+						</select>
+					</span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_ADDR ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardaddr" value="<?PHP echo $alter_corde['0']['card_addr'] ?>"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_MONEY ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardmoney" value="<?PHP echo $alter_corde['0']['money'] ?>"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_YEAR_OUT ?>&nbsp;-></span>
+				</td><td>
+					<span><input class="LoginInput" type="text" name="cardyearout" value="<?PHP echo $alter_corde['0']['year_out'] ?>"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_YEAR_IN ?>&nbsp;-></span>
+				</td><td>
+					<span><input class="LoginInput" type="text" name="cardyearin" value="<?PHP echo $alter_corde['0']['year_in'] ?>"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_NOTES ?>&nbsp;-></span>
+				</td><td>
+					<span><input class="LoginInput" type="text" name="notes" value="<?PHP echo $alter_corde['0']['notes'] ?>"></span>
+				</td></tr>
+				<tr><td colspan="2" class="Rtd">
+					<INPUT type="hidden" name="alter_id" value="<?PHP echo $Aid ?>">
+					<INPUT type="hidden" name="alter_submit" value="1">
+				<INPUT  TYPE="submit" value="<?PHP echo $_ALTER; ?>">
+			</td></tr>
+		</table>
+<?PHP
+			}else{
+?>
+			<table width="240">
+				<tr><td colspan="2" class="Ctd">
+					<?PHP echo "<b>".$_ADD_BANKCARD."</b>"?>	
+				</td></tr>
+				<tr><td class="Rtd">
+					<?PHP echo $_ENABLE." :"; ?>
+				</td><td>
+					<INPUT TYPE="checkbox" checked="checked" name="is_disable" >
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_NAME ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardname"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_NUM ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardnum"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_TYPE."" ?>&nbsp;-></span>
+				</td><td>
+					<span> 
+						<select  name="cardtype">
+							<option value="储蓄卡">储蓄卡</option>
+							<option value="支付宝卡">支付宝卡</option>
+							<option value="信用卡">信用卡</option>
+						</select>
+					</span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_ADDR ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardaddr"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_MONEY ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cardmoney"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_YEAR_OUT ?>&nbsp;-></span>
+				</td><td>
+					<span><input class="LoginInput" type="text" name="cardyearout"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_CARD_YEAR_IN ?>&nbsp;-></span>
+				</td><td>
+					<span><input class="LoginInput" type="text" name="cardyearin"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_NOTES ?>&nbsp;-></span>
+				</td><td>
+					<span><input class="LoginInput" type="text" name="notes"></span>
+				</td></tr>
+				<tr><td colspan="2" class="Rtd">
+					<INPUT type="hidden" name="add_submit" value="1">
+				<INPUT  TYPE="submit" value="<?PHP echo $_ADD; ?>">
+			</td></tr>
+		</table>
+<?PHP
+			}
+
+			$card_data = $Finance->getCordeData($login_family_num,$recordtype,"",0,0);
+			 
+			$table_title = array("序号","用户","状态","开户行","卡类型","备注","创建时间","操作");
+			
+			echo "<table>";		
+			echo "<tr class='ContentTdColor'>";
+			for ($i=0;$i<count($table_title);$i++){
+				echo "<th>".$table_title[$i]."</th>";
+			}
+
+			$c="ContentTdColor1";
+			for ($i=0;$i<count($card_data);$i++){
+				echo "<tr class=\"".$c."\">";
+				echo "<td>".($i+1)."</td>";
+				echo "<td>".@$Finance->convertID($card_data[$i]['user_id'],"users")."</td>";
+				echo "<td>".$YesNo=$card_data[$i]['is_disable']? "禁用":"启用"."</td>";
+				echo "<td>".$card_data[$i]['card_name']."</td>";
+				echo "<td>".$card_data[$i]['card_type']."</td>";
+				echo "<td>".$card_data[$i]['notes']."</td>";
+				echo "<td>".date('Y-m-d H:i:s',$card_data[$i]['create_date'])."</td>";
+				echo "<td><span class=\"click\" onClick=\"Alter('".$card_data[$i]['id']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$card_data[$i]['id']."')\">删除</span></td>";
+				echo "</tr>";
+				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			}
+			echo "</table>";
+			if(DEBUG_YES){ 
+				echo "<br>DEBUG START*********************************************<br>";
+				print_r($card_data);
+				echo "<Br>".date("Y-m-d");
+				echo "<br>DEBUG END*********************************************<br>";	
+			}
+			break;
+		case 'current_money':
+			if ( $add_submit == 1 || $alter_submit == 1 ){
+				if(DEBUG_YES){ 
+					echo "<br>DEBUG START*********************************************<br>";
+					echo "cmoney值为：".$_POST['cmoney']."<br>";
+					echo "alter_id值为：".$_POST['alter_id']."<br>";
+					echo "<br>DEBUG END*********************************************<br>";	
+				}
+				$cmoney = $_POST['cmoney'];
+				$alter_id = $_POST['alter_id'];
+
+				if($add_submit == 1){
+					$YesNo = ($Finance->insertCurrentMoney($login_user_id,$login_family_num,$cmoney))==true ? true:false;
+
+					/*  记录日志  */
+					$text_log = $YesNo ? "添加现金-成功,用户:".$login_user_id.", 现金:".$cmoney  : "添加现金-失败,用户:".$login_user_id.", 现金:".$cmoney;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  5040 : 1040;
+				}
+
+				if($alter_submit == 1){
+					$alter_corde = $Finance->getCordeData($login_family_num,$recordtype,"",0,$alter_id);
+
+					$YesNo = ($Finance->updateCurrentMoney($login_user_id,$login_family_num,$cmoney,$alter_id))==true ? true:false;
+					
+					/*  记录日志  */
+					$text_log = $YesNo ? "修改现金-成功,用户:".$login_user_id.", 现金:".$cmoney  : "修改现金-失败,用户:".$login_user_id.", 现金:".$cmoney;
+					/*  消息提醒  */
+					$_SESSION['__global_logid'] = $YesNo ?  5041 : 1041;
+				}
+			}
+
+			if (!(is_null($Did)) && !(is_null($login_user_id))){
+				$alter_corde = $Finance->getCordeData($login_family_num,$recordtype,"",0,$Did);
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
+					
+				/*  记录日志  */
+				$text_log = $YesNo ? "删除现金-成功,用户:".$login_user_id.", 现金:".$cmoney  : "删除现金-失败,用户:".$login_user_id.", 现金:".$cmoney;
+				/*  消息提醒  */
+				$_SESSION['__global_logid'] = $YesNo ?  5042 : 1042;
+			}
+
+			if (!(is_null($Aid)) && !(is_null($login_user_id))){
+				$alter_corde = $Finance->getCordeData($login_family_num,$recordtype,"",0,$Aid);
+?>
+			<table width="240">
+				<tr><td colspan="2" class="Ctd">
+					<?PHP echo "<b>".$_ALTER_MONEY."</b>"?>	
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_C_MONEY ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cmoney" value="<?PHP echo $alter_corde['0']['money'] ?>"></span>
+				</td></tr>
+				<tr><td colspan="2" class="Rtd">
+					<INPUT type="hidden" name="alter_id" value="<?PHP echo $Aid ?>">
+					<INPUT type="hidden" name="alter_submit" value="1">
+				<INPUT  TYPE="submit" value="<?PHP echo $_ALTER; ?>">
+			</td></tr>
+		</table>
+<?PHP
+			}else{
+				if ( $Finance->yesCurrentMoney( $login_user_id )) {
+					echo "<BR><BR>";
+				} else {
+?>
+					<table width="240">
+						<tr><td colspan="2" class="Ctd">
+							<?PHP echo "<b>".$_ADD_MONEY."</b>"?>	
+						</td></tr>
+						<tr><td class="Rtd">
+							<span><?PHP echo $_C_MONEY ?>&nbsp;-></span>
+						</td><td>
+							<span> <input class="LoginInput" type="text" name="cmoney"></span>
+						</td></tr>
+						<tr><td colspan="2" class="Rtd">
+							<INPUT type="hidden" name="add_submit" value="1">
+						<INPUT  TYPE="submit" value="<?PHP echo $_ADD; ?>">
+					</td></tr>
+				</table>
+<?PHP
+				}
+			}
+
+			$money_data = $Finance->getCordeData($login_family_num,$recordtype,"",0,0);
+			 
+			$table_title = array("序号","用户","家庭号","最后修改时间","现金","操作");
+			
+			echo "<table>";		
+			echo "<tr class='ContentTdColor'>";
+			for ($i=0;$i<count($table_title);$i++){
+				echo "<th>".$table_title[$i]."</th>";
+			}
+
+			$c="ContentTdColor1";
+			$today_money = 0;
+			for ($i=0;$i<count($money_data);$i++){
+				$today_money = ($today_money + $money_data[$i]['money']);
+				echo "<tr class=\"".$c."\">";
+				echo "<td>".($i+1)."</td>";
+				echo "<td>".@$Finance->convertID($money_data[$i]['user_id'],"users")."</td>";
+				echo "<td>".$money_data[$i]['family_num']."</td>";
+				echo "<td>".date('Y-m-d H:i:s',$money_data[$i]['last_date'])."</td>";
+				echo "<td>".$money_data[$i]['money']."</td>";
+				echo "<td><span class=\"click\" onClick=\"Alter('".$money_data[$i]['id']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$money_data[$i]['id']."')\">删除</span></td>";
+				echo "</tr>";
+				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			}
+			echo "<tr class='ContentTdColor'><td colspan=\"4\" align=\"right\">现金总计：</td><td colspan=\"2\">".$today_money."元</td></tr>";
+			echo "</table>";
+			if(DEBUG_YES){ 
+				echo "<br>DEBUG START*********************************************<br>";
+				print_r($money_data);
+				echo "<Br>".date("Y-m-d");
+				echo "<br>DEBUG END*********************************************<br>";	
+			}
+			break;
 	case 'family':
 			echo "<script type=\"text/javascript\" src=\"".JS_PATH."check.js\"></script>";
 			if ( $add_submit == 1 || $alter_submit == 1 ){
@@ -817,6 +1167,10 @@
 		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=in_mantype\"><span>收入类别管理</span></a>";
 		echo "<br><br>";
 		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=address\"><span>地址管理</span></a><br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=bank_card\"><span>银行卡管理</span></a>";
+		echo "<br><br>";
+		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=current_money\"><span>现金管理</span></a>";
+		echo "<br><br>";
 		echo "<a class=\"content\" href=\"main.php?page=fun_manager.php&add_type=family\"><span>家庭管理</span></a>";
 	}
 	if (! empty($text_log)) {

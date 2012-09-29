@@ -100,4 +100,18 @@
 	$_BUG_LEVEL = "级别";
 	$_BUG_TITLE = "标题";
 	$_BUG_CENTENT = "内容";
+
+	$_ADD_BANKCARD = "添加 银行卡" ;
+	$_ALTER_BANKCARD = "修改 银行卡" ;
+	$_CARD_NAME = "开户行";
+	$_CARD_NUM = "卡号";
+	$_CARD_TYPE = "卡类型";
+	$_CARD_ADDR = "归属地";
+	$_CARD_MONEY = "卡内金额";
+	$_CARD_YEAR_OUT = "年费";
+	$_CARD_YEAR_IN = "利息";
+
+	$_ADD_MONEY = "添加 现金" ;
+	$_ALTER_MONEY = "修改 现金" ;
+	$_C_MONEY = "现金" ;
 ?>

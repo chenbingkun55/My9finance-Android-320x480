@@ -27,6 +27,8 @@
         public $_address = 'address';
 		public $_log = "log_";
 		public $_bug_corde = "bug_corde";
+		public $_bank_card = "bank_card";
+		public $_current_money = "current_money";
 
 
         public $_pagesize = 10;
@@ -99,13 +101,16 @@
        /* 获取收入\支出数据函数 */
         public function getCordeData($family_num,$in_out,$date,$is_user=0,$Aid=0)
         {
-            
 			if ( $in_out == "out_record" ){
 				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE  from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND user_id = '".$user_id."'": $Aid ? "SELECT * FROM  ".$this->_out_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_out_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND family_num = '".$family_num."'";
 			} else if ( $in_out == "in_record" ) {
 				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND user_id = '".$family_num."'": $Aid ? "SELECT * FROM  ".$this->_in_corde." WHERE id = '".$Aid."'":"SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(create_date)>='".date('Y-m-d',$date)."'  AND family_num = '".$family_num."'";
 			} else if ( $in_out == "bug_corde" ) {
 				$sql = $is_user ? "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status  FROM ".$this->_bug_corde." WHERE user_id = '".$family_num."' AND status = '".$date."'" :  $Aid ?  "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status FROM  ".$this->_bug_corde." WHERE id = '".$Aid."'" : "SELECT id,user_id,family_num,bug_type,case bug_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as bug_level,bug_title,bug_centent,create_date,case status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as status  FROM  ".$this->_bug_corde." WHERE family_num = '".$family_num."'";
+			} else if ( $in_out == "bank_card") {
+				$sql = $is_user ? "SELECT * FROM  ".$this->_bank_card." WHERE  user_id = '".$family_num."'" : $Aid ? "SELECT * FROM  ".$this->_bank_card." WHERE  id = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  family_num = '".$family_num."'" ;
+			} else if ( $in_out == "current_money") {
+				$sql = $is_user ? "SELECT * FROM  ".$this->_current_money." WHERE  user_id = '".$family_num."'" : $Aid ? "SELECT * FROM  ".$this->_current_money." WHERE  id = '".$Aid."'" : "SELECT * FROM  ".$this->_current_money." WHERE  family_num = '".$family_num."'" ;
 			}
 
 			$result = $this->select($sql);
@@ -268,7 +273,7 @@
         {
 			$sql = "UPDATE ".$this->_users." SET is_disable = '".$is_disable."',username = '".$user_name."',user_alias = '".$user_alias."',password = password('".$user_password."'),clean_pass='".$user_password."',email='".$email."',qq='".$qq."',notes = '".$notes."'  WHERE id = '".$alter_id."'";
 			
-			$old_corde_sql = "SELECT * FROM ".$this->_users."  WHERE id = '".$Aid."'";
+			$old_corde_sql = "SELECT * FROM ".$this->_users."  WHERE id = '".$alter_id."'";
 
 
 			/* 记录修改前的资料 START */
@@ -500,6 +505,14 @@
 				case "bug_corde":
 					$sql = "DELETE from ".$this->_bug_corde." where id='".$corde_id."' AND user_id = '".$user_id."'";
 					$old_corde_sql = "SELECT * from ".$this->_bug_corde." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					break;
+				case "bank_card":
+					$sql = "DELETE from ".$this->_bank_card." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * from ".$this->_bank_card." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					break;
+				case "current_money":
+					$sql = "DELETE from ".$this->_current_money." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * from ".$this->_current_money." where id='".$corde_id."' AND user_id = '".$user_id."'";
 					break;
 			}
 
@@ -946,6 +959,53 @@
 	
 			return $this->update($sql);
 		}
+
+		public function insertBankCard( $user_id,$family_num,$cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$cardyearout,$cardyearin,$notes,$alter_id,$is_disable ) {
+			$card_store = $this->select("select max(store) from bank_card Where family_num = '".$family_num."'");
+
+			$sql = "INSERT INTO ".$this->_bank_card."  (id,user_id,family_num,card_name,card_num,card_type,card_addr,money, year_out,year_in,store,is_disable,notes,create_date) values ('','".$user_id."','".$family_num."','".$cardname."','".$cardnum."','".$cardtype."','".$cardaddr."','".$cardmoney."','".$cardyearout."','".$cardyearin."','".$card_store."','".$is_disable."','".$notes."','".time()."')";
+
+			return $this->insert($sql);
+		}
+	
+	public function updateBankCard($cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$cardyearout,$cardyearin,$notes,$alter_id,$is_disable) {
+			$set_sql = is_null($cardname) ? "  " :  "card_name = '".$cardname."' "   ;
+			$set_sql .= is_null($cardnum) ?   " " : " ,card_num = '".$cardnum."' " ;
+			$set_sql .= is_null($cardtype) ?   " " : " ,card_type = '".$cardtype."' " ;
+			$set_sql .= is_null($cardaddr) ?   " " : " ,card_addr = '".$cardaddr."' " ;
+			$set_sql .= is_null($cardmoney) ?   " " : " ,money = '".$cardmoney."' " ;
+			$set_sql .= is_null($cardyearout) ?   " " : " ,year_out = '".$cardyearout."' " ;
+			$set_sql .= is_null($cardyearin) ?   " " : " ,year_in = '".$cardyearin."' " ;
+			$set_sql .= is_null($notes) ?   " " : " ,notes = '".$notes."' " ;
+			$set_sql .= is_null($is_disable) ?   " " : " ,is_disable = '".$is_disable."' " ;
+
+			$sql = "UPDATE ".$this->_bank_card." SET  ".$set_sql." WHERE id = '".$alter_id."'";
+
+			return $this->update($sql);
+	}
+
+	/* 新增加用户现金 */
+	public function insertCurrentMoney($user_id,$family_num,$cmoney){
+		$sql = "INSERT INTO ".$this->_current_money."  (id,user_id,family_num,money,create_date,last_date) values ('','".$user_id."','".$family_num."','".$cmoney."','".time()."','".time()."')";
+
+		return $this->insert($sql);		
+	}
+
+	/* 判断是否己存在 */
+	public function yesCurrentMoney($user_id){
+		$sql = "SELECT user_id FROM ".$this->_current_money." WHERE  user_id = '".$user_id."'";
+		return $this->select($sql);
+	}
+
+	/* 修改用户现金 */
+	public function updateCurrentMoney($user_id,$family_num,$cmoney,$alter_id){
+		$set_sql = is_null($cmoney) ? "  " :  "money = '".$cmoney."' "   ;
+		$set_sql .= " ,last_date = '".time()."' " ;
+		$sql = "UPDATE ".$this->_current_money." set ".$set_sql." WHERE user_id = '".$user_id."'  AND id = '".$alter_id."'" ;
+
+		return $this->update($sql);			
+	}
+
 
 /*  以上内容为优化内容  ####################################################################################################*/
 

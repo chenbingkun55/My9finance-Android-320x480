@@ -6,7 +6,11 @@
 
 	/* 初始化用户环境变量 */
 	$login_username = $_SESSION['__userdata']['0']["username"];
-	$login_user_alias = $_SESSION['__userdata']['0']["user_alias"];
+	if( $_SESSION['__userdata']['0']["user_alias"] ) { 
+			$login_user_alias = $_SESSION['__userdata']['0']["user_alias"] ;
+	} else {
+			$login_user_alias = $_SESSION['__userdata']['0']["username"] ;
+	}
 	$login_user_id = $_SESSION['__userdata']['0']["id"];
 	$login_user_session = $_SESSION['__userdata']['0']["session"];
 	$login_last_date = $_SESSION['__userdata']['0']["last_date"];

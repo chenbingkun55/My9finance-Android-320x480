@@ -17,11 +17,7 @@
 	<?PHP
 			echo "<div>[ ".$login_family_num." ]->";
 
-		if ( $login_user_alias ) {
 			echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_alias."</a>&nbsp;&nbsp;".$_HELLO."</div>";
-		} else {
-			echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_name."&</a>nbsp;&nbsp;".$_HELLO."</div>";
-		}
 	?>
 </div>
 <div class="ChangeSkinPlane" id="ChangeSkinPlane">
