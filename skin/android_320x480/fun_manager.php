@@ -839,7 +839,7 @@
 				$alter_id = $_POST['alter_id'];
 
 				if($add_submit == 1){
-					$YesNo = ($Finance->insertCurrentMoney($login_user_id,$login_family_num,$cmoney))==true ? true:false;
+					$YesNo = ($Finance->insertCurrentMoney($login_user_id,$login_family_num,$cmoney,""))==true ? true:false;
 
 					/*  记录日志  */
 					$text_log = $YesNo ? "添加现金-成功,用户:".$login_user_id.", 现金:".$cmoney  : "添加现金-失败,用户:".$login_user_id.", 现金:".$cmoney;
@@ -889,26 +889,22 @@
 		</table>
 <?PHP
 			}else{
-				if ( $Finance->yesCurrentMoney( $login_user_id )) {
-					echo "<BR><BR>";
-				} else {
 ?>
-					<table width="240">
-						<tr><td colspan="2" class="Ctd">
-							<?PHP echo "<b>".$_ADD_MONEY."</b>"?>	
-						</td></tr>
-						<tr><td class="Rtd">
-							<span><?PHP echo $_C_MONEY ?>&nbsp;-></span>
-						</td><td>
-							<span> <input class="LoginInput" type="text" name="cmoney"></span>
-						</td></tr>
-						<tr><td colspan="2" class="Rtd">
-							<INPUT type="hidden" name="add_submit" value="1">
-						<INPUT  TYPE="submit" value="<?PHP echo $_ADD; ?>">
-					</td></tr>
-				</table>
+			<table width="240">
+				<tr><td colspan="2" class="Ctd">
+					<?PHP echo "<b>".$_ADD_MONEY."</b>"?>	
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_C_MONEY ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="cmoney"></span>
+				</td></tr>
+				<tr><td colspan="2" class="Rtd">
+					<INPUT type="hidden" name="add_submit" value="1">
+				<INPUT  TYPE="submit" value="<?PHP echo $_ADD; ?>">
+			</td></tr>
+		</table>
 <?PHP
-				}
 			}
 
 			$money_data = $Finance->getCordeData($login_family_num,$recordtype,"",0,0);

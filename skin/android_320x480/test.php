@@ -3,7 +3,7 @@
 	require_once(INCLUDE_PATH.'finance.inc.php');
 	header("Content-Type:text/html;charset=UTF-8"); 
 
-	$str="    abc    ";
+	$str = intval(-30);
 
 	echo "A".$str."A<BR>";
 	$str = trim( $str );

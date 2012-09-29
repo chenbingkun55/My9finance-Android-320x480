@@ -8,7 +8,7 @@
 	$alter_submit = $_POST['alter_submit'];
 	$Aid = $_GET['Aid'];
 	$Did = $_GET['Did'];
-
+	$bank_card = $Finance->getCordeData($login_user_id,"bank_card",0,1,0);
 
 	/*
 		添加表单:
@@ -21,6 +21,7 @@
 			$address = $_POST['address'];
 			$money = $_POST['money'];
 			$notes = $_POST['notes'];
+			$fromtype = $_POST['fromtype'];
 			$alter_id = $_POST['alter_id'];
 
 			if(DEBUG_YES){ 
@@ -35,7 +36,7 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			if ($add_submit == 1){
-				$YesNo = ($Finance->addCordeData($recordtype,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo = ($Finance->addCordeData($fromtype,$recordtype,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 				
 				/*  记录日志   */
 				$text_log = $YesNo ? "添加支出-成功,金额:".$money." 支出主类: ".@$Finance->convertID($mantype_id,"out_mantype")." 支出子类: ".@$Finance->convertID($subtype_id,"out_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加支出-失败,金额:".$money." 支出主类: ".@$Finance->convertID($mantype_id,"out_mantype")." 支出子类: ".@$Finance->convertID($subtype_id,"out_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -62,7 +63,13 @@
 			$_SESSION['__global_logid'] = $YesNo ?  5014 : 1014; 
 		}
 
-		echo "支出:&nbsp;";
+		echo "从:&nbsp;<select name=\"fromtype\">";
+		echo "<option value=\"0\">现金</option>";
+		for ($i=0;$i<count($bank_card);$i++){
+			echo "<option value=\"".$bank_card['0']['id']."\">".$bank_card['0']['card_name']."</option> ";
+		} 
+		echo "</select>";
+		echo "<BR>支出:&nbsp;";
 		if (!(is_null($Aid)) && !(is_null($login_user_id))){
 			$Finance->select_type($login_family_num,$recordtype,$Aid);
 		}else{
@@ -129,7 +136,7 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			if ($add_submit == 1){
-				$YesNo = ($Finance->addCordeData($recordtype,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo = ($Finance->addCordeData($fromtype,$recordtype,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 				
 				/*  记录日志   */
 				$text_log = $YesNo ?  "添加收入-成功,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加收入-失败,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -137,7 +144,7 @@
 				$_SESSION['__global_logid'] = $YesNo ? 5011 : 1011;  
 			}
 			if($alter_submit == 1){
-				$YesNo =($Finance->updateCordeData($recordtype,$alter_id,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo =($Finance->updateCordeData($fromtype,$recordtype,$alter_id,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 
 				/*  记录日志   */
 				$text_log = $YesNo ?  "修改收入-成功,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加收入-失败,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -156,8 +163,14 @@
 			/*  消息提醒  */
 			$_SESSION['__global_logid'] = $YesNo ?  5015 : 1015;
 		}
+		echo "从:&nbsp;<select name=\"fromtype\">";
+		echo "<option value=\"0\">现金</option>";
+		for ($i=0;$i<count($bank_card);$i++){
+			echo "<option value=\"".$bank_card['0']['id']."\">".$bank_card['0']['card_name']."</option> ";
+		} 
+		echo "</select>";
 
-		echo "收入:&nbsp;";
+		echo "<BR>收入:&nbsp;";
 		if (!(is_null($Aid)) && !(is_null($login_user_id))){
 			$Finance->select_type($login_family_num,$recordtype,$Aid);
 		}else{
