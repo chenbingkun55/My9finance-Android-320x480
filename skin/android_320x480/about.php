@@ -116,7 +116,7 @@
 
 		if (!(is_null($Did)) && !(is_null($login_user_id))){
 			$Did_data = $Finance->getCordeData($login_family_num,"bug_corde",0,0,$Did);
-			$YesNo = ($Finance->delCorde("bug_corde",$login_family_num,$Did))==true ? true:false;
+			$YesNo = (@$Finance->delCorde("bug_corde",$login_family_num,$Did,$login_user_id))==true ? true:false;
 			
 			/*  记录日志   */
 			/*  记录日志   */

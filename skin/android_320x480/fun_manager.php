@@ -72,7 +72,7 @@
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 					
 				/*  记录日志  */
 				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
@@ -186,7 +186,7 @@
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$Lid,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 
 				/*  记录日志  */
 				$man_name=@$Finance->convertID($Lid,"out_mantype");
@@ -299,7 +299,7 @@
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getManType($login_family_num,$recordtype,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 				
 				/*  记录日志  */
 				$is_display = $alter_corde['0']['is_diaplay'] == 1 ?  "显示" : "不显示";
@@ -413,7 +413,7 @@
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getSubType($login_family_num,$recordtype,1,$Lid,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 				
 				/*  记录日志  */
 				$man_name=@$Finance->convertID($Lid,"in_mantype");
@@ -524,7 +524,7 @@
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getAddress($login_family_num,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 					
 				/*  记录日志  */
 				$is_display2 = $alter_corde['0']['is_display'] == "1" ?  "显示" : "不显示";
@@ -642,7 +642,7 @@
 
 			if (!(is_null($Did)) && !(is_null($login_user_id))){
 				$alter_corde=$Finance->getUsers($login_family_num,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+				$YesNo =($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 					
 				/*  记录日志  */
 				$is_disable2 = $alter_corde['0']['is_disable'] == "0" ?  "启用" : "禁用";

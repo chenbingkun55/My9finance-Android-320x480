@@ -54,7 +54,7 @@
 
 		if (!(is_null($Did)) && !(is_null($login_user_id))){
 			$Did_data = $Finance->getCordeData($login_family_num,"out_record","",0,$Did);
-			$YesNo = ($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+			$YesNo = ($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 				
 			/*  记录日志   */
 			$text_log = $YesNo ? "删除支出-成功,金额:".$Did_data['0']['money']." 支出主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"out_mantype")." 支出子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"out_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'] : "删除支出-失败,金额:".$Did_data['0']['money']." 支出主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"out_mantype")." 支出子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"out_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'];
@@ -149,7 +149,7 @@
 
 		if (!(is_null($Did)) && !(is_null($login_user_id))){
 			$Did_data = $Finance->getCordeData($login_family_num,"in_record","",0,$Did);
-			$YesNo = ($Finance->delCorde($recordtype,$login_family_num,$Did))==true ? true:false;
+			$YesNo = ($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
 
 			/*  记录日志   */
 			$text_log = $YesNo ? "删除收入-成功,金额:".$Did_data['0']['money']." 收入主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"in_mantype")." 收入子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"in_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'] : "删除收入-失败,金额:".$Did_data['0']['money']." 收入主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"in_mantype")." 收入子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"in_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'];

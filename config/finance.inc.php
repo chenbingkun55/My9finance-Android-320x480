@@ -462,16 +462,16 @@
 
 
         /*删除收入支出与各主类了类记录函数 */
-        public function delCorde($in_out,$family_num,$corde_id)
+        public function delCorde($in_out,$family_num,$corde_id,$user_id)
         {
 			switch($in_out){
 				case "out_record":
-					$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND family_num = '".$family_num."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND family_num = '".$family_num."'";
+					$sql = "DELETE FROM ".$this->_out_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
 					break;
 				case "in_record":
-					$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND family_num = '".$family_num."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND family_num = '".$family_num."'";
+					$sql = "DELETE FROM ".$this->_in_corde." where id = '".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where id = '".$corde_id."' AND user_id = '".$user_id."'";
 					break;
 				case "out_mantype":
 					$sql = "DELETE out_mantype,out_subtype from out_mantype left join out_subtype on out_mantype.id=out_subtype.man_id where out_mantype.id='".$corde_id."' AND out_mantype.family_num = '".$family_num."'";
@@ -498,8 +498,8 @@
 					$old_corde_sql = "SELECT * from ".$this->_users." where id='".$corde_id."'";
 					break;
 				case "bug_corde":
-					$sql = "DELETE from ".$this->_bug_corde." where id='".$corde_id."'";
-					$old_corde_sql = "SELECT * from ".$this->_bug_corde." where id='".$corde_id."'";
+					$sql = "DELETE from ".$this->_bug_corde." where id='".$corde_id."' AND user_id = '".$user_id."'";
+					$old_corde_sql = "SELECT * from ".$this->_bug_corde." where id='".$corde_id."' AND user_id = '".$user_id."'";
 					break;
 			}
 
