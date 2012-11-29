@@ -163,7 +163,7 @@
 			/*  消息提醒  */
 			$_SESSION['__global_logid'] = $YesNo ?  5015 : 1015;
 		}
-		echo "从:&nbsp;<select name=\"fromtype\">";
+		echo "入:&nbsp;<select name=\"fromtype\">";
 		echo "<option value=\"0\">现金</option>";
 		for ($i=0;$i<count($bank_card);$i++){
 			echo "<option value=\"".$bank_card['0']['id']."\">".$bank_card['0']['card_name']."</option> ";
