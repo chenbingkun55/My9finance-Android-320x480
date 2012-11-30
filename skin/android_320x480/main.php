@@ -4,34 +4,55 @@
 	header("Content-Type:text/html;charset=UTF-8"); 
 
 
-	/* 初始化用户环境变量 */
-	$login_username = $_SESSION['__userdata']['0']["username"];
-	if( $_SESSION['__userdata']['0']["user_alias"] ) { 
-			$login_user_alias = $_SESSION['__userdata']['0']["user_alias"] ;
+	/* 初始化家庭环境变量 */
+	$login_familyname = $_SESSION['__familydata']['0']['F_name'];
+	if( $_SESSION['__familydata']['0']["F_alias"] ) { 
+			$login_familyalias = $_SESSION['__familydata']['0']['F_alias'] ;
 	} else {
-			$login_user_alias = $_SESSION['__userdata']['0']["username"] ;
+			$login_familyalias = $_SESSION['__familydata']['0']['F_name'] ;
 	}
-	$login_user_id = $_SESSION['__userdata']['0']["id"];
-	$login_user_session = $_SESSION['__userdata']['0']["session"];
-	$login_last_date = $_SESSION['__userdata']['0']["last_date"];
-	$login_family_num = $_SESSION['__userdata']['0']['family_num'];
-	$login_family_adm = $_SESSION['__userdata']['0']['family_adm'];
-	$login_skin_id = $_SESSION['__userdata']['0']["skin"];
+	$login_family_id = $_SESSION['__familydata']['0']['Id'];
+	$login_family_session = $_SESSION['__familydata']['0']['Session'];
+	
+	/* 初始化家庭成员环境变量 */
+	$login_member_id = $_SESSION['__memberdata']['0']['Id'];
+	$login_member_disable = $_SESSION['__memberdata']['0']['Is_d'];
+	if( $_SESSION['__memberdata']['0']['U_alias'] ) { 
+			$login_member_alias = $_SESSION['__memberdata']['0']['U_alias'] ;
+	} else {
+			$login_member_alias = $_SESSION['__familydata']['0']['U_name'] ;
+	}
+	$login_member_name = $_SESSION['__memberdata']['0']['U_name'];
+	$login_member_sum = $_SESSION['__memberdata']['0']['Sum'];
+	$login_member_skin = $_SESSION['__memberdata']['0']['Skin'];
+	
+
+
 	if ( ! isset($_SESSION['date_num']))  $_SESSION['date_num'] = 0;
 
 	/* 判断用户名为空时退出, 不是当前 Session 时退出 */
-	$temp_session = $Finance->getUserSession($login_user_id) ;
-	if ( empty($login_username) || $login_user_session != $temp_session['0']["session"])
+	$temp_session = $Finance->getFamilySession($login_family_id) ;
+	if ( empty($login_familyname) || $login_family_session != $temp_session['0']['Session'])
 	{
 		$_SESSION['__global_logid'] = "3";
-		echo "<script>window.location.replace('index.php?logid=3');</script>";
+		if(DEBUG_YES){ 
+			echo "<br>DEBUG START*********************************************<br>";
+			echo "login_family_id = " .$login_family_id."<BR>";
+			echo "login_family_session = " .$login_family_session."<BR>";
+			echo "temp_session = " .$temp_session['0']["Session"]."<BR>";
+			echo "login_last_date = " .$login_last_date."<BR>";
+			echo "login_member_skin = " .$login_member_skin."<BR>";
+			echo "<br>DEBUG END*********************************************<br>";	
+		} else {
+			echo "<script>window.location.replace('index.php?logid=3');</script>";
+		}
 	}
 
 
 	if ( ! is_null($_GET['skin'])){
-		$Finance->UpdateSkin($login_user_id,$_GET['skin']);
-		$_SESSION['__userdata']['0']['skin'] = $_GET['skin'];
-		$login_skin_id = $_SESSION['__userdata']['0']["skin"];
+		$Finance->UpdateSkin($login_member_id,$_GET['skin']);
+		$_SESSION['__memberdata']['0']['Skin'] = $_GET['skin'];
+		$login_member_skin = $_SESSION['__memberdata']['0']["Skin"];
 	}
 ?>
 
@@ -39,7 +60,7 @@
 <head>
 <title><?PHP echo $_TITLE?></title>
 <link href="<?PHP echo CSS_PATH."base_public.css"?>" rel="stylesheet" type="text/css" />
-<link href="<?PHP echo CSS_PATH."user_skin.".$login_skin_id.".css"?>" rel="stylesheet" type="text/css" />
+<link href="<?PHP echo CSS_PATH."user_skin.".$login_member_skin.".css"?>" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<?PHP echo JS_PATH."base_public.js"?>"></script>
 </head>
 

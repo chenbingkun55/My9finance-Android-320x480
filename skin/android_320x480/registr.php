@@ -67,7 +67,7 @@
 </style>
 </head>
 
-<body onload="document.getElementById('registr').username.focus()">
+<body onload="document.getElementById('registr').familyname.focus()">
 <div class="Backplane">
 	<div class="IndexICO">
 		<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
@@ -78,22 +78,21 @@
   <div class="IndexLogin">
 	<?PHP
 		$registr = $_POST['registr'];
-		$username = $_POST['username'];
-		$useralias = $_POST['useralias'];
-		$family_num = $_POST['family_num'];
-		$email = $_POST['email'];
-		$qq = $_POST['qq'];
+		$familyname = $_POST['familyname'];
+		$familyalias = $_POST['familyalias'];
+		$adm_email = $_POST['email'];
 		$password = $_POST['password'];
 
 		if ( $registr == 1 ){
-			if ($Finance->RegistrUser($username,$useralias,$password,$family_num,$email,$qq)!=false){
+			if ($Finance->RegistrUser($familyname,$familyalias,$password,$adm_email)!=false){
 				/* 判断注册用户 */
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
 					printf("注册成功。");
-					echo "用户名：".$username."<BR>";
-					echo "用别名：".$useralias."<BR>";
-					echo "用户家庭：".$family."<BR>";
+					echo "家庭名：".$familyname."<BR>";
+					echo "家庭别名：".$familyalias."<BR>";
+					echo "密码：".$password."<BR>";
+					echo "邮箱：".$adm_email."<BR>";
 					echo "<br>DEBUG END*********************************************<br>";
 				} else {
 					$_SESSION['__global_logid']=5801 ;
@@ -112,36 +111,21 @@
 			}
 		}
 	?>
-	     <FORM action="registr.php" onsubmit="return check(this)" id="registr" method="post">
+	     <FORM action="registr.php" onsubmit="return check(this);" id="registr" method="post">
 			<table width="240">
 				<tr><td colspan="2" class="Ctd">
 					<?PHP echo "<b>".$_REGISTR."</b>"?>	
 				</td></tr>
 				<tr><td>&nbsp;</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_USERNAME ?>&nbsp;-></span>
+					<span><?PHP echo $_FAMILYNAME ?>&nbsp;-></span>
 				</td><td>
-					<span> <input class="LoginInput" type="text" name="username"></span>
+					<span> <input class="LoginInput" type="text" name="familyname"></span>
 				</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_USERALIAS ?>&nbsp;-></span>
+					<span><?PHP echo $_FAMILYALIAS ?>&nbsp;-></span>
 				</td><td>
-					<span> <input class="LoginInput" type="text" name="useralias"></span>
-				</td></tr>
-				<tr><td class="Rtd">
-					<span><?PHP echo $_FAMILY_NUM."[3-10]位" ?><BR>[结合用户名登录]&nbsp;-></span>
-				</td><td>
-					<span> <input class="LoginInput" type="text" name="family_num"></span>
-				</td></tr>
-				<tr><td class="Rtd">
-					<span><?PHP echo $_MAIL ?>&nbsp;-></span>
-				</td><td>
-					<span> <input class="LoginInput" type="text" name="email"></span>
-				</td></tr>
-				<tr><td class="Rtd">
-					<span><?PHP echo $_QQ ?>&nbsp;-></span>
-				</td><td>
-					<span> <input class="LoginInput" type="text" name="qq"></span>
+					<span> <input class="LoginInput" type="text" name="familyalias"></span>
 				</td></tr>
 				<tr><td class="Rtd">
 					<span><?PHP echo $_PASSWORD ?>&nbsp;-></span>
@@ -152,6 +136,11 @@
 					<span><?PHP echo $_YES_PASSWORD ?>&nbsp;-></span>
 				</td><td>
 					<span><input class="LoginInput" type="password" name="yes_password"></span>
+				</td></tr>
+				<tr><td class="Rtd">
+					<span><?PHP echo $_ADM_MAIL ?>&nbsp;-></span>
+				</td><td>
+					<span> <input class="LoginInput" type="text" name="email"></span>
 				</td></tr>
 				<tr><td colspan="2" class="Rtd">
 					<span><INPUT type="hidden" name="registr" value="1"></span>

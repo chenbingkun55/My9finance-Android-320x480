@@ -1,23 +1,20 @@
 <?PHP
 	if(DEBUG_YES){ 
-		$str = "DEBUG START*********************************************";
-		$str .= "用户名: ".$login_username;
-		$str .= "用户别名: ".$login_user_alias;
-		$str .= "用户ID: ".$login_user_id;
-		$str .= "用户Session: ".$login_user_session;
-		$str .= "用户最后登录: ".$login_last_date;
-		$str .= "用户组号: ".$login_family_num;
-		$str .= "用户组管理员: ".$login_family_adm;
+		$str = "DEBUG START*********************************************<BR>";
+		$str .= "用户名: ".$login_member_name."<BR>";
+		$str .= "用户别名: ".$login_member_alias."<BR>";
+		$str .= "用户ID: ".$login_member_id."<BR>";
+		$str .= "用户家庭ID: ".$login_family_id."<BR>";
+		$str .= "用户Skin: ".$login_member_skin."<BR>";
 		$str .= "DEBUG END*********************************************";
-		echo "<script>alert('".$str."')</script>";
+		echo $str;
 	}
 ?>
 
 <div class="UserInfo">
 	<?PHP
-			echo "<div>[ ".$login_family_num." ]->";
-
-			echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_user_id."\">".$login_user_alias."</a>&nbsp;&nbsp;".$_HELLO."</div>";
+			echo "<div><a href=\"login.php?ml=1\">".$login_familyalias."</a> -> ";
+			echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_member_id."\">".$login_member_alias."</a>&nbsp;&nbsp;".$_HELLO."</div>";
 	?>
 </div>
 <div class="ChangeSkinPlane" id="ChangeSkinPlane">

@@ -23,7 +23,7 @@
 	}
 
 	if ( $is_bug == 1 || isset($Aid) ) {
-		$Aid_data = $Finance->getCordeData($login_family_num,"bug_corde",0,0,$Aid);
+		$Aid_data = $Finance->getCordeData($login_family_id,"bug_corde",0,0,$Aid);
 ?>
 			<form action="main.php?page=about.php" onsubmit="return check()" id="bug-form" method="post">
 			<table width="240">
@@ -95,7 +95,7 @@
 		}
 
 		if ($add_submit == 1){
-			$YesNo = ($Finance->addBUG($login_user_id,$login_family_num,$bug_type,$bug_level,$bug_title,$bug_centent))==true ? true:false; 
+			$YesNo = ($Finance->addBUG($login_family_id,$login_family_id,$bug_type,$bug_level,$bug_title,$bug_centent))==true ? true:false; 
 				
 			/*  记录日志   */
 			$text_log = $YesNo ? "添加".$bug_type."-成功,BUG级别: ".$bug_level." 标题: ".$bug_title." 内容: ".$bug_centent :  "添加".$bug_type."-失败,BUG级别: ".$bug_level." 标题:".$bug_title." 内容: ".$bug_centent ;
@@ -114,9 +114,9 @@
 		}
 	}
 
-		if (!(is_null($Did)) && !(is_null($login_user_id))){
-			$Did_data = $Finance->getCordeData($login_family_num,"bug_corde",0,0,$Did);
-			$YesNo = (@$Finance->delCorde("bug_corde",$login_family_num,$Did,$login_user_id))==true ? true:false;
+		if (!(is_null($Did)) && !(is_null($login_family_id))){
+			$Did_data = $Finance->getCordeData($login_family_id,"bug_corde",0,0,$Did);
+			$YesNo = (@$Finance->delCorde("bug_corde",$login_family_id,$Did,$login_family_id))==true ? true:false;
 			
 			/*  记录日志   */
 			/*  记录日志   */
@@ -125,7 +125,7 @@
 			$_SESSION['__global_logid'] = $YesNo ?  5036 : 1036; 
 		}
 
-		$list_bug = $Finance->getCordeData($login_family_num,"bug_corde",0,0,$Aid);
+		$list_bug = $Finance->getCordeData($login_family_id,"bug_corde",0,0,$Aid);
 		
 		$table_title = array("序号","用户","家庭号","类型","级别","标题","状态","时间","操作");	
 		
@@ -141,7 +141,7 @@
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
 				echo "<td>".@$Finance->convertID($list_bug[$i]['user_id'],"users")."</td>";
-				echo "<td>".$list_bug[$i]['family_num']."</td>";
+				echo "<td>".$list_bug[$i]['family_id']."</td>";
 				echo "<td>".$list_bug[$i]['bug_type']."</td>";
 				echo "<td>".$list_bug[$i]['bug_level']."</td>";
 				echo "<td>".$list_bug[$i]['bug_title']."</td>";

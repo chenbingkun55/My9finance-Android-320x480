@@ -77,7 +77,7 @@ table {
 }
 </style>
 </head>
-<body onload="document.getElementById('login-form').username.focus()">
+<body onload="document.getElementById('login-form').familyname.focus()">
 <div class="Backplane">
 	<div class="IndexICO">
 		<IMG id="TitleIMG" SRC="<?PHP echo IMG_PATH."logo_color.gif"?>" BORDER="0" ALT="" onMouseOver="OverTitleIMG()" onMouseOut="OutTitleIMG()">
@@ -100,16 +100,16 @@ table {
 		  }
 	  ?>
   <div class="IndexLogin">
-			<form action="login.php" onsubmit="return check(this)" id="login-form" method="post">
+			<form action="login.php" onsubmit="return check(this);" id="login-form" method="post">
 			<table width="240">
 				<tr><td colspan="2" class="Ctd">
 					<?PHP echo "<b>".$_LOGIN."</b>"?>	
 				</td></tr>
 				<tr><td>&nbsp;</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_FAMILY_NUM ?>&nbsp;-></span>
+					<span><?PHP echo $_FAMILYNAME ?>&nbsp;-></span>
 				</td><td>
-					<span> <input class="LoginInput" type="text" name="username"></span>
+					<span> <input class="LoginInput" type="text" name="familyname"></span>
 				</td></tr>
 				
 				<tr><td class="Rtd">

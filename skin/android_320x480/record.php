@@ -8,7 +8,7 @@
 	$alter_submit = $_POST['alter_submit'];
 	$Aid = $_GET['Aid'];
 	$Did = $_GET['Did'];
-	$bank_card = $Finance->getCordeData($login_user_id,"bank_card",0,1,0);
+	$bank_card = $Finance->getCordeData($login_family_id,"bank_card",0,1,0);
 
 	/*
 		添加表单:
@@ -36,7 +36,7 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			if ($add_submit == 1){
-				$YesNo = ($Finance->addCordeData($fromtype,$recordtype,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo = ($Finance->addCordeData($fromtype,$recordtype,$login_member_id,$login_family_id,"8",$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 				
 				/*  记录日志   */
 				$text_log = $YesNo ? "添加支出-成功,金额:".$money." 支出主类: ".@$Finance->convertID($mantype_id,"out_mantype")." 支出子类: ".@$Finance->convertID($subtype_id,"out_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加支出-失败,金额:".$money." 支出主类: ".@$Finance->convertID($mantype_id,"out_mantype")." 支出子类: ".@$Finance->convertID($subtype_id,"out_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -44,7 +44,7 @@
 				$_SESSION['__global_logid'] = $YesNo ?  5010 : 1010;  
 			}
 			if($alter_submit == 1){
-				$YesNo =($Finance->updateCordeData($recordtype,$alter_id,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo =($Finance->updateCordeData($recordtype,$alter_id,$login_member_id,$login_family_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 				
 				/*  记录日志   */
 				$text_log = $YesNo ?  "修改支出-成功,金额:".$money." 支出主类: ".@$Finance->convertID($mantype_id,"out_mantype")." 支出子类: ".@$Finance->convertID($subtype_id,"out_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加支出-失败,金额:".$money." 支出主类: ".@$Finance->convertID($mantype_id,"out_mantype")." 支出子类: ".@$Finance->convertID($subtype_id,"out_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -53,12 +53,12 @@
 			}
 		}
 
-		if (!(is_null($Did)) && !(is_null($login_user_id))){
-			$Did_data = $Finance->getCordeData($login_family_num,"out_record","",0,$Did);
-			$YesNo = ($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
+		if (!(is_null($Did)) && !(is_null($login_family_id))){
+			$Did_data = $Finance->getCordeData($login_family_id,"out_record",0,0,$Did);
+			$YesNo = ($Finance->delCorde($recordtype,$login_family_id,$Did,$login_member_id))==true ? true:false;
 				
 			/*  记录日志   */
-			$text_log = $YesNo ? "删除支出-成功,金额:".$Did_data['0']['money']." 支出主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"out_mantype")." 支出子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"out_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'] : "删除支出-失败,金额:".$Did_data['0']['money']." 支出主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"out_mantype")." 支出子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"out_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'];
+			$text_log = $YesNo ? "删除支出-成功,金额:".$Did_data['0']['Money']." 支出主类: ".@$Finance->convertID($Did_data['0']['M_id'],"out_mantype")." 支出子类: ".@$Finance->convertID($Did_data['0']['S_id'],"out_subtype")." 地址:".@$Finance->convertID($Did_data['0']['A_id'],"address")." 备注:".$Did_data['0']['Notes'] : "删除支出-失败,金额:".$Did_data['0']['Money']." 支出主类: ".@$Finance->convertID($Did_data['0']['M_id'],"out_mantype")." 支出子类: ".@$Finance->convertID($Did_data['0']['S_id'],"out_subtype")." 地址:".@$Finance->convertID($Did_data['0']['A_id'],"address")." 备注:".$Did_data['0']['Notes'];
 			/*  消息提醒  */
 			$_SESSION['__global_logid'] = $YesNo ?  5014 : 1014; 
 		}
@@ -66,20 +66,20 @@
 		echo "从:&nbsp;<select name=\"fromtype\">";
 		echo "<option value=\"0\">现金</option>";
 		for ($i=0;$i<count($bank_card);$i++){
-			echo "<option value=\"".$bank_card['0']['id']."\">".$bank_card['0']['card_name']."</option> ";
+			echo "<option value=\"".$bank_card['0']['Id']."\">".$bank_card['0']['Name']."</option> ";
 		} 
 		echo "</select>";
 		echo "<BR>支出:&nbsp;";
-		if (!(is_null($Aid)) && !(is_null($login_user_id))){
-			$Finance->select_type($login_family_num,$recordtype,$Aid);
+		if (!(is_null($Aid)) && !(is_null($login_family_id))){
+			$Finance->select_type($login_family_id,$recordtype,$Aid);
 		}else{
-			$Finance->select_type($login_family_num,$recordtype);
+			$Finance->select_type($login_family_id,$recordtype);
 		}
 		$str =  $Aid ? "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\"><INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"修改\"></span>":"<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"添加\"></span>";
 		echo $str;
 
-		$today_corde = $Finance->getCordeData($login_family_num,$recordtype,time());
-		$table_title = array("序号","时间","用户","家庭号","主类","子类","金额","地址","备注","操作");
+		$today_corde = $Finance->getCordeData($login_family_id,$recordtype,time());
+		$table_title = array("序号","时间","用户","主类","子类","金额","地址","备注","操作");
 		
 		echo "<table>";		
 		echo "<tr class='ContentTdColor'>";
@@ -90,19 +90,18 @@
 		$c="ContentTdColor1";
 		$today_money = 0;
 		for ($i=0;$i<count($today_corde);$i++){
-			$today_money = ($today_money + $today_corde[$i]['money']);
+			$today_money = ($today_money + $today_corde[$i]['Money']);
 			echo "<tr class='".$c."'>";
 			echo "<td>".($i+1)."</td>";
-			echo "<td>".date('H:i:s',$today_corde[$i]['create_date'])."</td>";
+			echo "<td>".date('H:i:s',$today_corde[$i]['C_date'])."</td>";
 
-			echo "<td>".@$Finance->convertID($today_corde[$i]['user_id'],"users")."</td>";
-			echo "<td>".$login_family_num."</td>";
-			echo "<td>".@$Finance->convertID($today_corde[$i]['mantype_id'],"out_mantype")."</td>";
-			echo "<td>".@$Finance->convertID($today_corde[$i]['subtype_id'],"out_subtype")."</td>";
-			echo "<td>".$today_corde[$i]['money']."</td>";
-			echo "<td>".@$Finance->convertID($today_corde[$i]['addr_id'],"address")."</td>";
-			echo "<td>".$today_corde[$i]['notes']."</td>";
-			echo "<td><span class=\"click\" onClick=\"Alter('".$today_corde[$i]['id']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$today_corde[$i]['id']."')\">删除</span></td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['U_id'],"family_member")."</td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['M_id'],"out_mantype")."</td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['S_id'],"out_subtype")."</td>";
+			echo "<td>".$today_corde[$i]['Money']."</td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['A_id'],"address")."</td>";
+			echo "<td>".$today_corde[$i]['Notes']."</td>";
+			echo "<td><span class=\"click\" onClick=\"Alter('".$today_corde[$i]['ID']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$today_corde[$i]['ID']."')\">删除</span></td>";
 			echo "</tr>";
 			$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 		}
@@ -136,7 +135,7 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			if ($add_submit == 1){
-				$YesNo = ($Finance->addCordeData($fromtype,$recordtype,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo = ($Finance->addCordeData($fromtype,$recordtype,$login_member_id,$login_family_id,"8",$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 				
 				/*  记录日志   */
 				$text_log = $YesNo ?  "添加收入-成功,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加收入-失败,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -144,7 +143,7 @@
 				$_SESSION['__global_logid'] = $YesNo ? 5011 : 1011;  
 			}
 			if($alter_submit == 1){
-				$YesNo =($Finance->updateCordeData($fromtype,$recordtype,$alter_id,$login_user_id,$login_family_num,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo =($Finance->updateCordeData($fromtype,$recordtype,$alter_id,$login_member_id,$login_family_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 
 				/*  记录日志   */
 				$text_log = $YesNo ?  "修改收入-成功,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加收入-失败,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -154,33 +153,33 @@
 			}
 		}
 
-		if (!(is_null($Did)) && !(is_null($login_user_id))){
-			$Did_data = $Finance->getCordeData($login_family_num,"in_record","",0,$Did);
-			$YesNo = ($Finance->delCorde($recordtype,$login_family_num,$Did,$login_user_id))==true ? true:false;
+		if (!(is_null($Did)) && !(is_null($login_family_id))){
+			$Did_data = $Finance->getCordeData($login_family_id,"in_record",0,0,$Did);
+			$YesNo = ($Finance->delCorde($recordtype,$login_family_id,$Did,$login_member_id))==true ? true:false;
 
 			/*  记录日志   */
-			$text_log = $YesNo ? "删除收入-成功,金额:".$Did_data['0']['money']." 收入主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"in_mantype")." 收入子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"in_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'] : "删除收入-失败,金额:".$Did_data['0']['money']." 收入主类: ".@$Finance->convertID($Did_data['0']['mantype_id'],"in_mantype")." 收入子类: ".@$Finance->convertID($Did_data['0']['subtype_id'],"in_subtype")." 地址:".@$Finance->convertID($Did_data['0']['addr_id'],"address")." 备注:".$Did_data['0']['notes'];
+			$text_log = $YesNo ? "删除收入-成功,金额:".$Did_data['0']['Money']." 收入主类: ".@$Finance->convertID($Did_data['0']['M_id'],"in_mantype")." 收入子类: ".@$Finance->convertID($Did_data['0']['S_id'],"in_subtype")." 地址:".@$Finance->convertID($Did_data['0']['A_id'],"address")." 备注:".$Did_data['0']['Notes'] : "删除收入-失败,金额:".$Did_data['0']['Money']." 收入主类: ".@$Finance->convertID($Did_data['0']['M_id'],"in_mantype")." 收入子类: ".@$Finance->convertID($Did_data['0']['S_id'],"in_subtype")." 地址:".@$Finance->convertID($Did_data['0']['A_id'],"address")." 备注:".$Did_data['0']['Notes'];
 			/*  消息提醒  */
 			$_SESSION['__global_logid'] = $YesNo ?  5015 : 1015;
 		}
 		echo "入:&nbsp;<select name=\"fromtype\">";
 		echo "<option value=\"0\">现金</option>";
 		for ($i=0;$i<count($bank_card);$i++){
-			echo "<option value=\"".$bank_card['0']['id']."\">".$bank_card['0']['card_name']."</option> ";
+			echo "<option value=\"".$bank_card['0']['Id']."\">".$bank_card['0']['Name']."</option> ";
 		} 
 		echo "</select>";
 
 		echo "<BR>收入:&nbsp;";
-		if (!(is_null($Aid)) && !(is_null($login_user_id))){
-			$Finance->select_type($login_family_num,$recordtype,$Aid);
+		if (!(is_null($Aid)) && !(is_null($login_family_id))){
+			$Finance->select_type($login_family_id,$recordtype,$Aid);
 		}else{
-			$Finance->select_type($login_family_num,$recordtype);
+			$Finance->select_type($login_family_id,$recordtype);
 		}
 		$str =  $Aid ? "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\"><INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"修改\"></span>":"<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\"><span align=\"right\"><INPUT class=\"LoginButton\" type=\"submit\" value=\"添加\"></span>";
 		echo $str;
 
-		$today_corde = $Finance->getCordeData($login_family_num,$recordtype,time());
-		$table_title = array("序号","时间","用户","家庭号","主类","子类","金额","地址","备注","操作");
+		$today_corde = $Finance->getCordeData($login_family_id,$recordtype,time());
+		$table_title = array("序号","时间","用户","主类","子类","金额","地址","备注","操作");
 		
 		echo "<table>";		
 		echo "<tr class='ContentTdColor'>";
@@ -191,19 +190,18 @@
 		$c="ContentTdColor1";
 		$today_money = 0;
 		for ($i=0;$i<count($today_corde);$i++){
-			$today_money = ($today_money + $today_corde[$i]['money']);
+			$today_money = ($today_money + $today_corde[$i]['Money']);
 			echo "<tr class='".$c."'>";
 			echo "<td>".($i+1)."</td>";
-			echo "<td>".date('H:i:s',$today_corde[$i]['create_date'])."</td>";
+			echo "<td>".date('H:i:s',$today_corde[$i]['C_date'])."</td>";
 
-			echo "<td>".@$Finance->convertID($today_corde[$i]['user_id'],"users")."</td>";
-			echo "<td>".$login_family_num."</td>";
-			echo "<td>".@$Finance->convertID($today_corde[$i]['mantype_id'],"in_mantype")."</td>";
-			echo "<td>".@$Finance->convertID($today_corde[$i]['subtype_id'],"in_subtype")."</td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['U_id'],"family_member")."</td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['M_id'],"in_mantype")."</td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['S_id'],"in_subtype")."</td>";
 			echo "<td>".$today_corde[$i]['money']."</td>";
-			echo "<td>".@$Finance->convertID($today_corde[$i]['addr_id'],"address")."</td>";
-			echo "<td>".$today_corde[$i]['notes']."</td>";
-			echo "<td><span class=\"click\" onClick=\"Alter('".$today_corde[$i]['id']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$today_corde[$i]['id']."')\">删除</span></td>";
+			echo "<td>".@$Finance->convertID($today_corde[$i]['A_id'],"address")."</td>";
+			echo "<td>".$today_corde[$i]['Notes']."</td>";
+			echo "<td><span class=\"click\" onClick=\"Alter('".$today_corde[$i]['ID']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$today_corde[$i]['ID']."')\">删除</span></td>";
 			echo "</tr>";
 			$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 		}

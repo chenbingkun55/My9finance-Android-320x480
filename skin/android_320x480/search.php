@@ -7,7 +7,7 @@
 	</select>
 
 	<?PHP 
-		$Finance->select_type($login_family_num,isset($_GET['scorde']) ? $_GET['scorde'] : "out_record");
+		$Finance->select_type($login_family_id,isset($_GET['scorde']) ? $_GET['scorde'] : "out_record");
 	?>
 
 	后<input type="text" name="d_num" value="0" size="1"> 
@@ -34,7 +34,7 @@
 			$d_num = $_POST['d_num'];
 			$sdate = $_POST['sdate'];
 
-			$search_data = $Finance->getSearchData( $scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_family_num); 
+			$search_data = $Finance->getSearchData( $scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_family_id); 
 
 			$table_title = array("序号","用户","家庭号","主类","子类","地址","金钱","备注","时间");
 			echo "<table>";		
@@ -59,7 +59,7 @@
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['user_id'],"users")."</td>";
-				echo "<td>".$search_data[$i]['family_num']."</td>";
+				echo "<td>".$search_data[$i]['family_id']."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['mantype_id'],$mantype)."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['subtype_id'],$subtype)."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['addr_id'],"address")."</td>";

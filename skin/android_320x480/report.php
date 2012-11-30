@@ -32,7 +32,7 @@
 
 <?PHP
 	if ( $_GET['report'] == 1 ) {
-		$report_data = $Finance->getReportData($_GET['scorde'],$_GET['stype'],$_GET['sdate'],$login_family_num,$jump);
+		$report_data = $Finance->getReportData($_GET['scorde'],$_GET['stype'],$_GET['sdate'],$login_family_id,$jump);
 
 		switch( $_GET['stype'] ) {
 			case  "address":
@@ -120,7 +120,7 @@
 		$stype =  isset($_GET['stype']) ? $_GET['stype'] : "users";
 		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
-		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_family_num,$jump);
+		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_family_id,$jump);
 		
 		if ( $_GET['scorde'] == "in_out" ) {
 			echo "<table><tr class='ContentTdColor'>";
