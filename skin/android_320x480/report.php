@@ -12,7 +12,7 @@
 	</select>
 
 	<select id="stype" name="stype" <?PHP if ( $_GET['scorde'] == "in_out")  echo "disabled=\"true\"" ;  ?>>
-		 <option  value="users" <?PHP if ( $_GET['stype'] == "users")  echo "selected=\"selected\"" ;  ?>>用户</option>
+		 <option  value="member" <?PHP if ( $_GET['stype'] == "member")  echo "selected=\"selected\"" ;  ?>>成员</option>
 		 <option  value="address"  <?PHP if ( $_GET['stype'] == "address" )  echo "selected=\"selected\"" ;  ?>>地址</option>
 		 <option  value="mantype"  <?PHP if ( $_GET['stype'] == "mantype" )  echo "selected=\"selected\"" ;  ?>>类别</option>
 	</select>
@@ -36,11 +36,11 @@
 
 		switch( $_GET['stype'] ) {
 			case  "address":
-				$table_title = array("序号","地址","家庭号","金钱","占百分比");
+				$table_title = array("序号","地址","家庭","金钱","占百分比");
 				$stype = "address";
 				break;
 			case  "mantype":
-				$table_title = array("序号","类别","家庭号","金钱","占百分比");
+				$table_title = array("序号","类别","家庭","金钱","占百分比");
 				if ( $_GET['scorde'] == "in_corde" ) {
 					$stype = "in_mantype";
 				}
@@ -49,8 +49,8 @@
 				}
 				break;
 			default:
-				$table_title = array("序号","用户","家庭号","金钱","占百分比");
-				$stype = "users";
+				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$stype = "family_member";
 		}	
 
 		if(DEBUG_YES){ 
@@ -95,7 +95,7 @@
 
 			$today_money = 0;
 			for ($i=0;$i<count($report_data);$i++){
-				$today_money = ($today_money + $report_data[$i]['sum(money)']);
+				$today_money = ($today_money + $report_data[$i]['sum(Money)']);
 			}
 
 			$c="ContentTdColor1";
@@ -104,8 +104,8 @@
 				echo "<td>".($i+1)."</td>";
 				echo "<td>".@$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
 				echo "<td>".$report_data[$i]['2']."</td>";
-				echo "<td>".$report_data[$i]['sum(money)']."</td>";
-				echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
+				echo "<td>".$report_data[$i]['sum(Money)']."</td>";
+				echo "<td>".(number_format($report_data[$i]['sum(Money)']/$today_money,2)*100)."%</td>";
 				echo "</tr>";
 			
 				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
@@ -117,7 +117,7 @@
 	} else {		
 		$jump =  isset($_GET['jump']) ? $_GET['jump'] : 0 ;
 		$scorde = isset($_GET['scorde']) ? $_GET['scorde'] : "out_corde";
-		$stype =  isset($_GET['stype']) ? $_GET['stype'] : "users";
+		$stype =  isset($_GET['stype']) ? $_GET['stype'] : "member";
 		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
 		$report_data = $Finance->getReportData($scorde,$stype,$sdate,$login_family_id,$jump);
@@ -149,11 +149,11 @@
 		} else {
 			switch( $_GET['stype'] ) {
 				case  "address":
-					$table_title = array("序号","地址","家庭号","金钱","占百分比");
+					$table_title = array("序号","地址","家庭","金钱","占百分比");
 					$stype = "address";
 					break;
 				case  "mantype":
-					$table_title = array("序号","类别","家庭号","金钱","占百分比");
+					$table_title = array("序号","类别","家庭","金钱","占百分比");
 					if ( $_GET['scorde'] == "in_corde" ) {
 						$stype = "in_mantype";
 					}
@@ -162,8 +162,8 @@
 					}
 					break;
 				default:
-					$table_title = array("序号","用户","家庭号","金钱","占百分比");
-					$stype = "users";
+					$table_title = array("序号","用户","家庭","金钱","占百分比");
+					$stype = "family_member";
 			}	
 
 
@@ -183,7 +183,7 @@
 
 			$today_money = 0;
 			for ($i=0;$i<count($report_data);$i++){
-				$today_money = ($today_money + $report_data[$i]['sum(money)']);
+				$today_money = ($today_money + $report_data[$i]['sum(Money)']);
 			}
 
 			$c="ContentTdColor1";
@@ -192,8 +192,8 @@
 				echo "<td>".($i+1)."</td>";
 				echo "<td>".@$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
 				echo "<td>".$report_data[$i]['2']."</td>";
-				echo "<td>".$report_data[$i]['sum(money)']."</td>";
-				echo "<td>".(number_format($report_data[$i]['sum(money)']/$today_money,2)*100)."%</td>";
+				echo "<td>".$report_data[$i]['sum(Money)']."</td>";
+				echo "<td>".(number_format($report_data[$i]['sum(Money)']/$today_money,2)*100)."%</td>";
 				echo "</tr>";
 				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 			}

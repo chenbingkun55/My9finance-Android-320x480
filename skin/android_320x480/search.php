@@ -36,7 +36,7 @@
 
 			$search_data = $Finance->getSearchData( $scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_family_id); 
 
-			$table_title = array("序号","用户","家庭号","主类","子类","地址","金钱","备注","时间");
+			$table_title = array("序号","用户","家庭","主类","子类","地址","金钱","备注","时间");
 			echo "<table>";		
 			echo "<tr class='ContentTdColor'>";
 
@@ -55,17 +55,17 @@
 			$c="ContentTdColor1";
 			$today_money = 0;
 			for ($i=0;$i<count($search_data);$i++){
-				$today_money = ($today_money + $search_data[$i]['money']);
+				$today_money = ($today_money + $search_data[$i]['Money']);
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
-				echo "<td>".@$Finance->convertID($search_data[$i]['user_id'],"users")."</td>";
-				echo "<td>".$search_data[$i]['family_id']."</td>";
-				echo "<td>".@$Finance->convertID($search_data[$i]['mantype_id'],$mantype)."</td>";
-				echo "<td>".@$Finance->convertID($search_data[$i]['subtype_id'],$subtype)."</td>";
-				echo "<td>".@$Finance->convertID($search_data[$i]['addr_id'],"address")."</td>";
-				echo "<td>".$search_data[$i]['money']."</td>";
-				echo "<td>".$search_data[$i]['notes']."</td>";
-				echo "<td>".date('Y-m-d H:i:s',$search_data[$i]['create_date'])."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['U_id'],"family_member")."</td>";
+				echo "<td>".$search_data[$i]['F_id']."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['M_id'],$mantype)."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['S_id'],$subtype)."</td>";
+				echo "<td>".@$Finance->convertID($search_data[$i]['A_id'],"address")."</td>";
+				echo "<td>".$search_data[$i]['Money']."</td>";
+				echo "<td>".$search_data[$i]['Notes']."</td>";
+				echo "<td>".date('Y-m-d H:i:s',$search_data[$i]['C_date'])."</td>";
 				echo "</tr>";
 				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 			}

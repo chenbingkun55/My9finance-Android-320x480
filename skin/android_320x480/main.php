@@ -11,20 +11,30 @@
 	} else {
 			$login_familyalias = $_SESSION['__familydata']['0']['F_name'] ;
 	}
-	$login_family_id = $_SESSION['__familydata']['0']['Id'];
+	$login_family_id = $_SESSION['__familydata']['0']['ID'];
 	$login_family_session = $_SESSION['__familydata']['0']['Session'];
 	
 	/* 初始化家庭成员环境变量 */
-	$login_member_id = $_SESSION['__memberdata']['0']['Id'];
-	$login_member_disable = $_SESSION['__memberdata']['0']['Is_d'];
-	if( $_SESSION['__memberdata']['0']['U_alias'] ) { 
-			$login_member_alias = $_SESSION['__memberdata']['0']['U_alias'] ;
+
+	if ( isset($_GET["member"]) )
+	{
+		$_SESSION['current_member'] =  $_GET["member"] ;
+		$current_member = $_SESSION['current_member'] ;
+		$Finance->refurbishMemberSession($_SESSION['__memberdata'][$current_member]['ID']);
 	} else {
-			$login_member_alias = $_SESSION['__familydata']['0']['U_name'] ;
+		$current_member = $_SESSION['current_member'] ;
 	}
-	$login_member_name = $_SESSION['__memberdata']['0']['U_name'];
-	$login_member_sum = $_SESSION['__memberdata']['0']['Sum'];
-	$login_member_skin = $_SESSION['__memberdata']['0']['Skin'];
+
+	$login_member_id = $_SESSION['__memberdata'][$current_member]['ID'];
+	$login_member_disable = $_SESSION['__memberdata'][$current_member]['Is_d'];
+	if( $_SESSION['__memberdata'][$current_member]['U_alias'] ) { 
+			$login_member_alias = $_SESSION['__memberdata'][$current_member]['U_alias'] ;
+	} else {
+			$login_member_alias = $_SESSION['__familydata'][$current_member]['U_name'] ;
+	}
+	$login_member_name = $_SESSION['__memberdata'][$current_member]['U_name'];
+	$login_member_sum = $_SESSION['__memberdata'][$current_member]['Sum'];
+	$login_member_skin = $_SESSION['__memberdata'][$current_member]['Skin'];
 	
 
 
@@ -51,8 +61,8 @@
 
 	if ( ! is_null($_GET['skin'])){
 		$Finance->UpdateSkin($login_member_id,$_GET['skin']);
-		$_SESSION['__memberdata']['0']['Skin'] = $_GET['skin'];
-		$login_member_skin = $_SESSION['__memberdata']['0']["Skin"];
+		$_SESSION['__memberdata'][$current_member]['Skin'] = $_GET['skin'];
+		$login_member_skin = $_SESSION['__memberdata'][$current_member]["Skin"];
 	}
 ?>
 
@@ -66,7 +76,7 @@
 
 <body>
 	<div class="Backplane" id="BodyDiv">
-		<?PHP 
+		<?PHP
 			$page = $_GET['page'];
 			 require("head.php"); 
 			 if (!$page){

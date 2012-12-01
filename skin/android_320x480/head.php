@@ -1,4 +1,11 @@
 <?PHP
+	$available_member = $Finance->AvailableMember($login_member_id);
+	
+	if ( $available_member != true ) {
+		unset($_SESSION['__memberdata']);
+		$login_member_alias = NULL;
+	}
+
 	if(DEBUG_YES){ 
 		$str = "DEBUG START*********************************************<BR>";
 		$str .= "用户名: ".$login_member_name."<BR>";
@@ -6,9 +13,15 @@
 		$str .= "用户ID: ".$login_member_id."<BR>";
 		$str .= "用户家庭ID: ".$login_family_id."<BR>";
 		$str .= "用户Skin: ".$login_member_skin."<BR>";
+		$str .= "用户是否存在: ".$available_member."<BR>";
 		$str .= "DEBUG END*********************************************";
 		echo $str;
 	}
+	 
+	if ( $login_member_alias == NULL && $_GET['add_type'] != "family" ) {
+		echo "<script>window.location.replace('login.php?ml=1');</script>";
+	}
+
 ?>
 
 <div class="UserInfo">

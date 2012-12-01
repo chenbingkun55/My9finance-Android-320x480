@@ -118,7 +118,7 @@
 				</td></tr>
 				<tr><td>&nbsp;</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_FAMILYNAME ?>&nbsp;-></span>
+					<span><?PHP echo $_FAMILYNAME ?>&nbsp;*-></span>
 				</td><td>
 					<span> <input class="LoginInput" type="text" name="familyname"></span>
 				</td></tr>
@@ -128,17 +128,17 @@
 					<span> <input class="LoginInput" type="text" name="familyalias"></span>
 				</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_PASSWORD ?>&nbsp;-></span>
+					<span><?PHP echo $_PASSWORD ?>&nbsp;*-></span>
 				</td><td>
 					<span><input class="LoginInput" type="password" name="password"></span>
 				</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_YES_PASSWORD ?>&nbsp;-></span>
+					<span><?PHP echo $_YES_PASSWORD ?>&nbsp;*-></span>
 				</td><td>
 					<span><input class="LoginInput" type="password" name="yes_password"></span>
 				</td></tr>
 				<tr><td class="Rtd">
-					<span><?PHP echo $_ADM_MAIL ?>&nbsp;-></span>
+					<span><?PHP echo $_ADM_MAIL ?>&nbsp;*-></span>
 				</td><td>
 					<span> <input class="LoginInput" type="text" name="email"></span>
 				</td></tr>

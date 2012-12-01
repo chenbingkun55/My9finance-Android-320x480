@@ -23,7 +23,7 @@
 	}
 
 	if ( $is_bug == 1 || isset($Aid) ) {
-		$Aid_data = $Finance->getCordeData($login_family_id,"bug_corde",0,0,$Aid);
+		$Aid_data = $Finance->getCordeData($login_member_id,"bug",0,0,$Aid);
 ?>
 			<form action="main.php?page=about.php" onsubmit="return check()" id="bug-form" method="post">
 			<table width="240">
@@ -35,29 +35,29 @@
 					<span><?PHP echo $_TYPE ?>&nbsp;-></span>
 				</td><td>
 					<select name="bug_type">
-						<option value="bug" <?PHP if ( $Aid_data['0']['bug_type'] == "bug" ) echo "selected=\"selected\""; ?>>缺陷</option>
-						<option value="suggestion" <?PHP if ( $Aid_data['0']['bug_type'] == "suggestion" ) echo "selected=\"selected\""; ?>>建议</option>
+						<option value="bug" <?PHP if ( $Aid_data['0']['B_type'] == "bug" ) echo "selected=\"selected\""; ?>>缺陷</option>
+						<option value="suggestion" <?PHP if ( $Aid_data['0']['B_type'] == "suggestion" ) echo "selected=\"selected\""; ?>>建议</option>
 					</select>
 				</td></tr>
 				<tr><td class="Rtd">
 					<span><?PHP echo $_BUG_LEVEL ?>&nbsp;-></span>
 				</td><td>
 					<select name="bug_level">
-						<option value="1" <?PHP if ( $Aid_data['0']['bug_level'] == "一般" ) echo "selected=\"selected\""; ?>>一般</option>
-						<option value="2" <?PHP if ( $Aid_data['0']['bug_level'] == "重要" ) echo "selected=\"selected\""; ?>>重要</option>
-						<option value="3" <?PHP if ( $Aid_data['0']['bug_level'] == "特重要" ) echo "selected=\"selected\""; ?>>特重要</option>
-						<option value="4" <?PHP if ( $Aid_data['0']['bug_level'] == "无法使用" ) echo "selected=\"selected\""; ?>>无法使用</option>
+						<option value="1" <?PHP if ( $Aid_data['0']['B_level'] == "一般" ) echo "selected=\"selected\""; ?>>一般</option>
+						<option value="2" <?PHP if ( $Aid_data['0']['B_level'] == "重要" ) echo "selected=\"selected\""; ?>>重要</option>
+						<option value="3" <?PHP if ( $Aid_data['0']['B_level'] == "特重要" ) echo "selected=\"selected\""; ?>>特重要</option>
+						<option value="4" <?PHP if ( $Aid_data['0']['B_level'] == "无法使用" ) echo "selected=\"selected\""; ?>>无法使用</option>
 					</select>
 				</td></tr>
 				<tr><td class="Rtd">
 					<span><?PHP echo $_BUG_TITLE ?>&nbsp;-></span>
 				</td><td>
-					<span><input type="text" name="bug_title" size="20" <?PHP echo  "value=\"".$Aid_data['0']['bug_title']."\"" ; ?>></span>
+					<span><input type="text" name="bug_title" size="20" <?PHP echo  "value=\"".$Aid_data['0']['B_title']."\"" ; ?>></span>
 				</td></tr>
 				<tr><td class="Rtd">
 					<span><?PHP echo $_BUG_CENTENT ?>&nbsp;-></span>
 				</td><td>
-					<textarea name = "bug_centent" rows="3" cols="20"><?PHP echo  $Aid_data['0']['bug_centent'] ; ?></textarea>
+					<textarea name = "bug_centent" rows="3" cols="20"><?PHP echo  $Aid_data['0']['B_centent'] ; ?></textarea>
 				</td></tr>
 				<tr><td colspan="2" class="Rtd">
 				<?PHP
@@ -95,7 +95,7 @@
 		}
 
 		if ($add_submit == 1){
-			$YesNo = ($Finance->addBUG($login_family_id,$login_family_id,$bug_type,$bug_level,$bug_title,$bug_centent))==true ? true:false; 
+			$YesNo = ($Finance->addBUG($login_member_id,$login_family_id,$bug_type,$bug_level,$bug_title,$bug_centent))==true ? true:false; 
 				
 			/*  记录日志   */
 			$text_log = $YesNo ? "添加".$bug_type."-成功,BUG级别: ".$bug_level." 标题: ".$bug_title." 内容: ".$bug_centent :  "添加".$bug_type."-失败,BUG级别: ".$bug_level." 标题:".$bug_title." 内容: ".$bug_centent ;
@@ -115,19 +115,19 @@
 	}
 
 		if (!(is_null($Did)) && !(is_null($login_family_id))){
-			$Did_data = $Finance->getCordeData($login_family_id,"bug_corde",0,0,$Did);
-			$YesNo = (@$Finance->delCorde("bug_corde",$login_family_id,$Did,$login_family_id))==true ? true:false;
+			$Did_data = $Finance->getCordeData($login_family_id,"bug",0,0,$Did);
+			$YesNo = (@$Finance->delCorde("bug",$login_family_id,$Did,$login_member_id))==true ? true:false;
 			
 			/*  记录日志   */
 			/*  记录日志   */
-			$text_log = $YesNo ? "删除BUG-成功,BUG级别:".$Did_data['0']['bug_level']." 标题: ".$Did_data['0']['bug_title']."内容: ".$Did_data['0']['bug_centent'] : "删除BUG-失败,BUG级别:".$Did_data['0']['bug_level']." 标题: ".$Did_data['0']['bug_title']."内容: ".$Did_data['0']['bug_centent'];
+			$text_log = $YesNo ? "删除BUG-成功,BUG级别:".$Did_data['0']['B_level']." 标题: ".$Did_data['0']['B_title']."内容: ".$Did_data['0']['B_centent'] : "删除BUG-失败,BUG级别:".$Did_data['0']['B_level']." 标题: ".$Did_data['0']['B_title']."内容: ".$Did_data['0']['B_centent'];
 			/*  消息提醒  */
 			$_SESSION['__global_logid'] = $YesNo ?  5036 : 1036; 
 		}
 
-		$list_bug = $Finance->getCordeData($login_family_id,"bug_corde",0,0,$Aid);
+		$list_bug = $Finance->getCordeData($login_family_id,"bug",0,0,$Aid);
 		
-		$table_title = array("序号","用户","家庭号","类型","级别","标题","状态","时间","操作");	
+		$table_title = array("序号","用户","类型","级别","标题","状态","时间","操作");	
 		
 		if ( $list_bug ) {
 			echo "<table>";		
@@ -140,14 +140,13 @@
 			for ($i=0;$i<count($list_bug);$i++){
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
-				echo "<td>".@$Finance->convertID($list_bug[$i]['user_id'],"users")."</td>";
-				echo "<td>".$list_bug[$i]['family_id']."</td>";
-				echo "<td>".$list_bug[$i]['bug_type']."</td>";
-				echo "<td>".$list_bug[$i]['bug_level']."</td>";
-				echo "<td>".$list_bug[$i]['bug_title']."</td>";
-				echo "<td>".$list_bug[$i]['status']."</td>";
-				echo "<td>".date('Y-m-d H:i:s',$list_bug[$i]['create_date'])."</td>";
-				echo "<td><span class=\"click\" onClick=\"Alter('".$list_bug[$i]['id']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$list_bug[$i]['id']."')\">删除</span></td>";
+				echo "<td>".@$Finance->convertID($list_bug[$i]['U_id'],"family_member")."</td>";
+				echo "<td>".$list_bug[$i]['B_type']."</td>";
+				echo "<td>".$list_bug[$i]['B_level']."</td>";
+				echo "<td>".$list_bug[$i]['B_title']."</td>";
+				echo "<td>".$list_bug[$i]['Status']."</td>";
+				echo "<td>".date('Y-m-d H:i:s',$list_bug[$i]['C_date'])."</td>";
+				echo "<td><span class=\"click\" onClick=\"Alter('".$list_bug[$i]['ID']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$list_bug[$i]['ID']."')\">删除</span></td>";
 				echo "</tr>";
 				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 			}

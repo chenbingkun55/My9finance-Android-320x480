@@ -10,6 +10,7 @@
 	$Did = $_GET['Did'];
 	$bank_card = $Finance->getCordeData($login_family_id,"bank_card",0,1,0);
 
+
 	/*
 		添加表单:
 	*/
@@ -143,7 +144,7 @@
 				$_SESSION['__global_logid'] = $YesNo ? 5011 : 1011;  
 			}
 			if($alter_submit == 1){
-				$YesNo =($Finance->updateCordeData($fromtype,$recordtype,$alter_id,$login_member_id,$login_family_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
+				$YesNo =($Finance->updateCordeData($recordtype,$alter_id,$login_member_id,$login_family_id,$mantype_id,$subtype_id,$address,$money,$notes))==true ? true:false;
 
 				/*  记录日志   */
 				$text_log = $YesNo ?  "修改收入-成功,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes : "添加收入-失败,金额:".$money." 收入主类: ".@$Finance->convertID($mantype_id,"in_mantype")." 收入子类: ".@$Finance->convertID($subtype_id,"in_subtype")." 地址:".@$Finance->convertID($address,"address")." 备注:".$notes;
@@ -162,7 +163,7 @@
 			/*  消息提醒  */
 			$_SESSION['__global_logid'] = $YesNo ?  5015 : 1015;
 		}
-		echo "入:&nbsp;<select name=\"fromtype\">";
+		echo "从:&nbsp;<select name=\"fromtype\">";
 		echo "<option value=\"0\">现金</option>";
 		for ($i=0;$i<count($bank_card);$i++){
 			echo "<option value=\"".$bank_card['0']['Id']."\">".$bank_card['0']['Name']."</option> ";
@@ -198,7 +199,7 @@
 			echo "<td>".@$Finance->convertID($today_corde[$i]['U_id'],"family_member")."</td>";
 			echo "<td>".@$Finance->convertID($today_corde[$i]['M_id'],"in_mantype")."</td>";
 			echo "<td>".@$Finance->convertID($today_corde[$i]['S_id'],"in_subtype")."</td>";
-			echo "<td>".$today_corde[$i]['money']."</td>";
+			echo "<td>".$today_corde[$i]['Money']."</td>";
 			echo "<td>".@$Finance->convertID($today_corde[$i]['A_id'],"address")."</td>";
 			echo "<td>".$today_corde[$i]['Notes']."</td>";
 			echo "<td><span class=\"click\" onClick=\"Alter('".$today_corde[$i]['ID']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$today_corde[$i]['ID']."')\">删除</span></td>";

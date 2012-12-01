@@ -99,7 +99,7 @@
     $_MESSAGE = "信息";
     $_SEND = "发送";
 
-	$_COM_BUG = "提交缺陷";
+	$_COM_BUG = "提交新缺陷";
 	$_COM_BUG_PAGE = "缺陷 提交页面";
 	$_BUG_LEVEL = "级别";
 	$_BUG_TITLE = "标题";

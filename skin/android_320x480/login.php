@@ -66,15 +66,18 @@
 
 	if ( $_SESSION['__familydata'] == '1' ) {
 		$_SESSION['__global_logid']=1 ;
-		$text_log = "家庭: [".$username."] 未知用户.";
+		$text_log = "家庭: [".$familyname."] 未知用户.";
+		echo "<script>window.location.replace('index.php?logid=1');</script>";
 	} else if ( $_SESSION['__familydata'] == '2' ) {
 		$_SESSION['__global_logid']=2 ;
-		$text_log = "家庭: [".$username."] 登录失败,密码错误.";
+		$text_log = "家庭: [".$familyname."] 登录失败,密码错误.";
+		echo "<script>window.location.replace('index.php?logid=2');</script>";
 	} else if ( $_SESSION['__familydata'] == '4' ) {
 		$_SESSION['__global_logid']=4 ;
-		$text_log = "家庭: [".$username."] 登录失败,账号被禁用.";
+		$text_log = "家庭: [".$familyname."] 登录失败,账号被禁用.";
+		echo "<script>window.location.replace('index.php?logid=4');</script>";
 	} else if( $_SESSION['__familydata']['0']["F_name"] == $familyname || $_GET['ml'] == '1' ){
-		$temp = $Finance->refurbishUserSession($_SESSION['__familydata']['0']["Id"]);
+		$temp = $Finance->refurbishFamilySession($_SESSION['__familydata']['0']["ID"]);
 		$_SESSION['__familydata']['0']["Session"] = $temp['0']["Session"] ;
 	
 		if(DEBUG_YES){ 
@@ -94,29 +97,34 @@
 				$login_familyalias = $_SESSION['__familydata']['0']['F_name'] ;
 		}
 
-		if ( $_SESSION['__familydata']['0']["Member"] == '0' ) 
+		if ( $_SESSION['__familydata']['0']['Member'] == '0' ) 
 		{
 			echo "<div>";
 			echo "<b>".$login_familyalias."&nbsp;-&nbsp;".$_FAMILY_MEMBER."</b><BR><BR>";
-			echo "还没有家庭成员.&nbsp;<a href=\"main.php\"><span>添加</span></a>";
+			echo "还没有家庭成员.&nbsp;<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>添加</span></a>";
 			echo "</div>";
 		} else {
-			$_SESSION['__memberdata'] = $Finance->getFamilyMember($_SESSION['__familydata']['0']["Id"]);
-				
+			$_SESSION['__memberdata'] = $Finance->getFamilyMember($_SESSION['__familydata']['0']["ID"]);
+
 			echo "<div>";
-			echo "<b>".$login_familyalias."&nbsp;-&nbsp;".$_FAMILY_MEMBER."</b><BR><BR>";
-			echo "<a href=\"main.php\"><span>".$_SESSION['__memberdata']['0']['U_alias']."</span></a>";
+			echo "<b>".$login_familyalias."&nbsp;-&nbsp;".$_FAMILY_MEMBER."</b>&nbsp;";
+			echo "<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>添加</span></a><BR><BR>";
+			for ( $i=0; $i <= $_SESSION['__familydata']['0']['Member']; $i++)
+			{
+				echo "<a href=\"main.php?member=".$i."\"><span>".$_SESSION['__memberdata'][$i]['U_alias']."</span></a><BR>";
+			}
 			echo "</div>";
 
 			if(DEBUG_YES){ 
 				echo "<br>DEBUG START*********************************************<br>";
-				echo $_SESSION['__familydata']['0']["Id"]."家庭ID<br>";
+				echo $_SESSION['__familydata']['0']["ID"]."家庭ID<br>";
 				print_r($_SESSION['__memberdata']);
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 		}
 	} else {
 		$_SESSION['__global_logid']=1 ;
+		echo "<script>window.location.replace('index.php?logid=1');</script>";
 	}
 	
 	echo "</div>";
