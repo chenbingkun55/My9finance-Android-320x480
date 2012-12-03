@@ -140,9 +140,12 @@
 				if ( $is_user == 1 ) {
 					$sql = "SELECT * FROM  ".$this->_bank_card." WHERE  U_id = '".$member_id."'" ;
 				} else {
-					$sql = $Aid ? "SELECT * FROM  ".$this->_bank_card." WHERE  Id = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  F_id = '".$family_id."'" ;
+					$sql = $Aid ? "SELECT * FROM  ".$this->_bank_card." WHERE  ID = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  F_id = '".$family_id."'" ;
 				}
+			} else if ( $in_out == "current_money") {
+				$sql = $is_user ? "SELECT ID,Money FROM  ".$this->_family_member." WHERE ID = '".$member_id."'": $Aid ? "SELECT ID,Money FROM  ".$this->_family_member." WHERE ID = '".$Aid."'":"SELECT ID,Money FROM  ".$this->_family_member." WHERE F_id = '".$family_id."'";	
 			}
+
 
 			$result = $this->select($sql);
 
@@ -302,7 +305,7 @@
         public function RegistrUser($familyname,$familyalias,$password,$adm_email)
         {
 			$this->begintransaction();
-			$sql = "INSERT INTO ".$this->_family." (ID,Is_d,F_name,F_alias,L_pass,C_pass,A_pass,Notes,Email,C_date,L_date,Sum,Session)  VALUES  ('','1','".$familyname."','".$familyalias."',password('".$password."'),'".$password."','','','".$adm_email."','".time()."','','0','')";
+			$sql = "INSERT INTO ".$this->_family." (ID,Is_d,F_name,F_alias,L_pass,C_pass,A_pass,Notes,Email,C_date,L_date,Sum,Session)  VALUES  ('','0','".$familyname."','".$familyalias."',password('".$password."'),'".$password."','','','".$adm_email."','".time()."','','0','')";
 
             $sql_family_id = "SELECT ID from ".$this->_family." where  F_name = '".$familyname."'";
 
@@ -1019,22 +1022,20 @@
 			return $this->update($sql);
 		}
 
-		public function insertBankCard( $user_id,$family_id,$cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$cardyearout,$cardyearin,$notes,$alter_id,$is_disable ) {
-			$card_store = $this->select("select max(store) from bank_card Where family_id = '".$family_id."'");
+		public function insertBankCard( $member_id,$family_id,$cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$notes,$alter_id,$is_disable ) {
+			$card_store = $this->select("select max(Store) from bank_card Where F_id = '".$family_id."'");
 
-			$sql = "INSERT INTO ".$this->_bank_card."  (id,user_id,family_id,card_name,card_num,card_type,card_addr,money, year_out,year_in,store,is_disable,notes,create_date) values ('','".$user_id."','".$family_id."','".$cardname."','".$cardnum."','".$cardtype."','".$cardaddr."','".$cardmoney."','".$cardyearout."','".$cardyearin."','".$card_store."','".$is_disable."','".$notes."','".time()."')";
+			$sql = "INSERT INTO ".$this->_bank_card." (ID,U_id,F_id,Is_d,Name,C_num,C_type,C_addr,Money,Store,Notes,C_date) values ('','".$member_id."','".$family_id."','".$is_disable."','".$cardname."','".$cardnum."','".$cardtype."','".$cardaddr."','".$cardmoney."','".$card_store."','".$notes."','".time()."')";
 
 			return $this->insert($sql);
 		}
 	
-	public function updateBankCard($cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$cardyearout,$cardyearin,$notes,$alter_id,$is_disable) {
+	public function updateBankCard($cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$notes,$alter_id,$is_disable) {
 			$set_sql = is_null($cardname) ? "  " :  "card_name = '".$cardname."' "   ;
 			$set_sql .= is_null($cardnum) ?   " " : " ,card_num = '".$cardnum."' " ;
 			$set_sql .= is_null($cardtype) ?   " " : " ,card_type = '".$cardtype."' " ;
 			$set_sql .= is_null($cardaddr) ?   " " : " ,card_addr = '".$cardaddr."' " ;
 			$set_sql .= is_null($cardmoney) ?   " " : " ,money = '".$cardmoney."' " ;
-			$set_sql .= is_null($cardyearout) ?   " " : " ,year_out = '".$cardyearout."' " ;
-			$set_sql .= is_null($cardyearin) ?   " " : " ,year_in = '".$cardyearin."' " ;
 			$set_sql .= is_null($notes) ?   " " : " ,notes = '".$notes."' " ;
 			$set_sql .= is_null($is_disable) ?   " " : " ,is_disable = '".$is_disable."' " ;
 
@@ -1067,10 +1068,10 @@
 	}
 
 	/* 修改用户现金 */
-	public function updateCurrentMoney($user_id,$family_id,$cmoney,$alter_id){
-		$set_sql = is_null($cmoney) ? "  " :  "money = '".$cmoney."' "   ;
-		$set_sql .= " ,last_date = '".time()."' " ;
-		$sql = "UPDATE ".$this->_current_money." set ".$set_sql." WHERE user_id = '".$user_id."'  AND id = '".$alter_id."'" ;
+	public function updateCurrentMoney($member_id,$family_id,$cmoney,$alter_id){
+		$sql = "UPDATE ".$this->_family_member." set Money = ".$cmoney." WHERE ID = '".$alter_id."' AND F_id = '".$family_id."'" ;
+		$current_member = $_SESSION['current_member'] ;
+		$_SESSION['__memberdata'][$current_member]['Money'] = $cmoney;
 
 		return $this->update($sql);			
 	}

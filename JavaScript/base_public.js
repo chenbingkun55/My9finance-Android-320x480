@@ -1,4 +1,6 @@
 var SubType=new Array();
+var MemberMoney=new Array();
+
 /*
   鼠标经过标题图片时启用,放大缩小功能.
 	OverTitleIMG()	鼠标进入显示大图.
@@ -211,6 +213,10 @@ function sSubType(sid){
 			}
 		}
 	} 
+}
+
+function PrintMoney(sid){
+	document.getElementById("MoneyPlane").innerHTML=MemberMoney[sid.selectedIndex]['3'];
 }
 
 

@@ -9,6 +9,19 @@
 	background-color:#66CC00
 }
 
+.MoneyPlane{
+	position: absolute;
+	z-index:20;
+	height: 10px;
+	width: 20px;
+	left: 140px;
+	top: 10px;
+	font-family: "微软雅黑";
+	font-size: 12px;
+	color: #FF0000;
+}
+
+
 .MainICO{
 	z-index: 100; 
 	position: absolute;
@@ -233,6 +246,7 @@ a:active {color: #3333FF}   /* 被选择的链接 */
 	font-family: "微软雅黑";
 	font-size: 9px;
 }
+
 
 .FunTitleFont{
 	font-family: "微软雅黑";

@@ -36,7 +36,7 @@
 
 			$search_data = $Finance->getSearchData( $scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $login_family_id); 
 
-			$table_title = array("序号","用户","家庭","主类","子类","地址","金钱","备注","时间");
+			$table_title = array("序号","用户","主类","子类","地址","金钱","备注","时间");
 			echo "<table>";		
 			echo "<tr class='ContentTdColor'>";
 
@@ -59,7 +59,6 @@
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['U_id'],"family_member")."</td>";
-				echo "<td>".$search_data[$i]['F_id']."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['M_id'],$mantype)."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['S_id'],$subtype)."</td>";
 				echo "<td>".@$Finance->convertID($search_data[$i]['A_id'],"address")."</td>";
@@ -69,7 +68,7 @@
 				echo "</tr>";
 				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
 			}
-			echo "<tr class='ContentTdColor'><td colspan=\"6\" align=\"right\">总计：</td><td colspan=\"3\">".$today_money."元</td></tr>"; 
+			echo "<tr class='ContentTdColor'><td colspan=\"5\" align=\"right\">总计：</td><td colspan=\"3\">".$today_money."元</td></tr>"; 
 			echo "</table>";
 	}
 ?>

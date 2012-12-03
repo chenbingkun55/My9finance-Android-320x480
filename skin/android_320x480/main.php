@@ -35,6 +35,7 @@
 	$login_member_name = $_SESSION['__memberdata'][$current_member]['U_name'];
 	$login_member_sum = $_SESSION['__memberdata'][$current_member]['Sum'];
 	$login_member_skin = $_SESSION['__memberdata'][$current_member]['Skin'];
+	$login_member_money = $_SESSION['__memberdata'][$current_member]['Money'];
 	
 
 
