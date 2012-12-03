@@ -168,8 +168,8 @@
 					$cmoney = $money;
 					break;
 			}
-			
-			$this->insertCurrentMoney($user_id,$family_id,$cmoney) ;
+
+			$this->updateCurrentMoney($member_id,$family_id,$cmoney,"");
 
             return $this->insert($sql);
         }
@@ -1069,9 +1069,18 @@
 
 	/* 修改用户现金 */
 	public function updateCurrentMoney($member_id,$family_id,$cmoney,$alter_id){
-		$sql = "UPDATE ".$this->_family_member." set Money = ".$cmoney." WHERE ID = '".$alter_id."' AND F_id = '".$family_id."'" ;
-		$current_member = $_SESSION['current_member'] ;
-		$_SESSION['__memberdata'][$current_member]['Money'] = $cmoney;
+		if ( $alter_id == "") {
+			$sql = "UPDATE ".$this->_family_member." set Money = Money + '".$cmoney."' WHERE ID = '".$member_id."' AND F_id = '".$family_id."'" ;
+			
+			$current_member = $_SESSION['current_member'] ;
+			$_SESSION['__memberdata'][$current_member]['Money'] = $_SESSION['__memberdata'][$current_member]['Money'] + $cmoney;
+		} else {
+			$sql = "UPDATE ".$this->_family_member." set Money = '".$cmoney."' WHERE ID = '".$alter_id."' AND F_id = '".$family_id."'" ;
+			$current_member = $_SESSION['current_member'] ;
+			$_SESSION['__memberdata'][$current_member]['Money'] = $cmoney;
+		}
+
+
 
 		return $this->update($sql);			
 	}
