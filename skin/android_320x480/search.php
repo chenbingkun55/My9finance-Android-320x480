@@ -41,11 +41,11 @@
 			echo "<tr class='ContentTdColor'>";
 
 			if ( $scorde == "out_record" ) {
-				$mantype = "out_mantype";
-				$subtype = "out_subtype";
+				$mantype = "mantype";
+				$subtype = "subtype";
 			} else if ($scorde == "in_record") {
-				$mantype = "in_mantype";
-				$subtype = "in_subtype";
+				$mantype = "mantype";
+				$subtype = "subtype";
 			}
 
 			for ($i=0;$i<count($table_title);$i++){

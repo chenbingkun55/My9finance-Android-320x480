@@ -295,19 +295,19 @@ function Del(ID){
 
 function ListSubtype(ID){
 	var args=queryStrings();
-	if (args.add_type=="out_mantype"){
-		window.location.replace('main.php?page='+args.page+'&add_type=out_subtype&Lid='+ID);
-	}else if (args.add_type=="in_mantype"){
-		window.location.replace('main.php?page='+args.page+'&add_type=in_subtype&Lid='+ID);
+	if (args.add_type=="mantype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=subtype&Lid='+ID);
+	}else if (args.add_type=="mantype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=subtype&Lid='+ID);
 	}
 }
 
 function ReturnMantype(){
 	var args=queryStrings();
-	if (args.add_type=="out_subtype"){
-		window.location.replace('main.php?page='+args.page+'&add_type=out_mantype');
-	}else if (args.add_type=="in_subtype"){
-		window.location.replace('main.php?page='+args.page+'&add_type=in_mantype');
+	if (args.add_type=="subtype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=mantype');
+	}else if (args.add_type=="subtype"){
+		window.location.replace('main.php?page='+args.page+'&add_type=mantype');
 	}
 	
 

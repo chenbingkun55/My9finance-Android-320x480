@@ -76,7 +76,7 @@
 		$_SESSION['__global_logid']=4 ;
 		$text_log = "家庭: [".$familyname."] 登录失败,账号被禁用.";
 		echo "<script>window.location.replace('index.php?logid=4');</script>";
-	} else if( $_SESSION['__familydata']['0']["F_name"] == $familyname || $_GET['ml'] == '1' ){
+	} else if( $_SESSION['__familydata']['0']["Name"] == $familyname || $_GET['ml'] == '1' ){
 		$temp = $Finance->refurbishFamilySession($_SESSION['__familydata']['0']["ID"]);
 		$_SESSION['__familydata']['0']["Session"] = $temp['0']["Session"] ;
 	
@@ -89,29 +89,29 @@
 			echo "<br>DEBUG END*********************************************<br>";
 		}
 		$_SESSION['__global_logid']=NULL;
-		$text_log = "家庭: [".$_SESSION['__familydata']['0']["F_name"]."] 登录成功";
+		$text_log = "家庭: [".$_SESSION['__familydata']['0']["Name"]."] 登录成功";
 			
-		if( $_SESSION['__familydata']['0']["F_alias"] ) { 
-				$login_familyalias = $_SESSION['__familydata']['0']['F_alias'] ;
+		if( $_SESSION['__familydata']['0']["Alias"] ) { 
+				$login_familyalias = $_SESSION['__familydata']['0']['Alias'] ;
 		} else {
-				$login_familyalias = $_SESSION['__familydata']['0']['F_name'] ;
+				$login_familyalias = $_SESSION['__familydata']['0']['Name'] ;
 		}
 
 		if ( $_SESSION['__familydata']['0']['Member'] == '0' ) 
 		{
 			echo "<div>";
 			echo "<b>".$login_familyalias."&nbsp;-&nbsp;".$_FAMILY_MEMBER."</b><BR><BR>";
-			echo "还没有家庭成员.&nbsp;<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>添加</span></a>";
+			echo "还没有家庭成员.&nbsp;<a href=\"main.php?page=fun_manager.php&add_type=member\"><span>添加</span></a>";
 			echo "</div>";
 		} else {
 			$_SESSION['__memberdata'] = $Finance->getFamilyMember($_SESSION['__familydata']['0']["ID"]);
 
 			echo "<div>";
 			echo "<b>".$login_familyalias."&nbsp;-&nbsp;".$_FAMILY_MEMBER."</b>&nbsp;";
-			echo "<a href=\"main.php?page=fun_manager.php&add_type=family\"><span>添加</span></a><BR><BR>";
+			echo "<a href=\"main.php?page=fun_manager.php&add_type=member\"><span>添加</span></a><BR><BR>";
 			for ( $i=0; $i <= $_SESSION['__familydata']['0']['Member']; $i++)
 			{
-				echo "<a href=\"main.php?member=".$i."\"><span>".$_SESSION['__memberdata'][$i]['U_alias']."</span></a><BR>";
+				echo "<a href=\"main.php?member=".$i."\"><span>".$_SESSION['__memberdata'][$i]['Name']."</span></a><BR>";
 			}
 			echo "</div>";
 

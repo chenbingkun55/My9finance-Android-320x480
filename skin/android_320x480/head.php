@@ -3,13 +3,11 @@
 	
 	if ( $available_member != true ) {
 		unset($_SESSION['__memberdata']);
-		$login_member_alias = NULL;
 	}
 
 	if(DEBUG_YES){ 
 		$str = "DEBUG START*********************************************<BR>";
 		$str .= "用户名: ".$login_member_name."<BR>";
-		$str .= "用户别名: ".$login_member_alias."<BR>";
 		$str .= "用户ID: ".$login_member_id."<BR>";
 		$str .= "用户家庭ID: ".$login_family_id."<BR>";
 		$str .= "用户Skin: ".$login_member_skin."<BR>";
@@ -18,7 +16,7 @@
 		echo $str;
 	}
 	 
-	if ( $login_member_alias == NULL && $_GET['add_type'] != "family" ) {
+	if ( $login_member_name == NULL && $_GET['add_type'] != "member" ) {
 		echo "<script>window.location.replace('login.php?ml=1');</script>";
 	}
 
@@ -27,7 +25,7 @@
 <div class="UserInfo">
 	<?PHP
 			echo "<div><a href=\"login.php?ml=1\">".$login_familyalias."</a> -> ";
-			echo "<a href=\"main.php?page=fun_manager.php&add_type=family&Aid=".$login_member_id."\">".$login_member_alias."</a>&nbsp;&nbsp;".$_HELLO."</div>";
+			echo "<a href=\"main.php?page=fun_manager.php&add_type=member&Aid=".$login_member_id."\">".$login_member_name."</a>&nbsp;&nbsp;".$_HELLO."</div>";
 	?>
 </div>
 <div class="ChangeSkinPlane" id="ChangeSkinPlane">

@@ -13,7 +13,7 @@ PHP Session 变量定义列表:
 
   变量:
     $error_info	 接收这个日志ID转换函数过来的数据$Finance->convertLogIdToContent($_SESSION['__global_logid'])
-    $today_out_corde	今天支出的记录.
+    $today_record_lib	今天支出的记录.
     $login_familyname	用户名
     $login_user_alias	用户别名
     $login_family_id	用户ID

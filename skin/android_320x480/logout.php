@@ -21,7 +21,7 @@
 	$_SESSION['__global_logid']=6000;
 	$error_info	= $Finance->convertLogIdToContent($_SESSION['__global_logid']);
 	echo "<br><br>&nbsp;".$error_info['0']['content'];
-	$text_log = "家庭: [".$_SESSION['__familydata']['0']["F_name"]."] 注销成功";
+	$text_log = "家庭: [".$_SESSION['__familydata']['0']["Name"]."] 注销成功";
 	session_destroy();
 	/*
 		跳转到登录页面。

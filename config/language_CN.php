@@ -1,8 +1,9 @@
 <?PHP
     $_TITLE = "彩贝壳-个人收支管理系统";
 	$_HELLO = "你好!";
-    $_USERNAME = "用户名";
-	$_USERALIAS = "显示名";
+    $_MEMBER_NAME = "成员名称";
+	$_MEMBER_MONEY = "成员钱包";
+	$_USER_ALIAS = "显示名";
 	$_FAMILYNAME = "家庭名";
 	$_FAMILYALIAS = "显示名";
 	$_FAMILY = "家庭";
@@ -23,7 +24,7 @@
     $_REPORT = "报表";
     $_SEARCH = "搜索";
     $_LOGIN_ERROR = "登录失败，请重新登录!";
-    $_LOGIN_USER_ERROR = "密码输入错误，请重新输入！";
+    $_LOGIN_USER__ERROR = "密码输入错误，请重新输入！";
     $_ADD_IN = "收入";
     $_ADD_OUT = "付出";
     $_ADD = "添加";
@@ -50,12 +51,12 @@
     $_ADD_ADDR = "添加地址";
 	
 	$_ENABLE = "启用";
-    $_LIST_USER = "列出用户";
-    $_USER_NAME = "用户名";
-    $_USER_ALIAS = "个性名称";
-    $_USER_PASSWORD = "用户密码";
-    $_ADD_USER = "添加用户";
-    $_ALTER_USER = "修改用户";
+    $_LIST_USER_ = "列出用户";
+    $_USER__NAME = "用户名";
+    $_USER__ALIAS = "个性名称";
+    $_USER__PASSWORD = "用户密码";
+    $_ADD_USER_ = "添加用户";
+    $_ALTER_USER_ = "修改用户";
     $_NOTES = "备注";
 
 

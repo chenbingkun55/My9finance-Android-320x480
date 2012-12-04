@@ -6,8 +6,8 @@
 <FORM action="main.php" method="get" >
 	
 	<select id="scorde" name="scorde" onChange="DisableStype()">
-		 <option  value="out_corde" <?PHP if ( $_GET['scorde'] == "out_corde")  echo "selected=\"selected\"" ;  ?>>支出</option>
-		 <option  value="in_corde" <?PHP if ( $_GET['scorde'] == "in_corde")  echo "selected=\"selected\"" ;  ?>>收入</option>
+		 <option  value="record_lib" <?PHP if ( $_GET['scorde'] == "record_lib")  echo "selected=\"selected\"" ;  ?>>支出</option>
+		 <option  value="record_lib" <?PHP if ( $_GET['scorde'] == "record_lib")  echo "selected=\"selected\"" ;  ?>>收入</option>
 		 <option  value="in_out" <?PHP if ( $_GET['scorde'] == "in_out")  echo "selected=\"selected\"" ;  ?>>收支</option>
 	</select>
 
@@ -41,11 +41,11 @@
 				break;
 			case  "mantype":
 				$table_title = array("序号","类别","家庭","金钱","占百分比");
-				if ( $_GET['scorde'] == "in_corde" ) {
-					$stype = "in_mantype";
+				if ( $_GET['scorde'] == "record_lib" ) {
+					$stype = "mantype";
 				}
-				if ( $_GET['scorde'] == "out_corde" ) {
-					$stype = "out_mantype";
+				if ( $_GET['scorde'] == "record_lib" ) {
+					$stype = "mantype";
 				}
 				break;
 			default:
@@ -116,7 +116,7 @@
 
 	} else {		
 		$jump =  isset($_GET['jump']) ? $_GET['jump'] : 0 ;
-		$scorde = isset($_GET['scorde']) ? $_GET['scorde'] : "out_corde";
+		$scorde = isset($_GET['scorde']) ? $_GET['scorde'] : "record_lib";
 		$stype =  isset($_GET['stype']) ? $_GET['stype'] : "member";
 		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
@@ -154,11 +154,11 @@
 					break;
 				case  "mantype":
 					$table_title = array("序号","类别","家庭","金钱","占百分比");
-					if ( $_GET['scorde'] == "in_corde" ) {
-						$stype = "in_mantype";
+					if ( $_GET['scorde'] == "record_lib" ) {
+						$stype = "mantype";
 					}
-					if ( $_GET['scorde'] == "out_corde" ) {
-						$stype = "out_mantype";
+					if ( $_GET['scorde'] == "record_lib" ) {
+						$stype = "mantype";
 					}
 					break;
 				default:

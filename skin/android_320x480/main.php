@@ -5,11 +5,11 @@
 
 
 	/* 初始化家庭环境变量 */
-	$login_familyname = $_SESSION['__familydata']['0']['F_name'];
-	if( $_SESSION['__familydata']['0']["F_alias"] ) { 
-			$login_familyalias = $_SESSION['__familydata']['0']['F_alias'] ;
+	$login_familyname = $_SESSION['__familydata']['0']['Name'];
+	if( $_SESSION['__familydata']['0']["Alias"] ) { 
+			$login_familyalias = $_SESSION['__familydata']['0']['Alias'] ;
 	} else {
-			$login_familyalias = $_SESSION['__familydata']['0']['F_name'] ;
+			$login_familyalias = $_SESSION['__familydata']['0']['Name'] ;
 	}
 	$login_family_id = $_SESSION['__familydata']['0']['ID'];
 	$login_family_session = $_SESSION['__familydata']['0']['Session'];
@@ -27,12 +27,7 @@
 
 	$login_member_id = $_SESSION['__memberdata'][$current_member]['ID'];
 	$login_member_disable = $_SESSION['__memberdata'][$current_member]['Is_d'];
-	if( $_SESSION['__memberdata'][$current_member]['U_alias'] ) { 
-			$login_member_alias = $_SESSION['__memberdata'][$current_member]['U_alias'] ;
-	} else {
-			$login_member_alias = $_SESSION['__familydata'][$current_member]['U_name'] ;
-	}
-	$login_member_name = $_SESSION['__memberdata'][$current_member]['U_name'];
+	$login_member_name = $_SESSION['__memberdata'][$current_member]['Name'];
 	$login_member_sum = $_SESSION['__memberdata'][$current_member]['Sum'];
 	$login_member_skin = $_SESSION['__memberdata'][$current_member]['Skin'];
 	$login_member_money = $_SESSION['__memberdata'][$current_member]['Money'];

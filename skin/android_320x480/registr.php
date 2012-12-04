@@ -84,7 +84,7 @@
 		$password = $_POST['password'];
 
 		if ( $registr == 1 ){
-			if ($Finance->RegistrUser($familyname,$familyalias,$password,$adm_email)!=false){
+			if ($Finance->RegistrFamily($familyname,$familyalias,$password,$adm_email)!=false){
 				/* 判断注册用户 */
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";

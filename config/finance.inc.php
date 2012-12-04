@@ -16,25 +16,20 @@
     class Finance extends DBSQL
     {
         /* 定义表名称变量*/
-        public $_in_corde = 'in_corde';
-        public $_out_corde = 'out_corde';
-        public $_in_mantype = 'in_mantype';
-        public $_in_subtype = 'in_subtype';
-        public $_out_mantype = 'out_mantype';
-        public $_out_subtype = 'out_subtype';
-        public $_users = 'users';
+        public $_record_lib = 'record_lib';
+        public $_mantype = 'mantype';
+        public $_subtype = 'subtype';
 		public $_family = 'family';
+		public $_bug = "bug";
+		public $_bank_card = "bank_card";
 		public $_family_member = 'family_member';
         public $_log_resolve = 'log_resolve';
         public $_address = 'address';
 		public $_log = "log_";
-		public $_bug = "bug";
-		public $_bank_card = "bank_card";
-
 
         public $_pagesize = 10;
-        public $_is_display = array("0"=>"禁用",
-            "1"=>"启用");
+        public $_is_disable = array("0"=>"启用",
+            "1"=>"禁用");
 
         /*  连接数据库函数 */
         public function _construct()
@@ -46,8 +41,8 @@
          /* 用户登录验证函数 */
         public function login($familyname,$password)
         {
-             $sql = "SELECT * FROM ".$this->_family." WHERE F_name = '".$familyname."'";
-			 $sql2 = "SELECT * FROM ".$this->_family." WHERE F_name = '".$familyname."' AND L_pass = password('".$password."')";
+             $sql = "SELECT * FROM ".$this->_family." WHERE Name = '".$familyname."'";
+			 $sql2 = "SELECT * FROM ".$this->_family." WHERE Name = '".$familyname."' AND L_pass = password('".$password."')";
 
              if( $result =  $this->select($sql))
             {
@@ -105,7 +100,7 @@
 		/*取得家庭成员函数*/
         public function getFamilyMember($family_id)
         {
-            $sql = "SELECT * FROM ".$this->_family_member." WHERE F_id = '".$family_id."'";
+            $sql = "SELECT * FROM ".$this->_family_member." WHERE F_id = '".$family_id."' AND Is_d = '0'";
             $result = $this->select($sql);
 			return  $result;
         }
@@ -127,23 +122,23 @@
 
 
        /* 获取收入\支出数据函数 */
-        public function getCordeData($family_id,$in_out,$date,$is_user=0,$Aid=0)
+        public function getCordeData($family_id,$flow,$date,$is_member=0,$Aid=0)
         {
 			$member_id = $family_id;
-			if ( $in_out == "out_record" ){
-				$sql = $is_user ? "SELECT * FROM  ".$this->_out_corde." WHERE  from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."'": $Aid ? "SELECT * FROM  ".$this->_out_corde." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_out_corde." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."'";
-			} else if ( $in_out == "in_record" ) {
-				$sql = $is_user ? "SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."'": $Aid ? "SELECT * FROM  ".$this->_in_corde." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_in_corde." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."'";
-			} else if ( $in_out == "bug" ) {
-				$sql = $is_user ? "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM ".$this->_bug." WHERE U_id = '".$member_id."' AND Status = '".$date."'" :  $Aid ?  "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status FROM  ".$this->_bug." WHERE ID = '".$Aid."'" : "SELECT ID,U_id,F_id,case B_type when 'bug' then '缺陷' when 'suggestion' then '建议' end as B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM  ".$this->_bug." WHERE F_id = '".$family_id."'";
-			} else if ( $in_out == "bank_card") {
-				if ( $is_user == 1 ) {
-					$sql = "SELECT * FROM  ".$this->_bank_card." WHERE  U_id = '".$member_id."'" ;
-				} else {
-					$sql = $Aid ? "SELECT * FROM  ".$this->_bank_card." WHERE  ID = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  F_id = '".$family_id."'" ;
-				}
-			} else if ( $in_out == "current_money") {
-				$sql = $is_user ? "SELECT ID,Money FROM  ".$this->_family_member." WHERE ID = '".$member_id."'": $Aid ? "SELECT ID,Money FROM  ".$this->_family_member." WHERE ID = '".$Aid."'":"SELECT ID,Money FROM  ".$this->_family_member." WHERE F_id = '".$family_id."'";	
+
+			switch ($flow){
+				case "0":
+					$sql = $is_member ? "SELECT * FROM  ".$this->_record_lib." WHERE  from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."' AND Flow = '0'": $Aid ? "SELECT * FROM  ".$this->_record_lib." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."' AND Flow = '0'";
+					break;
+				case "1":
+					$sql = $is_member ? "SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."' AND Flow = '1'": $Aid ? "SELECT * FROM  ".$this->_record_lib." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."'  AND Flow = '1'";
+					break;
+				case "bug" :
+					$sql = $is_member ? "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM ".$this->_bug." WHERE U_id = '".$member_id."' AND Status = '".$date."'" :  $Aid ?  "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status FROM  ".$this->_bug." WHERE ID = '".$Aid."'" : "SELECT ID,U_id,F_id,case B_type when 'bug' then '缺陷' when 'suggestion' then '建议' end as B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM  ".$this->_bug." WHERE F_id = '".$family_id."'";
+					break;
+				case "bank_card" :
+					$sql = $is_member ? "SELECT * FROM  ".$this->_bank_card." WHERE  U_id = '".$member_id."'" : $Aid ? "SELECT * FROM  ".$this->_bank_card."  WHERE  ID = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  F_id = '".$family_id."'";
+					break;
 			}
 
 
@@ -152,16 +147,16 @@
             return $result;
         }
 
-       /* 添加收入\支出数据函数 $in_out,$user_id,$family_id,$mantype_id,$subtype_id,$address,$menoy,$notes */
-        public function addCordeData($in_out,$member_id,$family_id,$bank_id,$mantype_id,$subtype_id,$address_id,$money,$notes)
+       /* 添加收入\支出数据函数 $flow,$user_id,$family_id,$mantype_id,$subtype_id,$address,$menoy,$notes */
+        public function addCordeData($flow,$member_id,$family_id,$bank_id,$mantype_id,$subtype_id,$address_id,$money,$notes)
         {
             
-			switch($in_out){
-				case "out_record":
-					$sql = "INSERT INTO ".$this->_out_corde." (ID,U_id,F_id,B_id,M_id,S_id,A_id,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','".$money."','".$notes."','".time()."')";
+			switch($flow){
+				case "0":
+					$sql = "INSERT INTO ".$this->_record_lib." (ID,U_id,F_id,B_id,M_id,S_id,A_id,Flow,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','0','".$money."','".$notes."','".time()."')";
 					break;
-				case "in_record":
-					$sql = "INSERT INTO ".$this->_in_corde."  (ID,U_id,F_id,B_id,M_id,S_id,A_id,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','".$money."','".$notes."','".time()."')";
+				case "1":
+					$sql = "INSERT INTO ".$this->_record_lib."  (ID,U_id,F_id,B_id,M_id,S_id,A_id,Flow,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','1','".$money."','".$notes."','".time()."')";
 					$cmoney = $money;
 					break;
 			}
@@ -172,22 +167,22 @@
         }
 
 		/*更新收入/支出记录函数 */
-        public function updateCordeData($in_out,$Aid,$member_id,$family_id,$mantype_id,$subtype_id,$address,$money,$notes)
+        public function updateCordeData($flow,$Aid,$member_id,$family_id,$mantype_id,$subtype_id,$address,$money,$notes)
         {
-			switch($in_out){
-				case "out_record":
-					$sql = "UPDATE ".$this->_out_corde." SET Money = '".$money."',M_id = '".$mantype_id."',S_id = '".$subtype_id."',A_id = '".$address."', Notes = '".$notes."'  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
+			switch($flow){
+				case "0":
+					$sql = "UPDATE ".$this->_record_lib." SET Money = '".$money."',M_id = '".$mantype_id."',S_id = '".$subtype_id."',A_id = '".$address."', Notes = '".$notes."'  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_record_lib."  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
 					break;
-				case "in_record":
-					$sql = "UPDATE ".$this->_in_corde." SET Money = '".$money."',M_id = '".$mantype_id."',S_id = '".$subtype_id."',A_id = '".$address."', Notes = '".$notes."'  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
+				case "1":
+					$sql = "UPDATE ".$this->_record_lib." SET Money = '".$money."',M_id = '".$mantype_id."',S_id = '".$subtype_id."',A_id = '".$address."', Notes = '".$notes."'  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_record_lib."  WHERE ID = '".$Aid."' AND U_id = '".$member_id."'";
 					break;
 			}
 
 			/* 记录修改前的资料 START */
 			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->_out_corde." 原记录: ";
+			$old_corde = "表名:".$this->_record_lib." 原记录: ";
 			for($j=0;$j<count($old_corde1);$j++) {
 				for($i=0;$i<count($old_corde1[$j]);$i++) {
 					$old_corde .= "'".$old_corde1[$j][$i]."',";
@@ -203,19 +198,19 @@
 		/* 添加收入\支出类别 */
 		public function addTypeData($in_out,$family_id,$typename,$is_display=1,$man_id=0){
 			switch($in_out){
-				case 'out_mantype':
-				case 'out_subtype':
-					$man_store = $this->select("select max(Store) from out_mantype Where F_id = '".$family_id."'");
-					$sub_store = $this->select("select max(Store) from out_subtype WHERE M_id = '".$man_id."' AND F_id ='".$family_id."'");
+				case 'mantype':
+				case 'subtype':
+					$man_store = $this->select("select max(Store) from mantype Where F_id = '".$family_id."'");
+					$sub_store = $this->select("select max(Store) from subtype WHERE M_id = '".$man_id."' AND F_id ='".$family_id."'");
 
-					$sql =($man_id) ? "INSERT INTO ".$this->_out_subtype ." (ID,F_id,M_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$man_id."','".$is_display."','".($sub_store['0']['0']+1)."','".$typename."','".time()."')":"INSERT INTO ".$this->_out_mantype ." (ID,F_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$is_display."','".($man_store['0']['0']+1)."','".$typename."','".time()."')" ;
+					$sql =($man_id) ? "INSERT INTO ".$this->_subtype ." (ID,F_id,M_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$man_id."','".$is_display."','".($sub_store['0']['0']+1)."','".$typename."','".time()."')":"INSERT INTO ".$this->_mantype ." (ID,F_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$is_display."','".($man_store['0']['0']+1)."','".$typename."','".time()."')" ;
 					break;
-				case 'in_mantype':
-				case 'in_subtype':
-					$man_store = $this->select("select max(Store) from in_mantype Where F_id = '".$family_id."'");
-					$sub_store = $this->select("select max(Store) from in_subtype WHERE M_id = '".$man_id."' AND F_id ='".$family_id."'");
+				case 'mantype':
+				case 'subtype':
+					$man_store = $this->select("select max(Store) from mantype Where F_id = '".$family_id."'");
+					$sub_store = $this->select("select max(Store) from subtype WHERE M_id = '".$man_id."' AND F_id ='".$family_id."'");
 
-					$sql =($man_id) ? "INSERT INTO ".$this->_in_subtype ." (ID,F_id,M_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$man_id."','".$is_display."','".($sub_store['0']['0']+1)."','".$typename."','".time()."')":"INSERT INTO ".$this->_in_mantype ." (ID,F_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$is_display."','".($man_store['0']['0']+1)."','".$typename."','".time()."')" ;
+					$sql =($man_id) ? "INSERT INTO ".$this->_subtype ." (ID,F_id,M_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$man_id."','".$is_display."','".($sub_store['0']['0']+1)."','".$typename."','".time()."')":"INSERT INTO ".$this->_mantype ." (ID,F_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$is_display."','".($man_store['0']['0']+1)."','".$typename."','".time()."')" ;
 					break;
 				case 'address':
 					$addr_store = $this->select("select max(Store) from ".$this->_address." Where F_id = '".$family_id."'");
@@ -229,37 +224,37 @@
 		/* 更新收入\支出类别 */
 		public function updateTypeData($in_out,$family_id,$Aid=0,$typename,$is_display=0,$man_id=0){
 			switch($in_out){
-				case "out_mantype":
-					$sql ="UPDATE ".$this->_out_mantype." SET Name = '".$typename."',Is_d = '".$is_display."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
+				case "mantype":
+					$sql ="UPDATE ".$this->_mantype." SET Name = '".$typename."',Is_d = '".$is_display."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 
 					/* 记录修改前的资料 START */
-					$old_corde_sql ="SELECT * FROM ".$this->_out_mantype."  WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
+					$old_corde_sql ="SELECT * FROM ".$this->_mantype."  WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 					$old_corde1 = $this->select($old_corde_sql);
-					$old_corde = "表名:".$this->_out_mantype." 原记录: ";
+					$old_corde = "表名:".$this->_mantype." 原记录: ";
 					break;
-			case "out_subtype":
-					$sql ="UPDATE ".$this->_out_subtype." SET Name = '".$typename."',Is_d = '".$is_display."',M_id = '".$man_id."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
+			case "subtype":
+					$sql ="UPDATE ".$this->_subtype." SET Name = '".$typename."',Is_d = '".$is_display."',M_id = '".$man_id."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 					
 					/* 记录修改前的资料 START */
-					$old_corde_sql ="SELECT * FROM ".$this->_out_subtype."  WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
+					$old_corde_sql ="SELECT * FROM ".$this->_subtype."  WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 					$old_corde1 = $this->select($old_corde_sql);
-					$old_corde = "表名:".$this->_out_mantype." 原记录: ";
+					$old_corde = "表名:".$this->_mantype." 原记录: ";
 					break;
-			case "in_mantype":
-					$sql ="UPDATE ".$this->_in_mantype." SET Name = '".$typename."',Is_d = '".$is_display."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
+			case "mantype":
+					$sql ="UPDATE ".$this->_mantype." SET Name = '".$typename."',Is_d = '".$is_display."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 
 					/* 记录修改前的资料 START */
-					$old_corde_sql ="SELECT * FROM ".$this->_in_mantype."  WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
+					$old_corde_sql ="SELECT * FROM ".$this->_mantype."  WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 					$old_corde1 = $this->select($old_corde_sql);
-					$old_corde = "表名:".$this->_in_mantype." 原记录: ";
+					$old_corde = "表名:".$this->_mantype." 原记录: ";
 					break;
-			case "in_subtype":
-					$sql ="UPDATE ".$this->_in_subtype." SET Name = '".$typename."',Is_d = '".$is_display."',M_id = '".$man_id."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
+			case "subtype":
+					$sql ="UPDATE ".$this->_subtype." SET Name = '".$typename."',Is_d = '".$is_display."',M_id = '".$man_id."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 					
 					/* 记录修改前的资料 START */
-					$old_corde_sql ="SELECT * FROM ".$this->_in_subtype."  WHERE id = '".$Aid."' AND family_id = '". $family_id."'";
+					$old_corde_sql ="SELECT * FROM ".$this->_subtype."  WHERE id = '".$Aid."' AND family_id = '". $family_id."'";
 					$old_corde1 = $this->select($old_corde_sql);
-					$old_corde = "表名:".$this->_in_mantype." 原记录: ";
+					$old_corde = "表名:".$this->_mantype." 原记录: ";
 					break;
 			case "address":
 					$sql ="UPDATE ".$this->_address." SET Name = '".$typename."',Is_d = '".$is_display."' WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
@@ -267,7 +262,7 @@
 					/* 记录修改前的资料 START */
 					$old_corde_sql ="SELECT * FROM ".$this->_address."  WHERE ID = '".$Aid."' AND F_id = '". $family_id."'";
 					$old_corde1 = $this->select($old_corde_sql);
-					$old_corde = "表名:".$this->_in_mantype." 原记录: ";
+					$old_corde = "表名:".$this->_mantype." 原记录: ";
 					break;
 			}
 			return $this->update($sql);
@@ -275,11 +270,11 @@
 
 
         /*  添加用户函数 */
-        public function AddMember($is_disable=0,$user_name,$user_alias,$email,$qq,$notes,$family_id)
+        public function AddMember($is_disable=0,$user_name,$email,$qq,$money,$notes,$family_id)
         {
 			$this->begintransaction();
 
-            $sql = "INSERT INTO ".$this->_family_member." (ID,F_id,Is_d,U_name,U_alias,Notes,Skin,Email,Sum,QQ,C_date,L_date)   VALUES  ('','".$family_id."','".$is_disable."','".$user_name."','".$user_alias."','".$notes."','0','".$email."','0','".$qq."','".time()."','')";
+            $sql = "INSERT INTO ".$this->_family_member." (ID,F_id,Is_d,Name,Notes,Skin,Email,Sum,QQ,Money,C_date,L_date)   VALUES  ('','".$family_id."','".$is_disable."','".$user_name."','".$notes."','0','".$email."','0','".$qq."','".$money."','".time()."','')";
 
 			$sql2 = "UPDATE ".$this->_family." set Member=Member+'1'";
 			
@@ -298,13 +293,13 @@
         }
 
 
-        /*  注册用户函数 */
-        public function RegistrUser($familyname,$familyalias,$password,$adm_email)
+        /*  注册家庭函数 */
+        public function RegistrFamily($familyname,$familyalias,$password,$adm_email)
         {
 			$this->begintransaction();
-			$sql = "INSERT INTO ".$this->_family." (ID,Is_d,F_name,F_alias,L_pass,C_pass,A_pass,Notes,Email,C_date,L_date,Sum,Session)  VALUES  ('','0','".$familyname."','".$familyalias."',password('".$password."'),'".$password."','','','".$adm_email."','".time()."','','0','')";
+			$sql = "INSERT INTO ".$this->_family." (ID,Is_d,Name,Alias,L_pass,C_pass,A_pass,Notes,Email,C_date,L_date,Sum,Session)  VALUES  ('','0','".$familyname."','".$familyalias."',password('".$password."'),'".$password."','','','".$adm_email."','".time()."','','0','')";
 
-            $sql_family_id = "SELECT ID from ".$this->_family." where  F_name = '".$familyname."'";
+            $sql_family_id = "SELECT ID from ".$this->_family." where  Name = '".$familyname."'";
 
 			if ($this->insert($sql) != false){
 				$family_id = $this->select($sql_family_id);
@@ -318,16 +313,16 @@
         }
 
       /* 更新用户数据函数 */
-        public function updateMember($is_disable,$user_name,$user_alias,$email,$qq,$notes,$alter_id=0)
+        public function updateMember($is_disable,$user_name,$email,$qq,$money,$notes,$alter_id=0)
         {
-			$sql = "UPDATE ".$this->_family_member." SET Is_d = '".$is_disable."',U_name = '".$user_name."',U_alias = '".$user_alias."',Email='".$email."',QQ='".$qq."',Notes = '".$notes."'  WHERE ID = '".$alter_id."'";
+			$sql = "UPDATE ".$this->_family_member." SET Is_d = '".$is_disable."',Name = '".$user_name."',Email='".$email."',QQ='".$qq."',Money = '".$money."',Notes = '".$notes."'  WHERE ID = '".$alter_id."'";
 			
 			$old_corde_sql = "SELECT * FROM ".$this->_family_member."  WHERE ID = '".$alter_id."'";
 
 
 			/* 记录修改前的资料 START */
 			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->_users." 原记录: ";
+			$old_corde = "表名:".$this->_family_member." 原记录: ";
 			for($j=0;$j<count($old_corde1);$j++) {
 				for($i=0;$i<count($old_corde1[$j]);$i++) {
 					$old_corde .= "'".$old_corde1[$j][$i]."',";
@@ -363,46 +358,46 @@
 
 
          /* 获取主类函数  */
-        public function getManType($family_id,$cordtype,$isdisplay=0,$alter_id=0)
+        public function getManType($family_id,$flow,$isdisplay=0,$alter_id=0)
         {
-			if ($cordtype == "out_mantype" || $cordtype == "out_record" ) {
-				if($alter_id!="0"){
-					$sql = "SELECT * FROM  ".$this->_out_mantype." where F_id = '".$family_id."' AND ID = '".$alter_id."'";
+			if ( $flow == "0" ) {
+				if($alter_id != "0"){
+					$sql = "SELECT * FROM  ".$this->_mantype." where F_id = '".$family_id."' AND ID = '".$alter_id."'";
 				}else{
-					$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_mantype." where F_id = '".$family_id."' order by Store":"SELECT * FROM  ".$this->_out_mantype." where F_id = '".$family_id."' AND Is_d = '0' order by Store";
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_mantype." where F_id = '".$family_id."'  AND Flow = '0' order by Store":"SELECT * FROM  ".$this->_mantype." where F_id = '".$family_id."' AND Is_d = '0' AND Flow = '0' order by Store";
 				}
-			}else if ($cordtype == "in_mantype" || $cordtype == "in_record"){
+			}else if ( $flow == "1"){
 				if($alter_id!="0"){
-					$sql = "SELECT * FROM  ".$this->_in_mantype." where F_id = '".$family_id."' AND ID = '".$alter_id."'";
+					$sql = "SELECT * FROM  ".$this->_mantype." where F_id = '".$family_id."' AND ID = '".$alter_id."'";
 				}else{
-					$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_mantype." where F_id = '".$family_id."' order by Store":"SELECT * FROM  ".$this->_in_mantype." where F_id = '".$family_id."' AND Is_d = '0' order by Store";
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_mantype." where F_id = '".$family_id."'  AND Flow = '1' order by Store":"SELECT * FROM  ".$this->_mantype." where F_id = '".$family_id."' AND Is_d = '0' AND Flow = '1' order by Store";
 				}
 			}
             return $this->select($sql);
         }
 
 		 /* 获取子类函数  */
-        public function getSubType($family_id,$cordtype,$isdisplay=0,$man_id=0,$sub_id=0)
+        public function getSubType($family_id,$flow,$isdisplay=0,$man_id=0,$sub_id=0)
         {
-			if ($cordtype == "out_subtype"|| $cordtype == "out_record" ) {
-				if($man_id!="0"){
-					if($sub_id !="0"){
-						$sql = "SELECT * FROM  ".$this->_out_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' AND ID = '".$sub_id."' order by Store";
+			if ($flow = "0" ) {
+				if($man_id != "0"){
+					if($sub_id != "0"){
+						$sql = "SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' AND ID = '".$sub_id."' order by Store";
 					}else{
-						$sql = "SELECT * FROM  ".$this->_out_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' order by Store";
+						$sql = "SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' order by Store";
 					}
 				}else{
-					$sql = $isdisplay ? "SELECT * FROM  ".$this->_out_subtype." where F_id = '".$family_id."' order by Store":"SELECT * FROM  ".$this->_out_subtype." where F_id = '".$family_id."' AND Is_d = '0'  order by Store";
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."'  order by Store":"SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."' AND Is_d = '0' order by Store";
 				}
-			}else if ($cordtype == "in_subtype"|| $cordtype == "in_record" ){
+			}else if ( $flow = "1" ){
 				if($man_id!="0"){
 					if($sub_id !="0"){
-						$sql = "SELECT * FROM  ".$this->_in_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' AND ID = '".$sub_id."' order by Store";
+						$sql = "SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' AND ID = '".$sub_id."' order by Store";
 					}else{
-						$sql = "SELECT * FROM  ".$this->_in_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' order by Store";
+						$sql = "SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."' AND M_id = '".$man_id."' order by Store";
 					}
 				}else{
-					$sql = $isdisplay ? "SELECT * FROM  ".$this->_in_subtype." where F_id = '".$family_id."' order by Store":"SELECT * FROM  ".$this->_in_subtype." where F_id = '".$family_id."' AND Is_d = '0'  order by Store";
+					$sql = $isdisplay ? "SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."'    order by Store":"SELECT * FROM  ".$this->_subtype." where F_id = '".$family_id."' AND Is_d = '0' order by Store";
 				}			
 			}
             return $this->select($sql);
@@ -422,9 +417,9 @@
 
 
 		/*  收入、支出、地址下拉菜单函数  */
-		public function select_type($family_id,$in_out,$Aid=0){
-				$ManType = $this->getManType($family_id,$in_out);
-				$SubType = $this->getSubType($family_id,$in_out);
+		public function select_type($family_id,$flow,$Aid=0){
+				$ManType = $this->getManType($family_id,$flow);
+				$SubType = $this->getSubType($family_id,$flow);
 				$Address = $this->getAddress($family_id);
 
 				if(DEBUG_YES){ 
@@ -435,7 +430,7 @@
 					echo "<br>DEBUG END*********************************************<br>";	
 				}
 
-				$alert_corde = $this->getCordeData(0,$in_out,0,0,$Aid);
+				$alert_corde = $this->getCordeData(0,$flow,0,0,$Aid);
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
 					echo "修改的Aid为：";
@@ -485,66 +480,45 @@
 
          /* 转换ID->名称函数*/
         public function convertID($id,$table)
-        {
-            
-			switch ($table){
-				case "family_member":
-					$sql = "SELECT U_alias FROM ".$this->_family_member." WHERE ID = '".$id."'";
-					break;
-				case "out_mantype":
-					$sql = "SELECT Name FROM ".$this->_out_mantype." WHERE ID = '".$id."'";
-					break;
-				case "out_subtype":
-					$sql = "SELECT Name FROM ".$this->_out_subtype." WHERE ID = '".$id."'";
-					break;
-				case "in_mantype":
-					$sql = "SELECT Name FROM ".$this->_in_mantype." WHERE ID = '".$id."'";
-					break;
-				case "in_subtype":
-					$sql = "SELECT Name FROM ".$this->_in_subtype." WHERE ID = '".$id."'";
-					break;
-				case "address":
-					$sql = "SELECT Name FROM ".$this->_address." WHERE ID = '".$id."'";
-					break;
-				case "bank_card":
-					$sql = "SELECT Name FROM ".$this->_bank_card." WHERE ID = '".$id."'";
-					break;
+        {		
+			switch($table){
+				case "bank_card" :
+					if ( $id == "0" ){ 
+						return "钱包"; 
+						break;
+					}
+				default:
+					$sql = "SELECT Name FROM ".$table." WHERE ID = '".$id."'";
 			}
-            $result = $this->select($sql);
-            foreach( $result as $key => $value)
-            {
-                return $value[0];
-            }
+				
+			
+			$result = $this->select($sql);
+			foreach( $result as $key => $value)
+			{
+				return $value[0];
+			}
         }
 
 
         /*删除收入支出与各主类了类记录函数 */
-        public function delCorde($in_out,$family_id,$corde_id,$member_id)
+        public function delCorde($flow,$family_id,$corde_id,$member_id)
         {
-			switch($in_out){
-				case "out_record":
-					$sql = "DELETE FROM ".$this->_out_corde." where ID = '".$corde_id."' AND U_id = '".$member_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_out_corde."  where ID = '".$corde_id."' AND U_id = '".$member_id."'";
+			switch($flow){
+				case "0":
+					$sql = "DELETE FROM ".$this->_record_lib." where ID = '".$corde_id."' AND U_id = '".$member_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_record_lib."  where ID = '".$corde_id."' AND U_id = '".$member_id."'";
 					break;
-				case "in_record":
-					$sql = "DELETE FROM ".$this->_in_corde." where ID = '".$corde_id."' AND U_id = '".$member_id."'";
-					$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  where ID = '".$corde_id."' AND U_id = '".$member_id."'";
+				case "1":
+					$sql = "DELETE FROM ".$this->_record_lib." where ID = '".$corde_id."' AND U_id = '".$member_id."'";
+					$old_corde_sql = "SELECT * FROM ".$this->_record_lib."  where ID = '".$corde_id."' AND U_id = '".$member_id."'";
 					break;
-				case "out_mantype":
-					$sql = "DELETE out_mantype,out_subtype from out_mantype left join out_subtype on out_mantype.ID=out_subtype.M_id where out_mantype.ID='".$corde_id."' AND out_mantype.F_id = '".$family_id."'";
-					$old_corde_sql = "SELECT * from out_mantype left join out_subtype on out_mantype.ID=out_subtype.M_id where out_mantype.ID='".$corde_id."' AND out_mantype.F_id = '".$family_id."'";
+				case "mantype":
+					$sql = "DELETE mantype,subtype from mantype left join subtype on mantype.ID=subtype.M_id where mantype.ID='".$corde_id."' AND mantype.F_id = '".$family_id."'";
+					$old_corde_sql = "SELECT * from mantype left join subtype on mantype.ID=subtype.M_id where mantype.ID='".$corde_id."' AND mantype.F_id = '".$family_id."'";
 					break;
-				case "out_subtype":
-					$sql = "DELETE from ".$this->_out_subtype." where ID='".$corde_id."' AND F_id = '".$family_id."'";
-					$old_corde_sql = "SELECT * from ".$this->_out_subtype." where ID='".$corde_id."' AND F_id = '".$family_id."'";
-					break;
-				case "in_mantype":
-					$sql = "DELETE in_mantype,in_subtype from in_mantype left join in_subtype on in_mantype.ID=in_subtype.M_id where in_mantype.ID='".$corde_id."' AND in_mantype.F_id = '".$family_id."'";
-					$old_corde_sql = "SELECT * from in_mantype left join in_subtype on in_mantype.ID=in_subtype.M_id where in_mantype.ID='".$corde_id."' AND in_mantype.F_id = '".$family_id."'";
-					break;
-				case "in_subtype":
-					$sql = "DELETE from ".$this->_in_subtype." where ID='".$corde_id."' AND F_id = '".$family_id."'";
-					$old_corde_sql = "SELECT * from ".$this->_in_subtype." where ID='".$corde_id."' AND F_id = '".$family_id."'";
+				case "subtype":
+					$sql = "DELETE from ".$this->_subtype." where ID='".$corde_id."' AND F_id = '".$family_id."'";
+					$old_corde_sql = "SELECT * from ".$this->_subtype." where ID='".$corde_id."' AND F_id = '".$family_id."'";
 					break;
 				case "address":
 					$sql = "DELETE from ".$this->_address." where ID='".$corde_id."' AND F_id = '".$family_id."'";
@@ -571,7 +545,7 @@
             
 			/* 记录修改前的资料 START */	
 			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->_out_corde." 原记录: ";
+			$old_corde = "表名:".$this->_record_lib." 原记录: ";
 
 			
 			for($j=0;$j<count($old_corde1);$j++) {
@@ -603,9 +577,9 @@
 			
 			$num = 0;
 			switch($in_out){
-				case "out_mantype":
-					$store_num = $this->select("SELECT Store from ".$this->_out_mantype." where ID = '".$id."'");
-					$store_max = $this->select("SELECT max(Store) from ".$this->_out_mantype." where F_id = '".$family_id."'");
+				case "mantype":
+					$store_num = $this->select("SELECT Store from ".$this->_mantype." where ID = '".$id."'");
+					$store_max = $this->select("SELECT max(Store) from ".$this->_mantype." where F_id = '".$family_id."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -613,18 +587,18 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_out_mantype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_mantype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_mantype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'";
 					$this->update($sql);
 					break;
-				case "out_subtype":
-					$store_num = $this->select("SELECT Store from ".$this->_out_subtype." where ID = '".$id."' AND M_id='".$man_id."'");
-					$store_max = $this->select("SELECT max(Store) from ".$this->_out_subtype." where M_id = '".$man_id."'");
+				case "subtype":
+					$store_num = $this->select("SELECT Store from ".$this->_subtype." where ID = '".$id."' AND M_id='".$man_id."'");
+					$store_max = $this->select("SELECT max(Store) from ".$this->_subtype." where M_id = '".$man_id."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -632,19 +606,19 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_out_subtype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."' AND M_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_subtype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."' AND M_id ='".$man_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_subtype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'  AND M_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_subtype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'  AND M_id ='".$man_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_out_subtype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'  AND M_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_subtype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'  AND M_id ='".$man_id."'";
 					$this->update($sql);
 					break;
 
-				case "in_mantype":
-					$store_num = $this->select("SELECT Store from ".$this->_in_mantype." where id = '".$id."'");
-					$store_max = $this->select("SELECT max(Store) from ".$this->_in_mantype." where F_id = '".$family_id."'");
+				case "mantype":
+					$store_num = $this->select("SELECT Store from ".$this->_mantype." where id = '".$id."'");
+					$store_max = $this->select("SELECT max(Store) from ".$this->_mantype." where F_id = '".$family_id."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -652,18 +626,18 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_in_mantype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_in_mantype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_in_mantype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'";
 					$this->update($sql);
 					break;
-				case "in_subtype":
-					$store_num = $this->select("SELECT Store from ".$this->_in_subtype." where ID = '".$id."'");
-					$store_max = $this->select("SELECT max(Store) from ".$this->_in_subtype." where M_id = '".$man_id."'");
+				case "subtype":
+					$store_num = $this->select("SELECT Store from ".$this->_subtype." where ID = '".$id."'");
+					$store_max = $this->select("SELECT max(Store) from ".$this->_subtype." where M_id = '".$man_id."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -671,13 +645,13 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_in_subtype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'  AND M_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_subtype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'  AND M_id ='".$man_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_in_subtype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND U_id ='".$user_id."'  AND M_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_subtype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND U_id ='".$user_id."'  AND M_id ='".$man_id."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_in_subtype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND U_id ='".$user_id."'  AND M_id ='".$man_id."'";
+					$sql = "UPDATE ".$this->_subtype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND U_id ='".$user_id."'  AND M_id ='".$man_id."'";
 					$this->update($sql);
 					break;
 				case "address":
@@ -742,10 +716,10 @@
         /*  添加用户默认主类数据 */
         public function insertDefault($family_id)
         {
-            $sql = "INSERT INTO ".$this->_out_mantype." (ID,F_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','0','1','衣服类','".time()."'),('','".$family_id."','0','2','饮食类','".time()."'),('','".$family_id."','0','3','住房类','".time()."'),('','".$family_id."','0','4','交通类','".time()."'),('','".$family_id."','0','5','个人消费类','".time()."'),('','".$family_id."','0','6','网络类','".time()."')";
+            $sql = "INSERT INTO ".$this->_mantype." (ID,F_id,Is_d,Store,Flow,Name,C_date)   VALUES  ('','".$family_id."','0','1','0','衣服类','".time()."'),('','".$family_id."','0','2','0','饮食类','".time()."'),('','".$family_id."','0','3','0','住房类','".time()."'),('','".$family_id."','0','4','0','交通类','".time()."'),('','".$family_id."','0','5','0','个人消费类','".time()."'),('','".$family_id."','0','6','0','网络类','".time()."')";
             $this->insert($sql);
 
-            $sql = "INSERT INTO ".$this->_in_mantype." (ID,F_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','0','1','固定收入','".time()."'),('','".$family_id."','0','2','第三方收入','".time()."')";
+            $sql = "INSERT INTO ".$this->_mantype." (ID,F_id,Is_d,Store,Flow,Name,C_date)   VALUES  ('','".$family_id."','0','1','1','固定收入','".time()."'),('','".$family_id."','0','2','1','第三方收入','".time()."')";
             $this->insert($sql);
 
 			/*  添加用户默认地址 */
@@ -754,63 +728,63 @@
 
 			/* 添加收入子类与支出子类 */
             /* 衣服类----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '衣服类' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '衣服类' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_out_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','服装','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','其他','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','鞋帽','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','服装','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','其他','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','鞋帽','".time()."')";
             $this->insert($sql);
 
             /* 饮食类----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '饮食类' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '饮食类' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_out_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','早餐','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','午餐','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','晚餐','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','夜宵','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','5','其他','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','早餐','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','午餐','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','晚餐','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','夜宵','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','5','其他','".time()."')";
             $this->insert($sql);
 
             /* 住房类----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '住房类' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '住房类' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_out_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','日常用品','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','家用电器','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','房租','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','其他','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','日常用品','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','家用电器','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','房租','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','其他','".time()."')";
             $this->insert($sql);
 
             /* 交通类----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '交通类' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '交通类' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_out_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','公交车','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','的士','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','地铁','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','火车','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','5','摩的','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','6','飞机','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','7','轮船','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','8','其他','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','公交车','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','的士','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','地铁','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','火车','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','5','摩的','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','6','飞机','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','7','轮船','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','8','其他','".time()."')";
             $this->insert($sql);
 
             /* 个人消费类----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '个人消费类' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '个人消费类' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_out_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','零食','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','饮料','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','理发','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','其他','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','零食','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','饮料','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','理发','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','其他','".time()."')";
             $this->insert($sql);
 
             /* 网络类----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from out_mantype where name = '网络类' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '网络类' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_out_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','网络费','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','手机费','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','电话费','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','通信软硬件','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','5','其他','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','网络费','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','手机费','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','电话费','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','4','通信软硬件','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','5','其他','".time()."')";
             $this->insert($sql);
 
             /* 固定收入----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from in_mantype where name = '固定收入' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '固定收入' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_in_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','工资','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','奖金','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','工资','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','奖金','".time()."')";
             $this->insert($sql);
 
             /* 第三方收入----------------------------------------------------------------------------- */
-            $sql_mantype = "SELECT id from in_mantype where name = '第三方收入' and F_id = '".$family_id."'";
+            $sql_mantype = "SELECT id from mantype where name = '第三方收入' and F_id = '".$family_id."'";
             $mantype_id = $this->select($sql_mantype);
             
-            $sql = "INSERT INTO ".$this->_in_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','中奖','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','兼职','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','其他','".time()."')";
+            $sql = "INSERT INTO ".$this->_subtype." (ID,F_id,M_id,Is_d,Store,Name,C_date)   VALUES  ('','".$family_id."','".$mantype_id['0']['0']."','0','1','中奖','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','2','兼职','".time()."'),('','".$family_id."','".$mantype_id['0']['0']."','0','3','其他','".time()."')";
             $this->insert($sql);
         }
 
-		 public function getReportData($scorde="out_corde", $stype="member", $sdate="week",$family_id,$jump=0) {
+		 public function getReportData($scorde="record_lib", $stype="member", $sdate="week",$family_id,$jump=0) {
 				if ( $_SESSION['date_num'] < 100 ) {
 					switch ( $sdate ) {
 						case "week":
@@ -932,10 +906,10 @@
 				}
 				
 				if ( $scorde == "in_out" ) {
-					$sql = "SELECT sum(Money) FROM ".$this->_out_corde." WHERE ".$date_filter." AND F_id = '".$family_id."'";
+					$sql = "SELECT sum(Money) FROM ".$this->_record_lib." WHERE ".$date_filter." AND F_id = '".$family_id."'";
 					$out_data = $this->select($sql);
 
-					$sql = "SELECT sum(Money) FROM ".$this->_in_corde." WHERE ".$date_filter." AND F_id = '".$family_id."'";
+					$sql = "SELECT sum(Money) FROM ".$this->_record_lib." WHERE ".$date_filter." AND F_id = '".$family_id."'";
 					$in_data = $this->select($sql);
 
 
@@ -966,9 +940,9 @@
 
 		  public function getSearchData($scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $family_id) {
 				if ( $scorde == "out_record" ){
-					$in_out = "out_corde" ;
+					$in_out = "record_lib" ;
 				} else if ( $scorde == "in_record" ) {
-					$in_out = "in_corde" ;
+					$in_out = "record_lib" ;
 				} else {
 					$in_out = NULL ;
 				}
@@ -1022,49 +996,48 @@
 			return $this->update($sql);
 		}
 
-		public function insertBankCard( $member_id,$family_id,$cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$notes,$alter_id,$is_disable ) {
+	/* 添加银行卡 */
+	public function addBankCard( $member_id,$family_id,$cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$notes,$alter_id,$is_disable ) {
 			$card_store = $this->select("select max(Store) from bank_card Where F_id = '".$family_id."'");
 
 			$sql = "INSERT INTO ".$this->_bank_card." (ID,U_id,F_id,Is_d,Name,C_num,C_type,C_addr,Money,Store,Notes,C_date) values ('','".$member_id."','".$family_id."','".$is_disable."','".$cardname."','".$cardnum."','".$cardtype."','".$cardaddr."','".$cardmoney."','".$card_store."','".$notes."','".time()."')";
 
 			return $this->insert($sql);
 		}
-	
-	public function updateBankCard($cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$notes,$alter_id,$is_disable) {
-			$set_sql = is_null($cardname) ? "  " :  "card_name = '".$cardname."' "   ;
-			$set_sql .= is_null($cardnum) ?   " " : " ,card_num = '".$cardnum."' " ;
-			$set_sql .= is_null($cardtype) ?   " " : " ,card_type = '".$cardtype."' " ;
-			$set_sql .= is_null($cardaddr) ?   " " : " ,card_addr = '".$cardaddr."' " ;
-			$set_sql .= is_null($cardmoney) ?   " " : " ,money = '".$cardmoney."' " ;
-			$set_sql .= is_null($notes) ?   " " : " ,notes = '".$notes."' " ;
-			$set_sql .= is_null($is_disable) ?   " " : " ,is_disable = '".$is_disable."' " ;
-
-			$sql = "UPDATE ".$this->_bank_card." SET  ".$set_sql." WHERE id = '".$alter_id."'";
-
-			return $this->update($sql);
-	}
-
-	/* 新增加用户现金 */
-	public function insertCurrentMoney($user_id,$family_id,$cmoney){
-		$sql = "SELECT user_id FROM ".$this->_current_money." WHERE  user_id = '".$user_id."'";
-		$YesNo = $this->select($sql);
-		if ( $YesNo ) {
-			$set_sql = is_null($cmoney) ? "  " :  "money = money + '".$cmoney."' "   ;
-			$set_sql .= " ,last_date = '".time()."'  WHERE user_id = '".$user_id."' " ;
-			$sql = "UPDATE ".$this->_current_money." set ".$set_sql ;
-
-			return $this->update($sql);	
-		} else {
-			$sql = "INSERT INTO ".$this->_current_money."  (id,user_id,family_id,money,create_date,last_date) values ('','".$user_id."','".$family_id."','".$cmoney."','".time()."','".time()."')";
-
-			return $this->insert($sql);		
+	/* 参数Type类型ID ，返回卡中文名称 */
+	public function bankCardType($C_type_id){
+		switch($C_type_id){
+			case "1" :
+				return "储蓄卡";
+				break;
+			case "2" :
+				return "信用卡";
+				break;
+			case "3" :
+				return "支付宝卡";
+				break;
+			case "4" :
+				return "存折";
+				break;
+			default:
+				return "未知卡";
 		}
 	}
 
-	/* 判断是否己存在 */
-	public function yesCurrentMoney($user_id){
-		$sql = "SELECT user_id FROM ".$this->_current_money." WHERE  user_id = '".$user_id."'";
-		return $this->select($sql);
+
+	/* 更新银行卡 */
+	public function updateBankCard($member_id,$cardname,$cardnum,$cardtype,$cardaddr,$cardmoney,$notes,$alter_id,$is_disable) {
+			$set_sql = is_null($cardname) ? "  " :  "Name = '".$cardname."' "   ;
+			$set_sql .= is_null($cardnum) ?   " " : " ,C_num = '".$cardnum."' " ;
+			$set_sql .= is_null($cardtype) ?   " " : " ,C_type = '".$cardtype."' " ;
+			$set_sql .= is_null($cardaddr) ?   " " : " ,C_addr = '".$cardaddr."' " ;
+			$set_sql .= is_null($cardmoney) ?   " " : " ,Money = '".$cardmoney."' " ;
+			$set_sql .= is_null($notes) ?   " " : " ,Notes = '".$notes."' " ;
+			$set_sql .= is_null($is_disable) ?   " " : " ,Is_d = '".$is_disable."' " ;
+
+			$sql = "UPDATE ".$this->_bank_card." SET  ".$set_sql." WHERE ID = '".$alter_id."' AND U_id = '".$member_id."'";
+
+			return $this->update($sql);
 	}
 
 	/* 修改用户现金 */
@@ -1084,10 +1057,10 @@
 			$sql = "UPDATE ".$this->_bank_card." set Money = Money + '".$cmoney."' WHERE U_id = '".$member_id."' AND F_id = '".$family_id."' AND ID = '".$mtype_id."'" ;
 		}
 
-
-
 		return $this->update($sql);			
 	}
+
+
 
 
 /*  以上内容为优化内容  ####################################################################################################*/
@@ -1452,7 +1425,7 @@
         /*写入收入主类函数 */
         public function insertInManType($user_id,$store,$is_display,$addmantypename)
         {
-            $sql = "INSERT INTO   ".$this->_in_mantype . "  VALUES ('','".$user_id."','".$store."','".$is_display."','".$addmantypename."','".time()."')";
+            $sql = "INSERT INTO   ".$this->_mantype . "  VALUES ('','".$user_id."','".$store."','".$is_display."','".$addmantypename."','".time()."')";
             return $this->insert($sql);
         }
 
@@ -1496,15 +1469,15 @@
           /*写入支出主类函数 */
         public function insertOutManType($user_id,$store,$is_display,$addmantypename)
         {
-            $sql = "INSERT INTO   ".$this->_out_mantype . "  VALUES ('','".$user_id."','".$store."','".$is_display."','".$addmantypename."','".time()."')";
+            $sql = "INSERT INTO   ".$this->_mantype . "  VALUES ('','".$user_id."','".$store."','".$is_display."','".$addmantypename."','".time()."')";
             return $this->insert($sql);
         }
 
 
         /*  把数据写入收入支出表函数 */
-        public function insertInOutRecord($in_out_corde,$money,$mantype_id,$subtype_id,$address_id,$notes)
+        public function insertInOutRecord($in_record_lib,$money,$mantype_id,$subtype_id,$address_id,$notes)
         {
-            $sql = "INSERT INTO ".$this->$in_out_corde ."  VALUES ('','".$money."','".$_SESSION['__useralive'][0]."','".$_SESSION['__group_id']."','".$mantype_id."','".$subtype_id."','".$address_id."','".$notes."','".time()."')";
+            $sql = "INSERT INTO ".$this->$in_record_lib ."  VALUES ('','".$money."','".$_SESSION['__useralive'][0]."','".$_SESSION['__group_id']."','".$mantype_id."','".$subtype_id."','".$address_id."','".$notes."','".time()."')";
             return $this->insert($sql);
         }
 
@@ -1514,11 +1487,11 @@
         /*更新收入记录函数 */
         public function     updateInCorde($id,$money,$mantype_id,$subtype_id,$address_id,$notes)
         {
-            $sql = "UPDATE ".$this->_in_corde." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address_id."', notes = '".$notes."'  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
+            $sql = "UPDATE ".$this->_record_lib." SET money = '".$money."',mantype_id = '".$mantype_id."',subtype_id = '".$subtype_id."',addr_id = '".$address_id."', notes = '".$notes."'  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
 			/* 记录修改前的资料 START */
-			$old_corde_sql = "SELECT * FROM ".$this->_in_corde."  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
+			$old_corde_sql = "SELECT * FROM ".$this->_record_lib."  WHERE id = '".$id."' AND user_id = '". $_SESSION['__useralive'][0]."'";
 			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->_in_corde." 原记录: ";
+			$old_corde = "表名:".$this->_record_lib." 原记录: ";
 			for($j=0;$j<count($old_corde1);$j++) {
 				for($i=0;$i<count($old_corde1[$j]);$i++) {
 					$old_corde .= "'".$old_corde1[$j][$i]."',";
@@ -1534,13 +1507,13 @@
 
 
         /*删除用户收入支出记录函数 */
-        public function deleteUserData($in_out_corde,$user_id)
+        public function deleteUserData($in_record_lib,$user_id)
         {
-            $sql = "DELETE FROM ".$this->$in_out_corde." where user_id = '".$user_id."'";
+            $sql = "DELETE FROM ".$this->$in_record_lib." where user_id = '".$user_id."'";
 			/* 记录修改前的资料 START */
-			$old_corde_sql = "SELECT * FROM ".$this->$in_out_corde."  where user_id = '".$user_id."'";
+			$old_corde_sql = "SELECT * FROM ".$this->$in_record_lib."  where user_id = '".$user_id."'";
 			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->$in_out_corde." 原记录: ";
+			$old_corde = "表名:".$this->$in_record_lib." 原记录: ";
 			for($j=0;$j<count($old_corde1);$j++) {
 				for($i=0;$i<count($old_corde1[$j]);$i++) {
 					$old_corde .= "'".$old_corde1[$j][$i]."',";
@@ -1556,13 +1529,13 @@
 
 
         /*删除用户收入支出记录从组管理员函数 */
-        public function deleteUserDataForGroupAdmin($in_out_corde)
+        public function deleteUserDataForGroupAdmin($in_record_lib)
         {
-            $sql = "DELETE FROM ".$this->$in_out_corde." where group_id = '".$_SESSION['__group_id']."'";
+            $sql = "DELETE FROM ".$this->$in_record_lib." where group_id = '".$_SESSION['__group_id']."'";
 			/* 记录修改前的资料 START */
-			$old_corde_sql = "SELECT * FROM ".$this->$in_out_corde."  where group_id = '".$_SESSION['__group_id']."'";
+			$old_corde_sql = "SELECT * FROM ".$this->$in_record_lib."  where group_id = '".$_SESSION['__group_id']."'";
 			$old_corde1 = $this->select($old_corde_sql);
-			$old_corde = "表名:".$this->$in_out_corde." 原记录: ";
+			$old_corde = "表名:".$this->$in_record_lib." 原记录: ";
 			for($j=0;$j<count($old_corde1);$j++) {
 				for($i=0;$i<count($old_corde1[$j]);$i++) {
 					$old_corde .= "'".$old_corde1[$j][$i]."',";
@@ -1813,11 +1786,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_POST["group_id"]."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_POST["group_id"]."'";    
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
             } else {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
             }
             return $this->select($sql);
         }
@@ -1827,11 +1800,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  group by user_id";
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
             } else {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
             }
             return $this->select($sql);
         }
@@ -1840,7 +1813,7 @@
         /*获得指定用户每月支出数据函数 */
         public function getReportPersonOutMonth($user_id,$month1)
         {
-            $sql = "SELECT * FROM ".$this->_out_corde." WHERE user_id = '".$user_id."' AND create_date like '".$month1."%'";        
+            $sql = "SELECT * FROM ".$this->_record_lib." WHERE user_id = '".$user_id."' AND create_date like '".$month1."%'";        
             return $this->select($sql);
         }
 
@@ -1850,11 +1823,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT count(*),sum(money),user_id,addr_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  group by addr_id";
+                $sql = "SELECT count(*),sum(money),user_id,addr_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  group by addr_id";
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT count(*),sum(money),user_id,addr_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by addr_id";
+                $sql = "SELECT count(*),sum(money),user_id,addr_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by addr_id";
             } else {
-                $sql = "SELECT count(*),sum(money),user_id,addr_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by addr_id";
+                $sql = "SELECT count(*),sum(money),user_id,addr_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by addr_id";
             }
             return $this->select($sql);
         }
@@ -1864,11 +1837,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  group by mantype_id";
+                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  group by mantype_id";
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by mantype_id";
+                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by mantype_id";
             } else {
-                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by mantype_id";
+                $sql = "SELECT count(*),sum(money),user_id,mantype_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by mantype_id";
             }
             return $this->select($sql);
         }
@@ -1878,11 +1851,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%'";    
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
             } else {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
             }
             return $this->select($sql);
         }
@@ -1892,11 +1865,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%'";    
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
             } else {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
             }
             return $this->select($sql);
         }
@@ -1906,11 +1879,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_in_corde." WHERE create_date like '".$month."%'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  group by user_id";
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_in_corde." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
             } else {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_in_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
             }
             return $this->select($sql);
         }
@@ -1920,11 +1893,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT * FROM ".$this->_in_corde." WHERE create_date like '".$month."%' AND group_id = '".$_POST["group_id"]."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_POST["group_id"]."'";    
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT * FROM ".$this->_in_corde." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
             } else {
-                $sql = "SELECT * FROM ".$this->_in_corde." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$month."%' AND group_id = '".$_SESSION['__group_id']."'";    
             }
             return $this->select($sql);
         }
@@ -1932,7 +1905,7 @@
         /*获得指定用户每月收入数据函数 */
         public function getReportPersonInMonth($user_id,$month1)
         {
-            $sql = "SELECT * FROM ".$this->_in_corde." WHERE user_id = '".$user_id."' AND create_date like '".$month1."%'";        
+            $sql = "SELECT * FROM ".$this->_record_lib." WHERE user_id = '".$user_id."' AND create_date like '".$month1."%'";        
             return $this->select($sql);
         }
 
@@ -1941,11 +1914,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_out_corde." WHERE create_date like '".$year."%'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$year."%'  group by user_id";
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_out_corde." WHERE create_date like '".$year."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$year."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
             } else {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_out_corde." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
             }
             return $this->select($sql);
         }
@@ -1956,11 +1929,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$year."%' AND group_id = '".$_POST["group_id"]."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND group_id = '".$_POST["group_id"]."'";    
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$year."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
             } else {
-                $sql = "SELECT * FROM ".$this->_out_corde." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."'";    
             }
             return $this->select($sql);
         }
@@ -1969,7 +1942,7 @@
         /*获得指定用户每年支出数据函数 */
         public function getReportPersonOutYear($user_id,$year1)
         {
-            $sql = "SELECT * FROM ".$this->_out_corde." WHERE user_id = '".$user_id."' AND create_date like '".$year1."%'";        
+            $sql = "SELECT * FROM ".$this->_record_lib." WHERE user_id = '".$user_id."' AND create_date like '".$year1."%'";        
             return $this->select($sql);
         }
 
@@ -1979,11 +1952,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_in_corde." WHERE create_date like '".$year."%'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$year."%'  group by user_id";
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_in_corde." WHERE create_date like '".$year."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$year."%'  AND user_id = '".$_SESSION['__useralive'][0]."'  group by user_id";
             } else {
-                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_in_corde." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
+                $sql = "SELECT count(*),sum(money),user_id,group_id FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."' group by user_id";
             }
             return $this->select($sql);
         }
@@ -1994,11 +1967,11 @@
         {
             if($_SESSION['__useralive'][0] == 1 )
             {
-                $sql = "SELECT * FROM ".$this->_in_corde." WHERE create_date like '".$year."%' AND group_id = '".$_POST["group_id"]."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND group_id = '".$_POST["group_id"]."'";    
             } else if ( $_SESSION['__groupname'] == "公共组" ) {
-                $sql = "SELECT * FROM ".$this->_in_corde." WHERE create_date like '".$year."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND user_id = '".$_SESSION['__useralive'][0]."'";
             } else {
-                $sql = "SELECT * FROM ".$this->_in_corde." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."'";    
+                $sql = "SELECT * FROM ".$this->_record_lib." WHERE create_date like '".$year."%' AND group_id = '".$_SESSION['__group_id']."'";    
             }
             return $this->select($sql);
         }
@@ -2007,7 +1980,7 @@
         /*获得指定用户每年收入数据函数 */
         public function getReportPersonInYear($user_id,$year1)
         {
-            $sql = "SELECT * FROM ".$this->_in_corde." WHERE user_id = '".$user_id."' AND create_date like '".$year1."%'";        
+            $sql = "SELECT * FROM ".$this->_record_lib." WHERE user_id = '".$user_id."' AND create_date like '".$year1."%'";        
             return $this->select($sql);
         }
 
