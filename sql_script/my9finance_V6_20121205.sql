@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 60004
 File Encoding         : 65001
 
-Date: 2012-12-04 12:34:55
+Date: 2012-12-04 12:45:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,11 +27,16 @@ CREATE TABLE `address` (
   `C_date` char(12) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `user_id` (`F_id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=1185 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1190 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of address
 -- ----------------------------
+INSERT INTO address VALUES ('1185', '1040', '0', '1', '住房处', '1354595902');
+INSERT INTO address VALUES ('1186', '1040', '0', '2', '公司', '1354595902');
+INSERT INTO address VALUES ('1187', '1040', '0', '3', '超市菜市场', '1354595902');
+INSERT INTO address VALUES ('1188', '1040', '0', '4', '商场', '1354595902');
+INSERT INTO address VALUES ('1189', '1040', '0', '5', '其他', '1354595902');
 
 -- ----------------------------
 -- Table structure for `bank_card`
@@ -85,8 +90,8 @@ DROP TABLE IF EXISTS `family`;
 CREATE TABLE `family` (
   `ID` int(4) NOT NULL AUTO_INCREMENT,
   `Is_d` smallint(2) DEFAULT NULL,
-  `F_name` char(16) NOT NULL,
-  `F_alias` char(20) DEFAULT NULL,
+  `Name` char(16) NOT NULL,
+  `Alias` char(20) DEFAULT NULL,
   `L_Pass` char(64) DEFAULT NULL,
   `C_pass` char(64) DEFAULT NULL,
   `A_pass` char(64) DEFAULT NULL,
@@ -98,11 +103,12 @@ CREATE TABLE `family` (
   `Sum` int(8) DEFAULT NULL,
   `Session` char(128) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=1040 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1041 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of family
 -- ----------------------------
+INSERT INTO family VALUES ('1040', '0', 'mygroup', '我爱我家', '*E12D48AE5735D8CA0F88145868AF87C5D45F6C53', 'chenbk55', '', '0', 'chenbingkun55@163.com', '', '1354595902', '1354596115', '2', '0ey3wPjy8svBY99Enw0txcE-K-d');
 
 -- ----------------------------
 -- Table structure for `family_member`
@@ -112,8 +118,7 @@ CREATE TABLE `family_member` (
   `ID` int(4) NOT NULL AUTO_INCREMENT,
   `F_id` int(4) NOT NULL,
   `Is_d` smallint(2) DEFAULT '0',
-  `U_name` char(16) NOT NULL,
-  `U_alias` char(20) DEFAULT NULL,
+  `Name` char(16) NOT NULL,
   `Notes` varchar(50) DEFAULT NULL,
   `Skin` smallint(2) DEFAULT '1',
   `Email` varchar(50) NOT NULL,
@@ -123,7 +128,7 @@ CREATE TABLE `family_member` (
   `C_date` char(12) NOT NULL,
   `L_date` char(12) DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `username` (`U_name`) USING BTREE
+  UNIQUE KEY `username` (`Name`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=1048 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
