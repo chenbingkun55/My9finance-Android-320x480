@@ -816,7 +816,7 @@
 
 				$alter_corde = $Finance->getCordeData($login_member_id,$recordtype,"",0,$alter_id);
 
-				$YesNo = ($Finance->updateCurrentMoney($login_member_id,$login_family_id,$cmoney,$alter_id))==true ? true:false;
+				$YesNo = ($Finance->updateMoney($login_member_id,$login_family_id,"0",$cmoney,$alter_id))==true ? true:false;
 					
 				/*  记录日志  */
 				$text_log = $YesNo ? "修改现金-成功,用户:".$login_member_id.", 现金:".$cmoney  : "修改现金-失败,用户:".$login_member_id.", 现金:".$cmoney;

@@ -1,6 +1,6 @@
 <?PHP
-    require_once(INCLUDE_PATH.'db.inc.php');
-    require_once(INCLUDE_PATH.'language_CN.php');
+    require(INCLUDE_PATH.'db.inc.php');
+    require(INCLUDE_PATH.'language_CN.php');
 
 /*
 	返回值说明：0 成功 ， 非0值 失败
@@ -152,16 +152,13 @@
             return $result;
         }
 
-       /* 添加收入\支出数据函数 $fromtype,$in_out,$user_id,$family_id,$mantype_id,$subtype_id,$address,$menoy,$notes */
-        public function addCordeData($fromtype,$in_out,$member_id,$family_id,$bank_id,$mantype_id,$subtype_id,$address_id,$money,$notes)
+       /* 添加收入\支出数据函数 $in_out,$user_id,$family_id,$mantype_id,$subtype_id,$address,$menoy,$notes */
+        public function addCordeData($in_out,$member_id,$family_id,$bank_id,$mantype_id,$subtype_id,$address_id,$money,$notes)
         {
             
 			switch($in_out){
 				case "out_record":
 					$sql = "INSERT INTO ".$this->_out_corde." (ID,U_id,F_id,B_id,M_id,S_id,A_id,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','".$money."','".$notes."','".time()."')";
-					if ( $fromtype == 0 ){
-						$cmoney = $money - ( $money *2 ); 
-					}
 					break;
 				case "in_record":
 					$sql = "INSERT INTO ".$this->_in_corde."  (ID,U_id,F_id,B_id,M_id,S_id,A_id,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','".$money."','".$notes."','".time()."')";
@@ -169,7 +166,7 @@
 					break;
 			}
 
-			$this->updateCurrentMoney($member_id,$family_id,$cmoney,"");
+			$this->updateMoney($member_id,$family_id,$bank_id,$cmoney,"");
 
             return $this->insert($sql);
         }
@@ -508,6 +505,9 @@
 					break;
 				case "address":
 					$sql = "SELECT Name FROM ".$this->_address." WHERE ID = '".$id."'";
+					break;
+				case "bank_card":
+					$sql = "SELECT Name FROM ".$this->_bank_card." WHERE ID = '".$id."'";
 					break;
 			}
             $result = $this->select($sql);
@@ -1068,16 +1068,20 @@
 	}
 
 	/* 修改用户现金 */
-	public function updateCurrentMoney($member_id,$family_id,$cmoney,$alter_id){
-		if ( $alter_id == "") {
-			$sql = "UPDATE ".$this->_family_member." set Money = Money + '".$cmoney."' WHERE ID = '".$member_id."' AND F_id = '".$family_id."'" ;
-			
-			$current_member = $_SESSION['current_member'] ;
-			$_SESSION['__memberdata'][$current_member]['Money'] = $_SESSION['__memberdata'][$current_member]['Money'] + $cmoney;
+	public function updateMoney($member_id,$family_id,$mtype_id,$cmoney,$alter_id){
+		if ( $mtype_id == "0" ){
+			if ( $alter_id == "") {
+				$sql = "UPDATE ".$this->_family_member." set Money = Money + '".$cmoney."' WHERE ID = '".$member_id."' AND F_id = '".$family_id."'" ;
+				
+				$current_member = $_SESSION['current_member'] ;
+				$_SESSION['__memberdata'][$current_member]['Money'] = $_SESSION['__memberdata'][$current_member]['Money'] + $cmoney;
+			} else {
+				$sql = "UPDATE ".$this->_family_member." set Money = '".$cmoney."' WHERE ID = '".$alter_id."' AND F_id = '".$family_id."'" ;
+				$current_member = $_SESSION['current_member'] ;
+				$_SESSION['__memberdata'][$current_member]['Money'] = $cmoney;
+			}
 		} else {
-			$sql = "UPDATE ".$this->_family_member." set Money = '".$cmoney."' WHERE ID = '".$alter_id."' AND F_id = '".$family_id."'" ;
-			$current_member = $_SESSION['current_member'] ;
-			$_SESSION['__memberdata'][$current_member]['Money'] = $cmoney;
+			$sql = "UPDATE ".$this->_bank_card." set Money = Money + '".$cmoney."' WHERE U_id = '".$member_id."' AND F_id = '".$family_id."' AND ID = '".$mtype_id."'" ;
 		}
 
 
