@@ -8,7 +8,6 @@
 	$alter_submit = $_POST['alter_submit'];
 	$Aid = $_GET['Aid'];
 	$Did = $_GET['Did'];
-	$bank_card = $Finance->getCordeData($login_member_id,"bank_card",0,1,0);
 
 	/*
 		添加表单:
@@ -65,6 +64,7 @@
 			$_SESSION['__global_logid'] = $YesNo ?  5014 : 1014; 
 		}
 
+		$bank_card = $Finance->getCordeData($login_member_id,"bank_card",0,1,0);
 		echo "<script>";
 		echo "MemberMoney['0'] = new Array('0','".$login_member_id."','我的钱包','".$login_member_money."');";
 		for ($i=0;$i<count($bank_card);$i++){
@@ -80,7 +80,7 @@
 		} 
 		echo "</select>";
 
-		echo "<div class=\"MoneyPlane\" align=\"right\" id=\"MoneyPlane\">".$login_member_money."</div>";
+		echo "<div class=\"MoneyPlane\" align=\"right\" id=\"MoneyPlane\">".$_SESSION['__memberdata'][$current_member]['Money']."</div>";
 
 
 		echo "<BR>支出:&nbsp;";
@@ -133,6 +133,7 @@
 		if ( $add_submit == 1 || $alter_submit == 1){
 			$mantype_id = $_POST['mantype_id'];
 			$subtype_id = $_POST['subtype_id'];
+			$bank_id = $_POST['bank_id'];
 			$address = $_POST['address'];
 			$money = $_POST['money'];
 			$notes = $_POST['notes'];
@@ -143,6 +144,7 @@
 				echo "add_submit值为：".$_POST['add_submit']."<br>";
 				echo "mantype_id值为：".$_POST['mantype_id']."<br>";
 				echo "subtype_id值为：".$_POST['subtype_id']."<br>";
+				echo "bank_id值为：".$_POST['bank_id']."<br>";
 				echo "address值为：".$_POST['address']."<br>";
 				echo "money值为：".$_POST['money']."<br>";
 				echo "notes值为：".$_POST['notes']."<br>";
@@ -178,6 +180,7 @@
 			$_SESSION['__global_logid'] = $YesNo ?  5015 : 1015;
 		}
 
+		$bank_card = $Finance->getCordeData($login_member_id,"bank_card",0,1,0);
 		echo "<script>";
 		echo "MemberMoney['0'] = new Array('0','".$login_member_id."','我的钱包','".$login_member_money."');";
 		for ($i=0;$i<count($bank_card);$i++){
@@ -193,7 +196,7 @@
 		} 
 		echo "</select>";
 
-		echo "<div class=\"MoneyPlane\" align=\"right\" id=\"MoneyPlane\">".$login_member_money."</div>";
+		echo "<div class=\"MoneyPlane\" align=\"right\" id=\"MoneyPlane\">".$_SESSION['__memberdata'][$current_member]['Money']."</div>";
 
 
 		echo "<BR>收入:&nbsp;";

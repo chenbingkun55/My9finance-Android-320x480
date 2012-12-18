@@ -35,7 +35,7 @@
 		添加表单:
 	*/
 	switch($recordtype){
-		case 'mantype':
+		case 'out_mantype':
 			if ( $add_submit == 1 || $alter_submit == 1 ){
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";

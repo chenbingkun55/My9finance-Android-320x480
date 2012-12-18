@@ -128,19 +128,18 @@
 
 			switch ($flow){
 				case "0":
-					$sql = $is_member ? "SELECT * FROM  ".$this->_record_lib." WHERE  from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."' AND Flow = '0'": $Aid ? "SELECT * FROM  ".$this->_record_lib." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."' AND Flow = '0'";
+					$sql = $is_member ? "SELECT * FROM  ".$this->_record_lib." WHERE  from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."' AND Flow = '0'": ($Aid ? "SELECT * FROM  ".$this->_record_lib." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."' AND Flow = '0'");
 					break;
 				case "1":
-					$sql = $is_member ? "SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."' AND Flow = '1'": $Aid ? "SELECT * FROM  ".$this->_record_lib." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."'  AND Flow = '1'";
+					$sql = $is_member ? "SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND U_id = '".$member_id."' AND Flow = '1'": ($Aid ? "SELECT * FROM  ".$this->_record_lib." WHERE ID = '".$Aid."'":"SELECT * FROM  ".$this->_record_lib." WHERE from_unixtime(C_date)>='".date('Y-m-d',$date)."'  AND F_id = '".$family_id."'  AND Flow = '1'");
 					break;
-				case "bug" :
-					$sql = $is_member ? "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM ".$this->_bug." WHERE U_id = '".$member_id."' AND Status = '".$date."'" :  $Aid ?  "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status FROM  ".$this->_bug." WHERE ID = '".$Aid."'" : "SELECT ID,U_id,F_id,case B_type when 'bug' then '缺陷' when 'suggestion' then '建议' end as B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM  ".$this->_bug." WHERE F_id = '".$family_id."'";
+				case "bug":
+					$sql = $is_member ? "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM ".$this->_bug." WHERE U_id = '".$member_id."' AND Status = '".$date."'" :  ($Aid ?  "SELECT ID,U_id,F_id,B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status FROM  ".$this->_bug." WHERE ID = '".$Aid."'" : "SELECT ID,U_id,F_id,case B_type when 'bug' then '缺陷' when 'suggestion' then '建议' end as B_type,case B_level when 1 then '一般' when 2 then '重要' when 3 then '特重要' when 4 then '无法使用' end as B_level,B_title,B_centent,C_date,case Status when 0 then '新增' when 1 then '处理中' when 2 then '己解决' when 3 then '己关闭' end as Status  FROM  ".$this->_bug." WHERE F_id = '".$family_id."'");
 					break;
-				case "bank_card" :
-					$sql = $is_member ? "SELECT * FROM  ".$this->_bank_card." WHERE  U_id = '".$member_id."'" : $Aid ? "SELECT * FROM  ".$this->_bank_card."  WHERE  ID = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE  F_id = '".$family_id."'";
+				case "bank_card":
+					$sql = $is_member ? "SELECT * FROM  ".$this->_bank_card." WHERE U_id = '".$member_id."'"   : ($Aid ? "SELECT * FROM  ".$this->_bank_card." WHERE ID = '".$Aid."'" : "SELECT * FROM  ".$this->_bank_card." WHERE F_id = '".$family_id."'");
 					break;
 			}
-
 
 			$result = $this->select($sql);
 
@@ -154,14 +153,15 @@
 			switch($flow){
 				case "0":
 					$sql = "INSERT INTO ".$this->_record_lib." (ID,U_id,F_id,B_id,M_id,S_id,A_id,Flow,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','0','".$money."','".$notes."','".time()."')";
+					$cmoney = $money-$money*2;
 					break;
 				case "1":
 					$sql = "INSERT INTO ".$this->_record_lib."  (ID,U_id,F_id,B_id,M_id,S_id,A_id,Flow,Money,Notes,C_date) VALUES ('','".$member_id."','".$family_id."','".$bank_id."','".$mantype_id."','".$subtype_id."','".$address_id."','1','".$money."','".$notes."','".time()."')";
 					$cmoney = $money;
 					break;
 			}
-
-			$this->updateMoney($member_id,$family_id,$bank_id,$cmoney,"");
+			
+			$this->updateMoney($member_id,$family_id,$bank_id,$cmoney ,"");
 
             return $this->insert($sql);
         }
@@ -331,8 +331,14 @@
 			}
 
 			$this->corde_sql_log($old_corde);
+
+			$current_member = $_SESSION['current_member'] ;
+			$_SESSION['__memberdata'][$current_member]['Money'] = $money ;
+			 
 			/*  记录修改前的资料 END */
             return $this->update($sql);
+
+
         }
 
 
