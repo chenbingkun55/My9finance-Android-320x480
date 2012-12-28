@@ -6,8 +6,8 @@
 <FORM action="main.php" method="get" >
 	
 	<select id="scorde" name="scorde" onChange="DisableStype()">
-		 <option  value="record_lib" <?PHP if ( $_GET['scorde'] == "record_lib")  echo "selected=\"selected\"" ;  ?>>支出</option>
-		 <option  value="record_lib" <?PHP if ( $_GET['scorde'] == "record_lib")  echo "selected=\"selected\"" ;  ?>>收入</option>
+		 <option  value="0" <?PHP if ( $_GET['scorde'] == "0")  echo "selected=\"selected\"" ;  ?>>支出</option>
+		 <option  value="1" <?PHP if ( $_GET['scorde'] == "1")  echo "selected=\"selected\"" ;  ?>>收入</option>
 		 <option  value="in_out" <?PHP if ( $_GET['scorde'] == "in_out")  echo "selected=\"selected\"" ;  ?>>收支</option>
 	</select>
 
@@ -36,20 +36,15 @@
 
 		switch( $_GET['stype'] ) {
 			case  "address":
-				$table_title = array("序号","地址","家庭","金钱","占百分比");
+				$table_title = array("序号","地址","金钱","占百分比");
 				$stype = "address";
 				break;
 			case  "mantype":
-				$table_title = array("序号","类别","家庭","金钱","占百分比");
-				if ( $_GET['scorde'] == "record_lib" ) {
-					$stype = "mantype";
-				}
-				if ( $_GET['scorde'] == "record_lib" ) {
-					$stype = "mantype";
-				}
+				$table_title = array("序号","类别","金钱","占百分比");
+				$stype = "mantype";
 				break;
 			default:
-				$table_title = array("序号","用户","家庭","金钱","占百分比");
+				$table_title = array("序号","用户","金钱","占百分比");
 				$stype = "family_member";
 		}	
 
@@ -103,7 +98,6 @@
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
 				echo "<td>".@$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
-				echo "<td>".$report_data[$i]['2']."</td>";
 				echo "<td>".$report_data[$i]['sum(Money)']."</td>";
 				echo "<td>".(number_format($report_data[$i]['sum(Money)']/$today_money,2)*100)."%</td>";
 				echo "</tr>";
@@ -116,7 +110,7 @@
 
 	} else {		
 		$jump =  isset($_GET['jump']) ? $_GET['jump'] : 0 ;
-		$scorde = isset($_GET['scorde']) ? $_GET['scorde'] : "record_lib";
+		$scorde = isset($_GET['scorde']) ? $_GET['scorde'] : "0";
 		$stype =  isset($_GET['stype']) ? $_GET['stype'] : "member";
 		$sdate = isset($_GET['sdate']) ?  $_GET['sdate'] :   "week";
 
@@ -149,20 +143,15 @@
 		} else {
 			switch( $_GET['stype'] ) {
 				case  "address":
-					$table_title = array("序号","地址","家庭","金钱","占百分比");
+					$table_title = array("序号","地址","金钱","占百分比");
 					$stype = "address";
 					break;
 				case  "mantype":
-					$table_title = array("序号","类别","家庭","金钱","占百分比");
-					if ( $_GET['scorde'] == "record_lib" ) {
-						$stype = "mantype";
-					}
-					if ( $_GET['scorde'] == "record_lib" ) {
-						$stype = "mantype";
-					}
+					$table_title = array("序号","类别","金钱","占百分比");
+					$stype = "mantype";
 					break;
 				default:
-					$table_title = array("序号","用户","家庭","金钱","占百分比");
+					$table_title = array("序号","用户","金钱","占百分比");
 					$stype = "family_member";
 			}	
 
@@ -191,7 +180,6 @@
 				echo "<tr class='".$c."'>";
 				echo "<td>".($i+1)."</td>";
 				echo "<td>".@$Finance->convertID($report_data[$i]['1'],$stype )."</td>";
-				echo "<td>".$report_data[$i]['2']."</td>";
 				echo "<td>".$report_data[$i]['sum(Money)']."</td>";
 				echo "<td>".(number_format($report_data[$i]['sum(Money)']/$today_money,2)*100)."%</td>";
 				echo "</tr>";

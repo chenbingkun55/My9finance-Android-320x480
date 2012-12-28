@@ -15,6 +15,7 @@
 	$Mid = $_GET['Mid'];
 	$add_submit = $_POST['add_submit'];
 	$alter_submit = $_POST['alter_submit'];
+	$flow = $_POST['flow'] == "on" ?  1 : 0;
 
 	if(DEBUG_YES){ 
 		echo "<br>DEBUG START*********************************************<br>";
@@ -24,6 +25,7 @@
 		echo "Aid值为：".$Aid."<br>";
 		echo "Did值为：".$Did."<br>";
 		echo "Mid值为：".$Mid."<br>";
+		echo "flow值为：".$flow."<br>";
 		echo "add_submit值为：".$add_submit."<br>";
 		echo "alter_submit值为：".$alter_submit."<br>";
 		echo "<br>DEBUG END*********************************************<br>";	
@@ -35,7 +37,7 @@
 		添加表单:
 	*/
 	switch($recordtype){
-		case 'out_mantype':
+		case 'mantype':
 			if ( $add_submit == 1 || $alter_submit == 1 ){
 				if(DEBUG_YES){ 
 					echo "<br>DEBUG START*********************************************<br>";
@@ -47,7 +49,7 @@
 				$mantype = $_POST['mantype'];
 				$is_display = $_POST['is_display'] == "on" ?  0 : 1;
 				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,$mantype,$is_display,0))==true ? true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,$flow,$mantype,$is_display,0))==true ? true:false;
 
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "启用" : "禁用";
@@ -94,7 +96,7 @@
 
 				echo "修改主支出类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"mantype\" size=\"10\" value=\"".$alter_corde['0']['Name']."\"></span>";
-				echo "是否显示";
+				echo "显示";
 				if ($alter_corde['0']['Is_d']=="0"){
 					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
 				}else{
@@ -104,14 +106,45 @@
 				echo "<INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\">";
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ALTER."\">";
 			}else{
-				echo "添加主支出类别 名称:&nbsp;<br>";
+				echo "添加主类别 名称:&nbsp;<br>";
 				echo "<input  type=\"text\" name=\"mantype\" size=\"10\" value=\"\"></span>";
-				echo "是否显示";
+				echo "显示";
 				echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
+				echo "收入?";
+				echo "<INPUT TYPE=\"checkbox\" name=\"flow\" ></span>";
 				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
 				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
 			}
 
+			echo "<BR>支出:";
+			$flow = 0;
+			$type_corde = $Finance->getManType($login_family_id,$flow,1,0);
+
+			$table_title = array("序号","状态","名称","排序","主类操作","子类操作");
+			
+			echo "<table>";		
+			echo "<tr class='ContentTdColor'>";
+			for ($i=0;$i<count($table_title);$i++){
+				echo "<th>".$table_title[$i]."</th>";
+			}
+
+			$c="ContentTdColor1";
+			for ($i=0;$i<count($type_corde);$i++){
+				echo "<tr class=\"".$c."\">";
+				echo "<td>".($i+1)."</td>";
+				echo "<td>".$YesNo=$type_corde[$i]['Is_d']? "禁用":"启用"."</td>";
+				echo "<td>".$type_corde[$i]['Name']."</td>";
+				echo "<td><span class=\"click\" onClick=\"MoveUp('".$type_corde[$i]['ID']."')\">上移</span>|<span class=\"click\" onClick=\"MoveDown('".$type_corde[$i]['ID']."')\">下移</span></td>";
+				echo "<td><span class=\"click\" onClick=\"Alter('".$type_corde[$i]['ID']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$type_corde[$i]['ID']."')\">删除</span></td>";
+				echo "<td><span class=\"click\" onClick=\"ListSubtype('".$type_corde[$i]['ID']."')\">查看子类</span></td>";
+				echo "</tr>";
+				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
+			}
+
+			echo "</table>";
+			
+			echo "<BR>收入:";
+			$flow = 1;
 			$type_corde = $Finance->getManType($login_family_id,$flow,1,0);
 
 			$table_title = array("序号","状态","名称","排序","主类操作","子类操作");
@@ -158,7 +191,7 @@
 				$_POST['is_display'] == "on" ? $is_display = "0" : $is_display = "1" ;
 				$man_id = $_POST['man_id'];
 				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,$subtype,$is_display,$Lid))==true ? true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,0,$subtype,$is_display,$Lid))==true ? true:false;
 					
 					/*  记录日志  */
 					$man_name=@@$Finance->convertID($man_id,"mantype");
@@ -261,231 +294,6 @@
 				echo "<br>DEBUG END*********************************************<br>";	
 			}
 			break;
-		case 'mantype':
-			if ( $add_submit == 1 || $alter_submit == 1 ){
-				if(DEBUG_YES){ 
-					echo "<br>DEBUG START*********************************************<br>";
-					echo "add_submit值为：".$_POST['add_submit']."<br>";
-					echo "mantype值为：".$_POST['mantype']."<br>";
-					echo "is_display值为：".$_POST['is_display']."<br>";
-					echo "<br>DEBUG END*********************************************<br>";	
-				}
-				$mantype = $_POST['mantype'];
-				$_POST['is_display'] == "on" ? $is_display = "0" : $is_display = "1" ;
-				if($add_submit == 1){
-
-					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,$mantype,$is_display,0))==true ? true:false;
-
-					/*  记录日志  */
-					$is_display = $_POST['is_display'] == "on" ?  "启用" : "禁用";
-					$text_log = $YesNo ? "添加收入主类-成功,主类名称: ".$mantype." 显示: ".$is_display : "添加收入主类-失败,主类名称: ".$mantype." 显示: ".$is_display;
-					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  5022 : 1022;
-				}
-
-				if($alter_submit == 1){
-					$alter_id = $_POST['alter_id'];
-					$alter_corde=$Finance->getManType($login_family_id,$recordtype,1,$alter_id);
-					$YesNo =($Finance->updateTypeData($recordtype,$login_family_id,$alter_id,$mantype,$is_display))==true ? true:false;
-					
-					/*  记录日志  */
-					$is_display = $_POST['is_display'] == "on" ?  "启用" : "禁用";
-					$is_display2 = $alter_corde['0']['is_display'] == "0" ?  "启用" : "禁用";
-					$text_log = $YesNo ? "修改收入主类-成功,主类原名称: ".$alter_corde['0']['Name']." 改为:".$mantype." 原显示: ".$is_display2."  改为:".$is_display : "修改收入主类-失败,主类原名称: ".$alter_corde['0']['Name']." 改为:".$mantype." 原显示: ".$is_display2."改为:".$is_display;
-					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  5023 : 1023;
-				}
-			}
-
-			if (!(is_null($Did)) && !(is_null($login_family_id))){
-				$alter_corde=$Finance->getManType($login_family_id,$recordtype,1,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_id,$Did,$login_family_id))==true ? true:false;
-				
-				/*  记录日志  */
-				$is_display = $alter_corde['0']['Is_d'] == 0 ?  "启用" : "禁用";
-				$text_log = $YesNo ? "删除收入主类-成功,主类名称: ".$alter_corde['0']['Name']." 显示: ".$is_display : "删除收入主类-失败,主类名称: ".$alter_corde['0']['Name']." 显示: ".$is_display;
-				/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  5024 : 1024;
-			}
-
-			if (!(is_null($Mid)) && !(is_null($login_family_id))){
-				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_family_id,0,$Mid,$UP);
-				}else{
-					$Finance->down_up($recordtype,$login_family_id,0,$Mid);
-				}
-			}
-
-			if (!(is_null($Aid)) && !(is_null($login_family_id))){
-				$alter_corde=$Finance->getManType($login_family_id,$recordtype,1,$Aid);
-
-				echo "修改主收入类别 名称:&nbsp;<br>";
-				echo "<input  type=\"text\" name=\"mantype\" size=\"10\" value=\"".$alter_corde['0']['Name']."\"></span>";
-				echo "是否显示";
-				if ($alter_corde['0']['Is_d']=="0"){
-					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
-				}else{
-					echo "<INPUT TYPE=\"checkbox\" name=\"is_display\" ></span>";
-				}
-				echo "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\">";
-				echo "<INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\">";
-				echo "<INPUT  TYPE=\"submit\" value=\"".$_ALTER."\">";
-			}else{
-				echo "添加主收入类别 名称:&nbsp;<br>";
-				echo "<input  type=\"text\" name=\"mantype\" size=\"10\" value=\"\"></span>";
-				echo "是否显示";
-				echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
-				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
-				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
-			}
-
-			$type_corde = $Finance->getManType($login_family_id,$recordtype,1,0);
-
-			$table_title = array("序号","状态","名称","排序","主类操作","子类操作");
-			
-			echo "<table>";		
-			echo "<tr class='ContentTdColor'>";
-			for ($i=0;$i<count($table_title);$i++){
-				echo "<th>".$table_title[$i]."</th>";
-			}
-
-			$c="ContentTdColor1";
-			for ($i=0;$i<count($type_corde);$i++){
-				echo "<tr class=\"".$c."\">";
-				echo "<td>".($i+1)."</td>";
-				echo "<td>".$YesNo=$type_corde[$i]['Is_d']? "禁用":"启用"."</td>";
-				echo "<td>".$type_corde[$i]['Name']."</td>";
-				echo "<td><span class=\"click\" onClick=\"MoveUp('".$type_corde[$i]['ID']."')\">上移</span>|<span class=\"click\" onClick=\"MoveDown('".$type_corde[$i]['ID']."')\">下移</span></td>";
-				echo "<td><span class=\"click\" onClick=\"Alter('".$type_corde[$i]['ID']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$type_corde[$i]['ID']."')\">删除</span></td>";
-				echo "<td><span class=\"click\" onClick=\"ListSubtype('".$type_corde[$i]['ID']."')\">查看子类</span></td>";
-				echo "</tr>";
-				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
-			}
-
-			echo "</table>";
-			if(DEBUG_YES){ 
-				echo "<br>DEBUG START*********************************************<br>";
-				print_r($type_corde);
-				echo "<Br>".date("Y-m-d");
-				echo "<br>DEBUG END*********************************************<br>";	
-			}
-			break;
-		case 'subtype':
-			$Lid = $_GET['Lid'];
-			if ( $add_submit == 1 || $alter_submit == 1 ){
-				if(DEBUG_YES){ 
-					echo "<br>DEBUG START*********************************************<br>";
-					echo "add_submit值为：".$_POST['add_submit']."<br>";
-					echo "subtype值为：".$_POST['subtype']."<br>";
-					echo "man_id值为：".$_POST['man_id']."<br>";
-					echo "is_display值为：".$_POST['is_display']."<br>";
-					echo "<br>DEBUG END*********************************************<br>";	
-				}
-				$man_id = $_POST['man_id'];
-				$subtype = $_POST['subtype'];
-				$_POST['is_display'] == "on" ? $is_display = "0" : $is_display = "1" ;
-				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,$subtype,$is_display,$Lid))==true ?  true:false;
-
-					/*  记录日志  */
-					$man_name=@$Finance->convertID($man_id,"mantype");
-					$is_display = $_POST['is_display'] == "on" ?  "启用" : "禁用";
-					$text_log = $YesNo ? "添加收入子类-成功,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display : "添加收入子类-失败,所属主类名称: ".$man_name.",子类名称:".$subtype.",显示: ".$is_display;
-					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  5025 : 1025;
-				}
-
-				if($alter_submit == 1){
-					$alter_id = $_POST['alter_id'];
-					$alter_corde=$Finance->getSubType($login_family_id,$recordtype,1,$man_id,$alter_id);
-
-					$YesNo =($Finance->updateTypeData($recordtype,$login_family_id,$alter_id,$subtype,$is_display,$man_id))==true ? true:false;
-					
-					/*  记录日志  */
-					$man_name=@$Finance->convertID($man_id,"mantype");
-					$is_display = $_POST['is_display'] == "on" ?  "启用" : "禁用";
-					$is_display2 = $alter_corde['0']['is_display'] == "0" ?  "启用" : "禁用";
-					$text_log = $YesNo ? "修改收入子类-成功,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display : "修改收入子类-失败,所属主类名称: ".$man_name.",原子类名称:".$alter_corde['0']['name'].",改为:".$subtype.",原显示: ".$is_display2.",改为:".$is_display;
-					/*  消息提醒  */
-					$_SESSION['__global_logid'] = $YesNo ?  5026 : 1026;
-				}
-			}
-
-			if (!(is_null($Did)) && !(is_null($login_family_id))){
-				$alter_corde=$Finance->getSubType($login_family_id,$recordtype,1,$Lid,$Did);
-				$YesNo =($Finance->delCorde($recordtype,$login_family_id,$Did,$login_family_id))==true ? true:false;
-				
-				/*  记录日志  */
-				$man_name=@$Finance->convertID($Lid,"mantype");
-				$is_display2 = $alter_corde['0']['is_display'] == "0" ?  "启用" : "禁用";
-				$text_log = $YesNo ? "删除支出子类-成功,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['name'].",显示: ".$is_display2 : "删除支出子类-失败,所属主类名称: ".$man_name.",子类名称:".$alter_corde['0']['Name'].",显示: ".$is_display2;
-					/*  消息提醒  */
-				$_SESSION['__global_logid'] = $YesNo ?  5027 : 1027;
-			}
-
-			if (!(is_null($Mid)) && !(is_null($login_family_id))){
-				if ($UP == 1){
-					$Finance->down_up($recordtype,$login_family_id,$Lid,$Mid,$UP);
-				}else{
-					$Finance->down_up($recordtype,$login_family_id,$Lid,$Mid);
-				}
-			}
-
-			$man_name=@$Finance->convertID($Lid,"mantype");
-			if (!(is_null($Aid)) && !(is_null($login_family_id))){
-				$alter_corde=$Finance->getSubType($login_family_id,$recordtype,1,$Lid,$Aid);
-				echo "修改-".$man_name."-的,子支出类别 名称:&nbsp;<br>";
-				echo "<input  type=\"text\" name=\"subtype\" size=\"10\" value=\"".$alter_corde['0']['Name']."\"></span>";
-				echo "是否显示";
-				if ($alter_corde['0']['Is_d']=="0"){
-					echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
-				}else{
-					echo "<INPUT TYPE=\"checkbox\" name=\"is_display\" ></span>";
-				}
-				echo "<INPUT type=\"hidden\" name=\"alter_id\" value=\"".$Aid."\">";
-				echo "<INPUT type=\"hidden\" name=\"man_id\" value=\"".$Lid."\">";
-				echo "<INPUT type=\"hidden\" name=\"alter_submit\" value=\"1\">";
-				echo "<INPUT  TYPE=\"submit\" value=\"".$_ALTER."\">";
-			}else{
-				echo "添加-".$man_name."-的,子支出类别 名称:&nbsp;<br>";
-				echo "<input  type=\"text\" name=\"subtype\" size=\"10\" value=\"\"></span>";
-				echo "是否显示";
-				echo "<INPUT TYPE=\"checkbox\" checked=\"checked\" name=\"is_display\" ></span>";
-				echo "<INPUT type=\"hidden\" name=\"add_submit\" value=\"1\">";
-				echo "<INPUT  TYPE=\"submit\" value=\"".$_ADD."\">";
-			}
-
-			$type_corde = $Finance->getSubType($login_family_id,$recordtype,1,$Lid,0);
-
-			$table_title = array("序号","状态","名称","排序","子类操作","返回主类");
-			
-			echo "<table>";		
-			echo "<tr class='ContentTdColor'>";
-			for ($i=0;$i<count($table_title);$i++){
-				echo "<th>".$table_title[$i]."</th>";
-			}
-
-			$c="ContentTdColor1";
-			for ($i=0;$i<count($type_corde);$i++){
-				echo "<tr class=\"".$c."\">";
-				echo "<td>".($i+1)."</td>";
-				echo "<td>".$YesNo=$type_corde[$i]['Is_d']? "禁用":"启用"."</td>";
-				echo "<td>".$type_corde[$i]['Name']."</td>";
-				echo "<td><span class=\"click\" onClick=\"MoveUp('".$type_corde[$i]['ID']."')\">上移</span>|<span class=\"click\" onClick=\"MoveDown('".$type_corde[$i]['ID']."')\">下移</span></td>";
-				echo "<td><span class=\"click\" onClick=\"Alter('".$type_corde[$i]['ID']."')\">修改</span>&nbsp;|&nbsp;<span class=\"click\" onClick=\"Del('".$type_corde[$i]['ID']."')\">删除</span></td>";
-				echo "<td><span class=\"click\" onClick=\"ReturnMantype('".$type_corde[$i]['ID']."')\">返回主类</span></td>";
-				echo "</tr>";
-				$c=($c=="ContentTdColor1") ? "ContentTdColor2":"ContentTdColor1";
-			}
-
-			echo "</table>";
-			if(DEBUG_YES){ 
-				echo "<br>DEBUG START*********************************************<br>";
-				print_r($type_corde);
-				echo "<Br>".date("Y-m-d");
-				echo "<br>DEBUG END*********************************************<br>";	
-			}
-			break;
 		case 'address':
 			if ( $add_submit == 1 || $alter_submit == 1 ){
 				if(DEBUG_YES){ 
@@ -498,7 +306,7 @@
 				$address = $_POST['address'];
 				$_POST['is_display'] == "on" ? $is_display = "0" : $is_display = "1" ;
 				if($add_submit == 1){
-					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,$address,1,0))==true ? true:false;
+					$YesNo = ($Finance->addTypeData($recordtype,$login_family_id,0,$address,1,0))==true ? true:false;
 
 					/*  记录日志  */
 					$is_display = $_POST['is_display'] == "on" ?  "启用" : "禁用";

@@ -196,21 +196,17 @@
         }
 
 		/* 添加收入\支出类别 */
-		public function addTypeData($in_out,$family_id,$typename,$is_display=1,$man_id=0){
+		public function addTypeData($in_out,$family_id,$flow,$typename,$is_display=1,$man_id=0){
 			switch($in_out){
 				case 'mantype':
 				case 'subtype':
-					$man_store = $this->select("select max(Store) from mantype Where F_id = '".$family_id."'");
+					$man_store = $this->select("select max(Store) from mantype Where F_id = '".$family_id."' AND Flow = '".$flow."'");
 					$sub_store = $this->select("select max(Store) from subtype WHERE M_id = '".$man_id."' AND F_id ='".$family_id."'");
-
-					$sql =($man_id) ? "INSERT INTO ".$this->_subtype ." (ID,F_id,M_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$man_id."','".$is_display."','".($sub_store['0']['0']+1)."','".$typename."','".time()."')":"INSERT INTO ".$this->_mantype ." (ID,F_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$is_display."','".($man_store['0']['0']+1)."','".$typename."','".time()."')" ;
-					break;
-				case 'mantype':
-				case 'subtype':
-					$man_store = $this->select("select max(Store) from mantype Where F_id = '".$family_id."'");
-					$sub_store = $this->select("select max(Store) from subtype WHERE M_id = '".$man_id."' AND F_id ='".$family_id."'");
-
-					$sql =($man_id) ? "INSERT INTO ".$this->_subtype ." (ID,F_id,M_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$man_id."','".$is_display."','".($sub_store['0']['0']+1)."','".$typename."','".time()."')":"INSERT INTO ".$this->_mantype ." (ID,F_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$is_display."','".($man_store['0']['0']+1)."','".$typename."','".time()."')" ;
+					if ( $man_id == 0 ){
+						$sql = "INSERT INTO ".$this->_mantype ." (ID,F_id,Is_d,Store,Flow,Name,C_date) VALUES ('','".$family_id."','".$is_display."','".($man_store['0']['0']+1)."','".$flow."','".$typename."','".time()."')" ;
+					} else {
+						$sql = "INSERT INTO ".$this->_subtype ." (ID,F_id,M_id,Is_d,Store,Name,C_date) VALUES ('','".$family_id."','".$man_id."','".$is_display."','".($sub_store['0']['0']+1)."','".$typename."','".time()."')";
+					}
 					break;
 				case 'address':
 					$addr_store = $this->select("select max(Store) from ".$this->_address." Where F_id = '".$family_id."'");
@@ -584,8 +580,10 @@
 			$num = 0;
 			switch($in_out){
 				case "mantype":
-					$store_num = $this->select("SELECT Store from ".$this->_mantype." where ID = '".$id."'");
-					$store_max = $this->select("SELECT max(Store) from ".$this->_mantype." where F_id = '".$family_id."'");
+					$store_num = $this->select("SELECT Store,Flow from ".$this->_mantype." where ID = '".$id."'");
+					$flow = $store_num['0']['Flow'] == "0" ? 0 : 1;
+
+					$store_max = $this->select("SELECT max(Store) from ".$this->_mantype." where F_id = '".$family_id."' AND Flow = '".$flow."'");
 					if ($isup && $store_num['0']['0'] > 0){
 						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
 					}else if($store_num['0']['0'] <= $store_max['0']['0']){
@@ -593,13 +591,13 @@
 					} else{
 						break;
 					}
-					$sql = "UPDATE ".$this->_mantype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."' AND Flow = '".$flow."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_mantype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."' AND Flow = '".$flow."'";
 					$this->update($sql);
 
-					$sql = "UPDATE ".$this->_mantype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'";
+					$sql = "UPDATE ".$this->_mantype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."' AND Flow = '".$flow."'";
 					$this->update($sql);
 					break;
 				case "subtype":
@@ -622,44 +620,6 @@
 					$this->update($sql);
 					break;
 
-				case "mantype":
-					$store_num = $this->select("SELECT Store from ".$this->_mantype." where id = '".$id."'");
-					$store_max = $this->select("SELECT max(Store) from ".$this->_mantype." where F_id = '".$family_id."'");
-					if ($isup && $store_num['0']['0'] > 0){
-						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
-					}else if($store_num['0']['0'] <= $store_max['0']['0']){
-						$num=$store_num['0']['0']+1 > $store_max['0']['0'] ? 1:$store_num['0']['0']+1;
-					} else{
-						break;
-					}
-					$sql = "UPDATE ".$this->_mantype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'";
-					$this->update($sql);
-
-					$sql = "UPDATE ".$this->_mantype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND F_id ='".$family_id."'";
-					$this->update($sql);
-
-					$sql = "UPDATE ".$this->_mantype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND F_id ='".$family_id."'";
-					$this->update($sql);
-					break;
-				case "subtype":
-					$store_num = $this->select("SELECT Store from ".$this->_subtype." where ID = '".$id."'");
-					$store_max = $this->select("SELECT max(Store) from ".$this->_subtype." where M_id = '".$man_id."'");
-					if ($isup && $store_num['0']['0'] > 0){
-						$num=$store_num['0']['0']-1==0 ? $store_max['0']['0']:$store_num['0']['0']-1;
-					}else if($store_num['0']['0'] <= $store_max['0']['0']){
-						$num=$store_num['0']['0']+1 > $store_max['0']['0'] ? 1:$store_num['0']['0']+1;
-					} else{
-						break;
-					}
-					$sql = "UPDATE ".$this->_subtype." SET Store = '0' where Store = '".$num."' AND F_id ='".$family_id."'  AND M_id ='".$man_id."'";
-					$this->update($sql);
-
-					$sql = "UPDATE ".$this->_subtype." SET Store = '".$num."' where Store = '".$store_num['0']['0']."' AND U_id ='".$user_id."'  AND M_id ='".$man_id."'";
-					$this->update($sql);
-
-					$sql = "UPDATE ".$this->_subtype." SET Store = '".$store_num['0']['0']."' where Store = '0' AND U_id ='".$user_id."'  AND M_id ='".$man_id."'";
-					$this->update($sql);
-					break;
 				case "address":
 					$store_num = $this->select("SELECT Store from ".$this->_address." where ID = '".$id."'");
 					$store_max = $this->select("SELECT max(Store) from ".$this->_address." where F_id = '".$family_id."'");
@@ -790,7 +750,7 @@
             $this->insert($sql);
         }
 
-		 public function getReportData($scorde="record_lib", $stype="member", $sdate="week",$family_id,$jump=0) {
+		 public function getReportData($scorde="0", $stype="member", $sdate="week",$family_id,$jump=0) {
 				if ( $_SESSION['date_num'] < 100 ) {
 					switch ( $sdate ) {
 						case "week":
@@ -931,13 +891,13 @@
 				} else {
 					switch ($stype) {
 						case "mantype":
-							$sql = "SELECT sum(Money),M_id,F_id FROM ".$scorde." WHERE  ".$date_filter."  AND F_id = '".$family_id."' group by M_id order by sum(Money) desc";
+							$sql = "SELECT sum(Money),M_id,F_id FROM ".$this->_record_lib." WHERE  ".$date_filter."  AND F_id = '".$family_id."' AND Flow = '".$scorde."' group by M_id order by sum(Money) desc";
 							break;
 						case "member":
-							$sql = "SELECT sum(Money),U_id,F_id FROM ".$scorde." WHERE ".$date_filter."   AND F_id = '".$family_id."'  group by U_id order by sum(Money) desc";
+							$sql = "SELECT sum(Money),U_id,F_id FROM ".$this->_record_lib." WHERE ".$date_filter."   AND F_id = '".$family_id."' AND Flow = '".$scorde."' group by U_id order by sum(Money) desc";
 							break;
 						case "address":
-							$sql = "SELECT sum(Money),A_id,F_id FROM ".$scorde." WHERE  ".$date_filter."  AND F_id = '".$family_id."'  group by A_id order by sum(Money) desc";
+							$sql = "SELECT sum(Money),A_id,F_id FROM ".$this->_record_lib." WHERE  ".$date_filter."  AND F_id = '".$family_id."' AND Flow = '".$scorde."' group by A_id order by sum(Money) desc";
 							break;
 					}
 				return $this->select($sql);
@@ -945,14 +905,6 @@
 		 }
 
 		  public function getSearchData($scorde, $mantype_id, $subtype_id, $address, $money, $notes, $d_num, $sdate,  $family_id) {
-				if ( $scorde == "out_record" ){
-					$in_out = "record_lib" ;
-				} else if ( $scorde == "in_record" ) {
-					$in_out = "record_lib" ;
-				} else {
-					$in_out = NULL ;
-				}
-
 				$where_sql = is_numeric($mantype_id)  ?  " AND M_id = '".$mantype_id."' " : "" ;
 				$where_sql .= is_numeric($subtype_id)  ?  " AND S_id = '".$subtype_id."' " : "" ;
 				$where_sql .=  is_numeric($address)  ?  " AND A_id = '".$address."' " : "" ;
@@ -978,7 +930,7 @@
 					} 
 
 
-			$sql = "SELECT * FROM ".$in_out." WHERE  ".$date_filter." ".$where_sql."  AND F_id = '".$family_id."'";
+			$sql = "SELECT * FROM ".$this->_record_lib." WHERE  ".$date_filter." ".$where_sql."  AND F_id = '".$family_id."' AND Flow = '".$scorde."'";
 			/* echo $sql; */
 			 return $this->select($sql);
 			/*return $subtype_id;*/
