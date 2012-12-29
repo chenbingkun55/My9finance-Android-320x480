@@ -119,4 +119,5 @@
 	$_ADD_MONEY = "添加 现金" ;
 	$_ALTER_MONEY = "修改 现金" ;
 	$_C_MONEY = "现金" ;
+	$_COMMIT = "提交"
 ?>

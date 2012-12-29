@@ -1,7 +1,7 @@
 <div class="ContentPlane Content" id="Content">
 <script>ChangFunTitle('FunTitle4')</script>
 <?PHP
-	$scorde = isset( $_GET['scorde'] ) ? $_GET['scorde'] : $_POST['scorde'];
+	$scorde = isset( $_POST['scorde'] ) ? $_POST['scorde'] : $_GET['scorde'];
 ?>
 
 <FORM action="main.php?page=search.php"  name="add_form" method="POST">
@@ -11,6 +11,7 @@
 	</select>
 
 	<?PHP 
+		$scorde = isset($scorde) ? $scorde : "0";
 		$Finance->select_type($login_family_id,$scorde);
 	?>
 
