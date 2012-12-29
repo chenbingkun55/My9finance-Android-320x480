@@ -22,6 +22,7 @@
 		 <option  value="week" <?PHP if ( $_GET['sdate'] == "week" )  echo "selected=\"selected\"" ;  ?>>周</option>
 		 <option  value="month" <?PHP if ( $_GET['sdate'] == "month")  echo "selected=\"selected\"" ;  ?>>月</option>
 		 <option  value="year" <?PHP if ( $_GET['sdate'] == "year")  echo "selected=\"selected\"" ;  ?>>年</option>
+		 <option  value="">&nbsp;</option>
 	</select>
 	<input type="hidden" name="report" value="1">
 	<input type="hidden" name="page" value="report.php">

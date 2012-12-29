@@ -863,6 +863,8 @@
 							echo "年份: ".date('Y',$date_year)." [共: ".$sdate_num."天]<br>";
 
 							break;
+						default:
+							$date_filter = "C_date like '%' ";
 					} 
 				} else {
 					$_SESSION['date_num'] = 0;
@@ -872,10 +874,10 @@
 				}
 				
 				if ( $scorde == "in_out" ) {
-					$sql = "SELECT sum(Money) FROM ".$this->_record_lib." WHERE ".$date_filter." AND F_id = '".$family_id."'";
+					$sql = "SELECT sum(Money) FROM ".$this->_record_lib." WHERE ".$date_filter." AND F_id = '".$family_id."' AND Flow = '0'";
 					$out_data = $this->select($sql);
 
-					$sql = "SELECT sum(Money) FROM ".$this->_record_lib." WHERE ".$date_filter." AND F_id = '".$family_id."'";
+					$sql = "SELECT sum(Money) FROM ".$this->_record_lib." WHERE ".$date_filter." AND F_id = '".$family_id."'  AND Flow = '1'";
 					$in_data = $this->select($sql);
 
 
@@ -927,6 +929,8 @@
 						$date_year =  mktime( 0,0, 0, 12 ,1 ,date( 'Y',time()) - $d_num);
 						$date_filter = "from_unixtime(C_date) like '".date('Y',$date_year)."%'";
 						break;
+					default:
+						$date_filter = "C_date like '%' ";
 					} 
 
 
@@ -1018,6 +1022,18 @@
 		return $this->update($sql);			
 	}
 
+	/* 添加表格一个字段"create_date2", 将旧数据库 create_date的日期 转为 create_date2的时间截  */
+	public function Tab_Date($table)
+	{
+		$sql = "select * from ".$table;
+		$start_date = $this->select($sql);
+		echo "共转换条数: ".count($start_date);
+
+		for ( $i= "0"; $i < count($start_date) ;$i++) {
+			$sql2 = "update ".$table." set create_date2 = ".strtotime($start_date[$i]['create_date'])."  WHERE id = '".$start_date[$i]['id']."'" ;
+			$this->select($sql2);
+		}
+	}
 
 
 
@@ -2161,9 +2177,9 @@
             return $this->select($sql);
         }
 		
-
-
     }
+
+
 
 	/*------------------------------------------------------------------------------------------*/
 

@@ -19,6 +19,7 @@
 		 <option  value="week" <?PHP if ( $_POST['sdate'] == "week" )  echo "selected=\"selected\"" ;  ?>>周</option>
 		 <option  value="month" <?PHP if ( $_POST['sdate'] == "month" )  echo "selected=\"selected\"" ;  ?>>月</option>
 		 <option  value="year" <?PHP if ( $_POST['sdate'] == "year" )  echo "selected=\"selected\"" ;  ?>>年</option>
+		 <option  value="">&nbsp;</option>
 	</select>
 
 	<input type="hidden" name="page" value="search.php">
