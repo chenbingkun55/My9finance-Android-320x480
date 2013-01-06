@@ -1,0 +1,92 @@
+<svg width="250" height="80" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+ <g display="inline">
+  <title>Layer 1</title>
+  <rect id="svg_11" height="64" width="57" y="10.099874" x="13" stroke-width="2" stroke="#000000" fill="#cccccc"/>
+  <line id="svg_12" y2="32.100006" x2="70.499998" y1="32.100006" x1="13.499997" stroke-width="2" stroke="#000000" fill="none"/>
+  <line id="svg_13" y2="53.100006" x2="69.500003" y1="53.100006" x1="13.500001" stroke-width="2" stroke="#000000" fill="none"/>
+  <line id="svg_14" y2="9.100006" x2="74.499999" y1="9.100006" x1="8.5" stroke-width="2" stroke="#000000" fill="none"/>
+  <line id="svg_15" y2="26.100006" x2="39" y1="26.100006" x1="14" stroke="#000000" fill="none"/>
+  <path transform="rotate(59.8745, 14.4805, 22.8203)" id="svg_16" d="m11.24129,22.820236l6.475625,0" stroke="#000000" fill="none"/>
+  <path id="svg_17" transform="rotate(90, 39.1621, 28.7344)" d="m37.245739,28.733242l3.831741,0" stroke="#000000" fill="none"/>
+  <rect id="svg_18" height="58" width="1" y="21.100433" x="136" stroke-width="3" stroke="#4909f9" fill="none"/>
+ </g>
+ <g display="inline">
+  <title>Layer 2</title>
+  <g id="svg_33">
+   <line id="svg_29" y2="50.23066" x2="231.5" y1="39.500001" x1="237" stroke-width="3" stroke="#4909f9" fill="none"/>
+   <line id="svg_30" y2="48.697709" x2="240.437501" y1="44.609838" x1="234.250001" stroke="#4909f9" fill="none"/>
+   <line id="svg_31" y2="54.128123" x2="237.880629" y1="47.866146" x1="240.244387" stroke="#4909f9" fill="none"/>
+   <line id="svg_32" y2="53.807546" x2="242.499996" y1="53.807546" x1="232.187497" stroke-width="2" stroke="#4909f9" fill="none"/>
+  </g>
+  <line id="svg_34" y2="78.16966" x2="245" y1="37" x1="245" stroke-width="3" stroke="#4909f9" fill="none"/>
+  <line id="svg_35" y2="56" x2="244.069276" y1="56" x1="222.999998" stroke-width="3" stroke="#4909f9" fill="none"/>
+  <g id="svg_65">
+   <line id="svg_36" y2="73.495098" x2="204" y1="48" x1="204" stroke-width="3" stroke="#4909f9" fill="none"/>
+   <line transform="rotate(90, 211, 60.748)" id="svg_37" y2="66.495644" x2="211" y1="55" x1="211" stroke-width="3" stroke="#4909f9" fill="none"/>
+   <line id="svg_38" y2="71.995644" x2="215.5" y1="60.5" x1="215.5" stroke-width="3" stroke="#4909f9" fill="none"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 3</title>
+  <ellipse ry="55" rx="53" id="svg_39" cy="-143" cx="127" stroke-width="3" stroke="#4909f9" fill="none"/>
+  <g id="svg_63">
+   <circle id="svg_56" r="6.980469" cy="37.714593" cx="209.981419" stroke="#4909f9" fill="none"/>
+   <line id="svg_57" y2="60.210285" x2="210.369276" y1="44.696014" x1="210.369276" stroke="#4909f9" fill="none"/>
+   <line id="svg_58" y2="58.658856" x2="211.29424" y1="58.658856" x1="218.752898" stroke="#4909f9" fill="none"/>
+   <line id="svg_59" y2="66.654607" x2="218.126411" y1="59.195948" x1="218.126411" stroke="#4909f9" fill="none"/>
+   <line id="svg_60" y2="50.513867" x2="211.294243" y1="50.513867" x1="218.752901" stroke="#4909f9" fill="none"/>
+   <line id="svg_61" y2="50.402023" x2="218.500773" y1="52.953035" x1="225.509619" stroke="#4909f9" fill="none"/>
+   <circle id="svg_62" r="0.775391" cy="38.490309" cx="213.084274" stroke="#4909f9" fill="none"/>
+  </g>
+  <line id="svg_64" y2="54" x2="229.500002" y1="54" x1="221.500002" stroke="#4909f9" fill="none"/>
+  <g id="svg_67">
+   <circle id="svg_41" r="2.533203" cy="15.12612" cx="43.466707" stroke="#4909f9" fill="none"/>
+   <line id="svg_43" y2="23.288946" x2="43.607446" y1="17.659411" x1="43.607446" stroke="#4909f9" fill="none"/>
+   <line id="svg_44" y2="24.808777" x2="41.524665" y1="22.89502" x1="43.438423" stroke="#4909f9" fill="none"/>
+   <line id="svg_45" y2="23.035759" x2="44.057952" y1="24.949516" x1="45.971709" stroke="#4909f9" fill="none"/>
+   <line id="svg_46" y2="19.770485" x2="40.846831" y1="19.770485" x1="43.553292" stroke="#4909f9" fill="none"/>
+   <circle id="svg_48" r="0.28125" cy="15.126121" cx="42.622278" stroke="#4909f9" fill="none"/>
+  </g>
+  <g id="svg_68">
+   <circle id="svg_49" r="2.945313" cy="15.92838" cx="36.449111" stroke="#4909f9" fill="none"/>
+   <line id="svg_50" y2="25.431072" x2="36.612951" y1="18.877491" x1="36.612951" stroke="#4909f9" fill="none"/>
+   <line id="svg_51" y2="24.775715" x2="37.003671" y1="24.775715" x1="40.154378" stroke="#4909f9" fill="none"/>
+   <line id="svg_52" y2="28.1533" x2="39.889741" y1="25.002593" x1="39.889741" stroke="#4909f9" fill="none"/>
+   <line id="svg_53" y2="21.335085" x2="37.003673" y1="21.335085" x1="40.15438" stroke="#4909f9" fill="none"/>
+   <line transform="rotate(-35, 41.5273, 20.8281)" id="svg_54" y2="20.287798" x2="40.04779" y1="21.365403" x1="43.008486" stroke="#4909f9" fill="none"/>
+   <circle id="svg_55" r="0.326172" cy="16.25606" cx="37.759828" stroke="#4909f9" fill="none"/>
+  </g>
+  <text font-weight="bold" xml:space="preserve" text-anchor="middle" font-family="Serif" font-size="9" id="svg_95" y="14.100006" x="134" stroke-width="0" stroke="#4909f9" fill="#0000ff">Current</text>
+ </g>
+ <g>
+  <title>Layer 4</title>
+  <g id="svg_81">
+   <line id="svg_71" y2="70.25" x2="67" y1="70.25" x1="63" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_70" y2="72.25" x2="69" y1="72.25" x1="65" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_72" y2="68.25" x2="64.5" y1="68.25" x1="60.5" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_73" y2="66.25" x2="62.25" y1="66.25" x1="58.25" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_74" y2="64.25" x2="60.25" y1="64.25" x1="56.25" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_75" y2="62.25" x2="58.25" y1="62.25" x1="54.25" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_76" y2="60.25" x2="56" y1="60.25" x1="52" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_77" y2="58.25" x2="54.25" y1="58.25" x1="50.25" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_78" y2="56.25" x2="52.25" y1="56.25" x1="48.25" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_79" y2="54.75" x2="50" y1="54.75" x1="46" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <path stroke-width="3" id="svg_80" d="m45.741013,52.820236l8.475334,0" stroke="#ffffff" fill="none"/>
+  </g>
+  <g id="svg_82">
+   <line id="svg_83" y2="49.25" x2="66.75" y1="49.25" x1="62.75" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_84" y2="51.25" x2="68.75" y1="51.25" x1="64.75" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_85" y2="47.25" x2="64.25" y1="47.25" x1="60.25" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_86" y2="45.25" x2="62" y1="45.25" x1="58" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_87" y2="43.25" x2="60" y1="43.25" x1="56" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_88" y2="41.25" x2="58" y1="41.25" x1="54" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_89" y2="39.25" x2="55.75" y1="39.25" x1="51.75" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_90" y2="37.25" x2="54" y1="37.25" x1="50" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_91" y2="35.25" x2="52" y1="35.25" x1="48" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <line id="svg_92" y2="33.75" x2="49.75" y1="33.75" x1="45.75" stroke-width="2" stroke="#f7f309" fill="none"/>
+   <path id="svg_93" stroke-width="3" d="m45.491013,31.820236l8.475334,0" stroke="#ffffff" fill="none"/>
+  </g>
+  <rect id="svg_94" height="77.999996" width="248" y="1" x="1.5" stroke="#ffffff" fill="none"/>
+ </g>
+</svg>
